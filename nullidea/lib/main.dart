@@ -54,8 +54,30 @@ class Nullidea extends StatelessWidget {
                             borderSide: BorderSide(color: PrimaryColor),
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         labelText: 'Email',
-                        labelStyle: TextStyle(),
-                        hintText: "Enter an Email",
+                        labelStyle: TextStyle(color: PrimaryColor),
+                        hintText: "Email adress",
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextFormField(
+                      obscureText: true,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: Colors.white),
+                      cursorColor: PrimaryColor,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock, color: PrimaryColor),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: PrimaryColor),
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: PrimaryColor),
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        labelText: 'Password',
+                        
+                        labelStyle: TextStyle(color: PrimaryColor),
+                        hintText: "Password",
                       ),
                     ),
                   )
