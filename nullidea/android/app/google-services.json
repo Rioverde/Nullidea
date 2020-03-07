@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "322435520588",
+    "firebase_url": "https://nullidea-v1.firebaseio.com",
+    "project_id": "nullidea-v1",
+    "storage_bucket": "nullidea-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322435520588:android:db2b3f1577f3260479fce9",
+        "android_client_info": {
+          "package_name": "com.example.nullidea"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322435520588-e1qrmdje2bjqvr17aoueanelqi3spavm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCPRfEtAu1Dw2GYtFFe2FR12XoHMTdtyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322435520588-e1qrmdje2bjqvr17aoueanelqi3spavm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
