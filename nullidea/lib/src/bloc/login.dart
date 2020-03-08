@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nullidea/src/bloc/login/patternBuilders.dart';
 import 'package:nullidea/src/constants/materialsData.dart';
+import 'package:nullidea/src/bloc/login/passwordField.dart';
 
 ThemeData buildTheme() {
   final ThemeData base = ThemeData();
@@ -18,22 +19,12 @@ ThemeData buildTheme() {
   );
 }
 
-bool passwordVisible = true;
 
-@override
-void initState() {
-  passwordVisible = false;
-}
-
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
+class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return
+      MaterialApp(
       theme: buildTheme(),
       home: Scaffold(
         resizeToAvoidBottomPadding: true,
@@ -44,47 +35,7 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 primaryText(60.0, primaryColor),
                 fieldEmail(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                  child: TextFormField(
-                    keyboardType: TextInputType.text,
-                    obscureText: passwordVisible,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(color: Colors.white),
-                    cursorColor: primaryColor,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          // Based on passwordVisible state choose the icon
-                          passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: hidecolor,
-                        ),
-                        onPressed: () {
-                          // Update the state i.e. toogle the state of passwordVisible variable
-                          setState(() {
-                            passwordVisible = !passwordVisible;
-                            if (!passwordVisible) hidecolor = Colors.grey; 
-                            else hidecolor = primaryColor;
-                          });
-                        },
-                      ),
-
-                      prefixIcon: Icon(Icons.lock, color: primaryColor),
-
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: primaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: primaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      // labelText: 'Password',
-                      // labelStyle: TextStyle(color: PrimaryColor),
-                      hintText: "Password",
-                    ),
-                  ),
-                ),
+                PasswordField(),
                 forgotPassword(),
                 customButton('SIGN IN'),
                 alreadyExist(),
@@ -99,7 +50,7 @@ class _LoginState extends State<Login> {
               ]),
         ),
       ),
-    );
+      );
   }
 }
- 
+

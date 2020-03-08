@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/materialsData.dart';
+import 'package:passwordfield/passwordfield.dart';
 
 
 //Returns Nullidea with pacifico fonts
@@ -111,4 +112,25 @@ Padding alreadyExist() {
       ),
     ),
   );
+}
+
+
+
+Padding passwordField(){
+  return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+            child: Center(
+              child: PasswordField(
+              color: Colors.green,
+              hasFloatingPlaceholder: true,
+              pattern: r'.*[@$#.*].*',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(2),
+                  borderSide: BorderSide(width: 2, color: primaryColor)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(width: 2, color: primaryColor)),
+              errorMessage: 'must contain special character either . * @ # \$',
+              ),
+             ));
 }
