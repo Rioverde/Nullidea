@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/materialsData.dart';
 
+
 //Returns Nullidea with pacifico fonts
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
   return Text(
@@ -17,14 +18,14 @@ Padding fieldEmail() {
     child: TextFormField(
       textAlign: TextAlign.start,
       style: TextStyle(color: Colors.white),
-      cursorColor: PrimaryColor,
+      cursorColor: primaryColor,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person, color: PrimaryColor),
+        prefixIcon: Icon(Icons.person, color: primaryColor),
         border: OutlineInputBorder(
-            borderSide: BorderSide(color: PrimaryColor),
+            borderSide: BorderSide(color: primaryColor),
             borderRadius: BorderRadius.all(Radius.circular(8))),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: PrimaryColor),
+            borderSide: BorderSide(color: primaryColor),
             borderRadius: BorderRadius.all(Radius.circular(8))),
         // labelText: 'Email',
         // labelStyle: TextStyle(color: PrimaryColor),
@@ -35,41 +36,20 @@ Padding fieldEmail() {
 }
 
 //Returns password field
-Padding fieldPassword() {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-    child: TextFormField(
-      obscureText: true,
-      textAlign: TextAlign.start,
-      style: TextStyle(color: Colors.white),
-      cursorColor: PrimaryColor,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock, color: PrimaryColor),
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: PrimaryColor),
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: PrimaryColor),
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        // labelText: 'Password',
-        // labelStyle: TextStyle(color: PrimaryColor),
-        hintText: "Password",
-      ),
-    ),
-  );
-}
+
 
 //returns button with string that we need
-Padding signinButton(var functionality) {
+Padding customButton(var functionality) {
   return Padding(
-    padding: const EdgeInsets.all(4),
+    padding: const EdgeInsets.only(left: 16, right: 16,),
     child: ButtonTheme(
-      minWidth: 330.0,
+      minWidth: double.infinity,
       height: 50,
       child: FlatButton(
+        padding: const EdgeInsets.only(left: 16, right: 16,),
         shape: new RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(8.0)),
-        color: PrimaryColor,
+        color: primaryColor,
         textColor: Colors.black,
         disabledColor: Colors.yellow.shade700,
         disabledTextColor: Colors.black,
@@ -89,11 +69,11 @@ Padding signinButton(var functionality) {
 
 Padding accessIcons(dynamic iconCustom) {
   return Padding(
-    padding: EdgeInsets.all(16),
+    padding: EdgeInsets.only(top: 0,left: 16),
     child: IconButton(
       icon: Icon(iconCustom, size: 32),
       splashColor: Colors.transparent,
-      color: PrimaryColor,
+      color: primaryColor,
       onPressed: () {},
     ),
   );
@@ -103,12 +83,12 @@ Container forgotPassword() {
   return Container(
     alignment: Alignment.topRight,
     child: FlatButton(
-      onPressed: () {},
+      onPressed: () {print("Forgot Password Screen");},
       child: Text(
         "Forgot password ?",
         style: TextStyle(
           fontSize: 12.0,
-          color: PrimaryColor,
+          color: primaryColor,
         ),
       ),
     ),
@@ -117,14 +97,17 @@ Container forgotPassword() {
 
 Padding alreadyExist() {
   return Padding(
-    padding: const EdgeInsets.only(top: 16),
-    child: RichText(
-      text: TextSpan(
-        text: "Don't have an account? ",
-        style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
-        children: <TextSpan>[
-          TextSpan(text: ' SIGN UP', style: TextStyle(color: PrimaryColor)),
-        ],
+    padding: const EdgeInsets.only(top: 8),
+    child: FlatButton(
+      onPressed: () {print('SIGN UP screen');},
+      child: RichText(
+        text: TextSpan(
+          text: "Don't have an account? ",
+          style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+          children: <TextSpan>[
+            TextSpan(text: ' SIGN UP', style: TextStyle(color: primaryColor)),
+          ],
+        ),
       ),
     ),
   );
