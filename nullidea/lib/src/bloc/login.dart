@@ -26,7 +26,8 @@ class Login extends StatelessWidget {
                 buildForgetPassword(),
                 //Sign in Button
                 signInButton(),
-                //are you already exist button. Sign Up
+                //are you already exist button. Sign Up with giving some padding using SizeBox
+                SizedBox(height: 4),
                 buildSignUp(),
                 //Enter via google, facebook or git
                 buildRowofLoginIcons(),
