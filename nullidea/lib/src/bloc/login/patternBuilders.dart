@@ -29,8 +29,8 @@ Padding accessIcons(dynamic iconCustom, dynamic func()) {
 TextButton buildForgetPassword() {
   return TextButton(
       alignment: Alignment.centerRight,
-      fontSize: 12,
-      yellowText: "Forget password ?");
+      fontSize: 14,
+      yellowText: "Forgot password ?");
 }
 
 CustomField emailField() {
@@ -43,8 +43,8 @@ CustomButton signInButton() {
     borderRadius: 8,
     color: primaryColor,
     functionality: 'SIGN IN',
-    fontSize: 16,
-    height: 50,
+    fontSize: 18,
+    height: 55,
     width: double.infinity,
   );
 }
@@ -52,7 +52,7 @@ CustomButton signInButton() {
 TextButton buildSignUp() {
   return TextButton(
     alignment: Alignment.center,
-    fontSize: 12,
+    fontSize: 14,
     contentText: "Don`t have an account ? ",
     yellowText: ' SIGN UP',
   );
