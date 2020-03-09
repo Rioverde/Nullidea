@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nullidea/src/bloc/login/textButton.dart';
 import 'package:nullidea/src/bloc/nullideaTheme.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:nullidea/src/bloc/login/patternBuilders.dart';
-import 'package:nullidea/src/constants/materialsData.dart';
 
+import 'package:nullidea/src/bloc/login/patternBuilders.dart';
+import 'package:nullidea/src/bloc/login/passwordField.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -11,31 +11,33 @@ class Login extends StatelessWidget {
     return MaterialApp(
       theme: nullideatheme(),
       home: Scaffold(
-        backgroundColor: Colors.black,
+        //Resize the scaffold if keyboard appears
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                //Create Nice view of Nullidea
                 primaryText(60.0, primaryColor),
-                fieldEmail(),
+                //email Field
+                emailField(),
+                //PAssword field which is stateful widget
                 PasswordField(),
-                forgotPassword(),
-                customButton('SIGN IN'),
-                alreadyExist(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    accessIcons(MdiIcons.facebook,futureFunc()),
-                    accessIcons(MdiIcons.google, futureFunc()),
-                    accessIcons(MdiIcons.githubCircle,futureFunc() ),
-                  ],
-                ),
+                //Forgot password button
+                buildForgetPassword(),
+                //Sign in Button
+                signInButton(),
+                //are you already exist button. Sign Up
+                buildSignUp(),
+                //Enter via google, facebook or git
+                buildRowofLoginIcons(),
               ]),
         ),
       ),
     );
   }
-}
 
-futureFunc(){}
+
+
+
+}
