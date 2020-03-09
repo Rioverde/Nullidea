@@ -1,34 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:nullidea/src/bloc/nullideaTheme.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nullidea/src/bloc/login/patternBuilders.dart';
 import 'package:nullidea/src/constants/materialsData.dart';
-import 'package:nullidea/src/bloc/login/passwordField.dart';
-
-ThemeData buildTheme() {
-  final ThemeData base = ThemeData();
-  return base.copyWith(
-    primaryColor: primaryColor,
-    inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyle(
-        color: Colors.grey.shade700,
-      ),
-      labelStyle: TextStyle(
-        color: primaryColor,
-      ),
-    ),
-  );
-}
 
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp(
-      theme: buildTheme(),
+    return MaterialApp(
+      theme: nullideatheme(),
       home: Scaffold(
-        resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.black,
+        resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +34,6 @@ class Login extends StatelessWidget {
               ]),
         ),
       ),
-      );
+    );
   }
 }
-

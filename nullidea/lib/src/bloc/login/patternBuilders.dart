@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/materialsData.dart';
-import 'package:passwordfield/passwordfield.dart';
-
 
 //Returns Nullidea with pacifico fonts
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
@@ -17,18 +15,10 @@ Padding fieldEmail() {
   return Padding(
     padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
     child: TextFormField(
-      textAlign: TextAlign.start,
-      style: TextStyle(color: Colors.white),
-      cursorColor: primaryColor,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person, color: primaryColor),
+        prefixIcon: Icon(Icons.person),
         border: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        // labelText: 'Email',
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         // labelStyle: TextStyle(color: PrimaryColor),
         hintText: "Email",
       ),
@@ -38,31 +28,22 @@ Padding fieldEmail() {
 
 //Returns password field
 
-
 //returns button with string that we need
 Padding customButton(var functionality) {
   return Padding(
-    padding: const EdgeInsets.only(left: 16, right: 16,),
-    child: ButtonTheme(
-      minWidth: double.infinity,
-      height: 50,
-      child: FlatButton(
-        padding: const EdgeInsets.only(left: 16, right: 16,),
-        shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(8.0)),
-        color: primaryColor,
-        textColor: Colors.black,
-        disabledColor: Colors.yellow.shade700,
-        disabledTextColor: Colors.black,
-        splashColor: Colors.yellow.shade700,
-        onPressed: () {
-          /*...*/
-          print('Will go to Register soon');
-        },
-        child: Text(
-          functionality,
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-        ),
+    padding: const EdgeInsets.only(left: 16, right: 16),
+    child: FlatButton(
+      shape: new RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(8.0)),
+      color: primaryColor,
+      textColor: Colors.black,
+      onPressed: () {
+        /*...*/
+        print('Will go to Register soon');
+      },
+      child: Text(
+        functionality,
+        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
       ),
     ),
   );
@@ -70,7 +51,7 @@ Padding customButton(var functionality) {
 
 Padding accessIcons(dynamic iconCustom) {
   return Padding(
-    padding: EdgeInsets.only(top: 0,left: 16),
+    padding: EdgeInsets.only(top: 0, left: 16),
     child: IconButton(
       icon: Icon(iconCustom, size: 32),
       splashColor: Colors.transparent,
@@ -84,7 +65,9 @@ Container forgotPassword() {
   return Container(
     alignment: Alignment.topRight,
     child: FlatButton(
-      onPressed: () {print("Forgot Password Screen");},
+      onPressed: () {
+        print("Forgot Password Screen");
+      },
       child: Text(
         "Forgot password ?",
         style: TextStyle(
@@ -100,7 +83,9 @@ Padding alreadyExist() {
   return Padding(
     padding: const EdgeInsets.only(top: 8),
     child: FlatButton(
-      onPressed: () {print('SIGN UP screen');},
+      onPressed: () {
+        print('SIGN UP screen');
+      },
       child: RichText(
         text: TextSpan(
           text: "Don't have an account? ",
@@ -114,23 +99,51 @@ Padding alreadyExist() {
   );
 }
 
+//passwordtype pattern
+bool passwordVisible = true;
+TextEditingController passwordController = new TextEditingController();
 
+@override
+void initState() {
+  passwordVisible = false;
+}
 
-Padding passwordField(){
-  return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-            child: Center(
-              child: PasswordField(
-              color: Colors.green,
-              hasFloatingPlaceholder: true,
-              pattern: r'.*[@$#.*].*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(2),
-                  borderSide: BorderSide(width: 2, color: primaryColor)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(width: 2, color: primaryColor)),
-              errorMessage: 'must contain special character either . * @ # \$',
-              ),
-             ));
+class PasswordField extends StatefulWidget {
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: TextFormField(
+        controller: passwordController,
+        obscureText: passwordVisible,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: Icon(
+              // Based on passwordVisible state choose the icon
+              passwordVisible ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              // Update the state i.e. toogle the state of passwordVisible variable
+              setState(() {
+                passwordVisible = !passwordVisible;
+                if (!passwordVisible)
+                  hidecolor = Colors.grey;
+                else
+                  hidecolor = primaryColor;
+              });
+            },
+          ),
+          prefixIcon: Icon(Icons.lock),
+          // labelText: 'Password',
+          // labelStyle: TextStyle(color: PrimaryColor),
+          hintText: "Password",
+        ),
+      ),
+    );
+  }
 }
