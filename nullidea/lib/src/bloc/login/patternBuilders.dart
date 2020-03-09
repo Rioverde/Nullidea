@@ -44,7 +44,7 @@ CustomButton signInButton() {
     color: primaryColor,
     functionality: 'SIGN IN',
     fontSize: 18,
-    height: 55,
+    height: 50,
     width: double.infinity,
   );
 }
@@ -67,6 +67,13 @@ Row buildRowofLoginIcons() {
       accessIcons(MdiIcons.githubCircle, futureFunc()),
     ],
   );
+}
+
+Center buildImage() {
+  return Center(
+      child: Container(
+          alignment: FractionalOffset.bottomRight,
+          child: Image.asset('assets/images/lamp-fial.png', scale: 3)));
 }
 
 futureFunc() {}

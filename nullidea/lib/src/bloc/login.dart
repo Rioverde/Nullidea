@@ -16,6 +16,7 @@ class Login extends StatelessWidget {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 90),
                 //Create Nice view of Nullidea
                 primaryText(60.0, primaryColor),
                 //email Field
@@ -27,17 +28,15 @@ class Login extends StatelessWidget {
                 //Sign in Button
                 signInButton(),
                 //are you already exist button. Sign Up with giving some padding using SizeBox
+
                 SizedBox(height: 4),
                 buildSignUp(),
                 //Enter via google, facebook or git
                 buildRowofLoginIcons(),
+                buildImage(),
               ]),
         ),
       ),
     );
   }
-
-
-
-
 }

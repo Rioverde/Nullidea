@@ -28,9 +28,11 @@ InputDecorationTheme inputDecorationhandler() {
       borderRadius: BorderRadius.circular(10.0),
     ),
     hintStyle: TextStyle(
+      fontFamily: 'Ubuntu',
       color: Colors.grey.shade700,
     ),
     labelStyle: TextStyle(
+      fontFamily: 'Ubuntu',
       color: primaryColor,
     ),
     border: OutlineInputBorder(

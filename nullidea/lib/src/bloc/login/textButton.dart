@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextButton extends StatelessWidget {
   final Alignment alignment;
@@ -24,7 +25,8 @@ class TextButton extends StatelessWidget {
         child: RichText(
           text: TextSpan(
             text: contentText,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: fontSize),
+            style: GoogleFonts.ubuntu( color: Colors.grey.shade700,
+                  fontSize: fontSize, fontWeight: FontWeight.w600),
             children: <TextSpan>[
               TextSpan(
                   text: yellowText,
