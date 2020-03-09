@@ -32,24 +32,28 @@ Padding fieldEmail() {
 Padding customButton(var functionality) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, right: 16),
-    child: FlatButton(
-      shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(8.0)),
-      color: primaryColor,
-      textColor: Colors.black,
-      onPressed: () {
-        /*...*/
-        print('Will go to Register soon');
-      },
-      child: Text(
-        functionality,
-        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+    child: ButtonTheme(
+      height: 50,
+      minWidth: double.infinity,
+      child: FlatButton(
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(8.0)),
+        color: primaryColor,
+        textColor: Colors.black,
+        onPressed: () {
+          /*...*/
+          print('Will go to Register soon');
+        },
+        child: Text(
+          functionality,
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+        ),
       ),
     ),
   );
 }
 
-Padding accessIcons(dynamic iconCustom) {
+Padding accessIcons(dynamic iconCustom, dynamic func()) {
   return Padding(
     padding: EdgeInsets.only(top: 0, left: 16),
     child: IconButton(
@@ -65,6 +69,8 @@ Container forgotPassword() {
   return Container(
     alignment: Alignment.topRight,
     child: FlatButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onPressed: () {
         print("Forgot Password Screen");
       },
@@ -117,7 +123,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: TextFormField(
         controller: passwordController,
         obscureText: passwordVisible,

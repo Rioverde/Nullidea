@@ -26,9 +26,9 @@ class Login extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    accessIcons(MdiIcons.facebook),
-                    accessIcons(MdiIcons.google),
-                    accessIcons(MdiIcons.githubCircle),
+                    accessIcons(MdiIcons.facebook,futureFunc()),
+                    accessIcons(MdiIcons.google, futureFunc()),
+                    accessIcons(MdiIcons.githubCircle,futureFunc() ),
                   ],
                 ),
               ]),
@@ -37,3 +37,5 @@ class Login extends StatelessWidget {
     );
   }
 }
+
+futureFunc(){}

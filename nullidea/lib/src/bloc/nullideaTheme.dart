@@ -4,7 +4,6 @@ import 'package:nullidea/src/constants/materialsData.dart';
 
 ThemeData nullideatheme() {
   return ThemeData.dark().copyWith(
-    buttonTheme: ButtonThemeData(buttonColor: primaryColor, height: 50, minWidth: double.infinity),
     accentColor: primaryColor,
     iconTheme: IconThemeData(color: primaryColor),
     primaryColor: primaryColor,
