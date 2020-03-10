@@ -14,30 +14,23 @@ class Login extends StatelessWidget {
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: Container(
-            child: Stack(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    //Create Nice view of Nullidea
-                    primaryText(60.0, primaryColor),
-                    //email Field
-                    emailField(),
-                    //PAssword field which is stateful widget
-                    PasswordField(),
-                    //Forgot password button
-                    buildForgetPassword(),
-                    //Sign in Button
-                    signInButton(),
-                    //are you already exist button. Sign Up with giving some padding using SizeBox
-
-                    buildSignUp(),
-                    //Enter via google, facebook or git
-                    buildRowofLoginIcons(),
-                  ],
-                ),
-                                    
-                (buildImage()),
+                //Create Nice view of Nullidea
+                primaryText(60.0, primaryColor),
+                //email Field
+                emailField(),
+                //PAssword field which is stateful widget
+                PasswordField(),
+                //Forgot password button
+                buildForgetPassword(),
+                //Sign in Button
+                customButton(),
+                //are you already exist button. Sign Up with giving some padding using SizeBox
+                buildSignUp(),
+                //Enter via google, facebook or git
+                buildRowofLoginIcons(),
               ],
             ),
           ),

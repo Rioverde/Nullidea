@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nullidea/src/bloc/login/buttonCustomized.dart';
 import 'package:nullidea/src/bloc/login/fields.dart';
+import 'package:nullidea/src/bloc/login/passwordField.dart';
+
 import 'package:nullidea/src/bloc/login/textButton.dart';
-import 'package:nullidea/src/bloc/nullideaTheme.dart';
-import 'buttomCustomized.dart';
+import 'buttonCustomized.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 //Returns Nullidea with pacifico fonts
@@ -20,7 +22,6 @@ Padding accessIcons(dynamic iconCustom, dynamic func()) {
     child: IconButton(
       icon: Icon(iconCustom, size: 32),
       splashColor: Colors.transparent,
-      color: primaryColor,
       onPressed: () {},
     ),
   );
@@ -35,18 +36,7 @@ TextButton buildForgetPassword() {
 
 CustomField emailField() {
   return CustomField(
-      prefixIcon: Icon(Icons.person), fieldRadius: 8, hinttext: 'Email');
-}
-
-CustomButton signInButton() {
-  return CustomButton(
-    borderRadius: 8,
-    color: primaryColor,
-    functionality: 'SIGN IN',
-    fontSize: 18,
-    height: 50,
-    width: double.infinity,
-  );
+      prefixIcon: Icon(Icons.person), fieldRadius: 8, hinttext: 'Email', maxLines: 1);
 }
 
 TextButton buildSignUp() {
@@ -69,10 +59,18 @@ Row buildRowofLoginIcons() {
   );
 }
 
-Container buildImage() {
-  return Container(
-          alignment: Alignment.bottomRight,
-          child: Image.asset('assets/images/lamp-fial.png', scale: 3.2));
+futureFunc() {}
+
+CustomButton customButton(){
+return CustomButton(
+      action: () {},
+      color: buttonStateColor,
+      borderRadius: 8,
+      functionality: 'SIGN IN',
+      fontSize: 18,
+      height: 50,
+      width: double.infinity,
+    );
 }
 
-futureFunc() {}
+

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Color primaryColor = const Color.fromRGBO(255, 203, 50, 1);
+Color primaryColor = Color.fromRGBO(255, 203, 50, 1);
+Color iconPrimaryColor = Color.fromRGBO(255, 203, 50, 1);
+
 
 ThemeData nullideatheme() {
   return ThemeData.dark().copyWith(
