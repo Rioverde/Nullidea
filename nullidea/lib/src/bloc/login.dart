@@ -13,28 +13,34 @@ class Login extends StatelessWidget {
         //Resize the scaffold if keyboard appears
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          child: Container(
+            child: Stack(
               children: <Widget>[
-                SizedBox(height: 90),
-                //Create Nice view of Nullidea
-                primaryText(60.0, primaryColor),
-                //email Field
-                emailField(),
-                //PAssword field which is stateful widget
-                PasswordField(),
-                //Forgot password button
-                buildForgetPassword(),
-                //Sign in Button
-                signInButton(),
-                //are you already exist button. Sign Up with giving some padding using SizeBox
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    //Create Nice view of Nullidea
+                    primaryText(60.0, primaryColor),
+                    //email Field
+                    emailField(),
+                    //PAssword field which is stateful widget
+                    PasswordField(),
+                    //Forgot password button
+                    buildForgetPassword(),
+                    //Sign in Button
+                    signInButton(),
+                    //are you already exist button. Sign Up with giving some padding using SizeBox
 
-                SizedBox(height: 4),
-                buildSignUp(),
-                //Enter via google, facebook or git
-                buildRowofLoginIcons(),
-                buildImage(),
-              ]),
+                    buildSignUp(),
+                    //Enter via google, facebook or git
+                    buildRowofLoginIcons(),
+                  ],
+                ),
+                                    
+                (buildImage()),
+              ],
+            ),
+          ),
         ),
       ),
     );

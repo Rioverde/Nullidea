@@ -69,11 +69,10 @@ Row buildRowofLoginIcons() {
   );
 }
 
-Center buildImage() {
-  return Center(
-      child: Container(
-          alignment: FractionalOffset.bottomRight,
-          child: Image.asset('assets/images/lamp-fial.png', scale: 3)));
+Container buildImage() {
+  return Container(
+          alignment: Alignment.bottomRight,
+          child: Image.asset('assets/images/lamp-fial.png', scale: 3.2));
 }
 
 futureFunc() {}
