@@ -29,7 +29,7 @@ class _TextButtonState extends State<TextButton> {
       child: FlatButton(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onPressed: widget.pressed,
+        onPressed: () {setState(widget.pressed);},
         child: RichText(
           text: TextSpan(
             text: widget.contentText,

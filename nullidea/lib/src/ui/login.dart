@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
-
 import 'package:nullidea/src/bloc/login/patternBuilders.dart';
 
 class Login extends StatelessWidget {
@@ -20,14 +19,14 @@ class Login extends StatelessWidget {
                 primaryText(60.0, primaryColor),
                 //email Field
                 emailField(),
-                //PAssword field which is stateful widget
+                //Password field which is stateful widget
                 passwordField(),
                 //Forgot password button
                 buildForgetPassword(),
                 //Sign in Button
                 customButton(),
                 //are you already exist button. Sign Up with giving some padding using SizeBox
-                buildSignUp(),
+                buildTextButton(context),
                 //Enter via google, facebook or git
                 buildRowofLoginIcons(),
               ],

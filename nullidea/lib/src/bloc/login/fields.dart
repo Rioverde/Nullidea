@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:nullidea/src/bloc/login/patternBuilders.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
 
 TextEditingController emailController = new TextEditingController();
@@ -15,6 +14,7 @@ class CustomField extends StatefulWidget {
   final String hinttext;
   final int maxLines;
   final int minLines;
+  final Key key;
 
   CustomField(
       {this.hinttext,
@@ -22,7 +22,8 @@ class CustomField extends StatefulWidget {
       this.prefixIcon,
       this.suffixIcon,
       this.maxLines,
-      this.minLines});
+      this.minLines,
+      this.key});
 
   @override
   _CustomFieldState createState() => _CustomFieldState();
@@ -34,7 +35,7 @@ class _CustomFieldState extends State<CustomField> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Form(
-        key: formEmailKey,
+        key: widget.key,
         child: TextFormField(
           validator: (value) => validateEmailCases(value),
           minLines: widget.minLines,
@@ -70,12 +71,16 @@ String validateEmailCases(String value) {
 //===============================passwordtype pattern======================================
 
 class PasswordField extends StatefulWidget {
+
+
   final Icon prefixIcon;
   final String hinttext;
+  final Key key;
 
   PasswordField({
     this.hinttext,
     this.prefixIcon,
+    this.key
   });
 
   @override
@@ -88,7 +93,7 @@ class _PasswordFieldState extends State<PasswordField> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Form(
-        key: formPasswordKey,
+        key: widget.key,
         child: TextFormField(
           controller: passwordController,
           obscureText: passwordVisible,

@@ -3,15 +3,21 @@ import 'package:nullidea/src/bloc/login/fields.dart';
 
 import 'package:nullidea/src/bloc/login/textButton.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
+
 import 'mainButton.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nullidea/src/ui/signUp.dart';
 
 //Returns Nullidea with pacifico fonts
 final formPasswordKey = new GlobalKey<FormState>();
 final formEmailKey = new GlobalKey<FormState>();
+final formPasswordKeySignUp = new GlobalKey<FormState>();
+final formEmailKeySignUp = new GlobalKey<FormState>();
 
 final form = formPasswordKey.currentState;
 final form2 = formEmailKey.currentState;
+final form3 = formPasswordKeySignUp.currentState;
+final form4 = formEmailKeySignUp.currentState;
 
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
   return Text('Nullidea',
@@ -41,6 +47,7 @@ TextButton buildForgetPassword() {
 
 CustomField emailField() {
   return CustomField(
+      key: formEmailKey,
       prefixIcon: Icon(Icons.person),
       fieldRadius: 8,
       hinttext: 'Email',
@@ -49,17 +56,9 @@ CustomField emailField() {
 
 PasswordField passwordField() {
   return PasswordField(
+    key: formPasswordKey,
     hinttext: 'Password',
     prefixIcon: Icon(Icons.lock),
-  );
-}
-
-TextButton buildSignUp() {
-  return TextButton(
-    alignment: Alignment.center,
-    fontSize: 14,
-    contentText: "Don`t have an account ? ",
-    yellowText: ' SIGN UP',
   );
 }
 
@@ -102,4 +101,35 @@ validateAndSave() {
   } else {
     print("Not valid");
   }
+}
+
+CustomField signUpEmailField() {
+  return CustomField(
+      key: formEmailKeySignUp,
+      prefixIcon: Icon(Icons.person),
+      fieldRadius: 8,
+      hinttext: 'Email',
+      maxLines: 1);
+}
+
+PasswordField signUpPasswordField() {
+  return PasswordField(
+    key: formPasswordKeySignUp,
+    hinttext: 'Password',
+    prefixIcon: Icon(Icons.lock),
+  );
+}
+
+TextButton buildTextButton(BuildContext context) {
+  return TextButton(
+    pressed: () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SignUp();
+      }));
+    },
+    alignment: Alignment.center,
+    fontSize: 14,
+    contentText: "Don`t have an account ? ",
+    yellowText: ' SIGN UP',
+  );
 }
