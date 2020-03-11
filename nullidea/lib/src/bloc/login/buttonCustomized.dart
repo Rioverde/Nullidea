@@ -25,9 +25,6 @@ class CustomButton extends StatefulWidget {
   _CustomButtonState createState() => _CustomButtonState();
 }
 
-
-
-
 class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
@@ -36,18 +33,17 @@ class _CustomButtonState extends State<CustomButton> {
       child: ButtonTheme(
         height: widget.height,
         minWidth: widget.width,
-        child: Opacity(
-          opacity: 1,
-          child: FlatButton(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(widget.borderRadius)),
-            color: widget.color,
-            textColor: Colors.black,
-            onPressed: (){setState(widget.action);},
-            child: Text(widget.functionality,
-                style: GoogleFonts.ubuntu(
-                    fontSize: widget.fontSize, fontWeight: FontWeight.w600)),
-          ),
+        child: FlatButton(
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(widget.borderRadius)),
+          color: widget.color,
+          textColor: Colors.black,
+          onPressed: () {
+            setState(widget.action);
+          },
+          child: Text(widget.functionality,
+              style: GoogleFonts.ubuntu(
+                  fontSize: widget.fontSize, fontWeight: FontWeight.w600)),
         ),
       ),
     );
