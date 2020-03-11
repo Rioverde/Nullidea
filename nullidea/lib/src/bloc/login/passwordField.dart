@@ -4,12 +4,18 @@ import 'package:nullidea/src/bloc/nullideaTheme.dart';
 //passwordtype pattern
 
 bool passwordVisible = true;
+bool buttonState = false;
 Color buttonStateColor = Color.fromRGBO(255, 203, 50, 90);
 TextEditingController passwordController = new TextEditingController();
 
 @override
 void initState() {
-  buttonStateColor = Color.fromRGBO(255, 203, 50, 90);
+  if (passwordController.text.isEmpty) {
+    buttonState = false;
+  } else {
+    buttonState = true;
+  }
+
   passwordVisible = false;
 }
 
@@ -36,13 +42,14 @@ class _PasswordFieldState extends State<PasswordField> {
         onChanged: (passwordController) {
           if (passwordController.isEmpty || passwordController == " ") {
             setState(() {
-              buttonStateColor = Color.fromRGBO(255, 203, 50, 90);
+              buttonState = false;
               print("Zero Chars");
             });
-          } if (passwordController.isNotEmpty){
+          }
+          if (passwordController.isNotEmpty) {
             setState(() {
+              buttonState = true;
               print(passwordController);
-              buttonStateColor = Color.fromRGBO(255, 203, 50, 1);
             });
           }
         },

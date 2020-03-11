@@ -1,9 +1,11 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:nullidea/src/bloc/login/passwordField.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final Color color;
+  
   final String functionality;
   final double height;
   final double width;
@@ -11,6 +13,7 @@ class CustomButton extends StatelessWidget {
   final double fontSize;
   final Function() action;
 
+  
   CustomButton(
       {this.color,
       this. action,
@@ -21,21 +24,35 @@ class CustomButton extends StatelessWidget {
       this.width});
 
   @override
+  _CustomButtonState createState() => _CustomButtonState();
+}
+
+
+class _CustomButtonState extends State<CustomButton> {
+  @override
+  void setState(fn) {
+    super.setState(fn);
+  }
+  @override
   Widget build(BuildContext context) {
     return Padding(
+      
+      
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 0),
       child: ButtonTheme(
-        height: height,
-        minWidth: width,
+        height: widget.height,
+        minWidth: widget.width,
         child: FlatButton(
+        
+          
           shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(borderRadius)),
-          color: color,
+              borderRadius: new BorderRadius.circular(widget.borderRadius)),
+          color: buttonState ? Color.fromRGBO(255, 203, 50, 90) : Color.fromRGBO(255, 203, 50, 1),
           textColor: Colors.black,
-          onPressed: action,
-          child: Text(functionality,
+          onPressed: widget.action,
+          child: Text(widget.functionality,
               style: GoogleFonts.ubuntu(
-                  fontSize: fontSize, fontWeight: FontWeight.w600)),
+                  fontSize: widget.fontSize, fontWeight: FontWeight.w600)),
         ),
       ),
     );

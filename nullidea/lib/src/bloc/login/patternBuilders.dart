@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/bloc/login/buttonCustomized.dart';
 import 'package:nullidea/src/bloc/login/fields.dart';
-import 'package:nullidea/src/bloc/login/passwordField.dart';
 
 import 'package:nullidea/src/bloc/login/textButton.dart';
 import 'buttonCustomized.dart';
@@ -63,8 +62,8 @@ futureFunc() {}
 
 CustomButton customButton(){
 return CustomButton(
+      
       action: () {},
-      color: buttonStateColor,
       borderRadius: 8,
       functionality: 'SIGN IN',
       fontSize: 18,
