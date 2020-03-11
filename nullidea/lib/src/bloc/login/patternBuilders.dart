@@ -3,6 +3,7 @@ import 'package:nullidea/src/bloc/login/buttonCustomized.dart';
 import 'package:nullidea/src/bloc/login/fields.dart';
 
 import 'package:nullidea/src/bloc/login/textButton.dart';
+import 'package:nullidea/src/bloc/nullideaTheme.dart';
 import 'buttonCustomized.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -62,7 +63,7 @@ futureFunc() {}
 
 CustomButton customButton(){
 return CustomButton(
-      
+      color: primaryColor,
       action: () {},
       borderRadius: 8,
       functionality: 'SIGN IN',
