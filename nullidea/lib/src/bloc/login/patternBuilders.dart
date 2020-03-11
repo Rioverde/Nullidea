@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:nullidea/src/bloc/login/buttonCustomized.dart';
 import 'package:nullidea/src/bloc/login/fields.dart';
 
 import 'package:nullidea/src/bloc/login/textButton.dart';
-import 'package:nullidea/src/bloc/nullideaTheme.dart';
-import 'buttonCustomized.dart';
+import 'package:nullidea/src/constants/nullideaTheme.dart';
+import 'mainButton.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 //Returns Nullidea with pacifico fonts
 final formPasswordKey = new GlobalKey<FormState>();
 final formEmailKey = new GlobalKey<FormState>();
 
-
-
+final form = formPasswordKey.currentState;
+final form2 = formEmailKey.currentState;
 
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
   return Text('Nullidea',
@@ -48,6 +47,13 @@ CustomField emailField() {
       maxLines: 1);
 }
 
+PasswordField passwordField() {
+  return PasswordField(
+    hinttext: 'Password',
+    prefixIcon: Icon(Icons.lock),
+  );
+}
+
 TextButton buildSignUp() {
   return TextButton(
     alignment: Alignment.center,
@@ -70,36 +76,30 @@ Row buildRowofLoginIcons() {
 
 futureFunc() {}
 
-
-
 Container customButton() {
   return Container(
     child: CustomButton(
-    action: validateAndSave,
-        color: primaryColor,
-        borderRadius: 8,
-        functionality: 'SIGN IN',
-        fontSize: 18,
-        height: 50,
-        width: double.infinity,
-            ),
-      );
-    }
-    
-  validateAndSave() {
-    final form = formPasswordKey.currentState;
-    final form2 = formEmailKey.currentState;
-    if (form.validate()) {
-      print("Is valide");
-    } else {
-      print("Not valid");
-    }
-
-       if (form2.validate()) {
-      print("Is valide");
-    } else {
-      print("Not valid");
-    }
+      action: validateAndSave,
+      color: primaryColor,
+      borderRadius: 8,
+      functionality: 'SIGN IN',
+      fontSize: 18,
+      height: 50,
+      width: double.infinity,
+    ),
+  );
 }
 
+validateAndSave() {
+  if (form.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+  }
 
+  if (form2.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+  }
+}

@@ -41,11 +41,5 @@ InputDecorationTheme inputDecorationhandler() {
       fontFamily: 'Ubuntu',
       color: primaryColor,
     ),
-    border: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.red, //this has no effect
-      ),
-      borderRadius: BorderRadius.circular(10.0),
-    ),
   );
 }
