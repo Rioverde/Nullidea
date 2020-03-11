@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:nullidea/src/bloc/login/patternBuilders.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
 
-
-
 TextEditingController emailController = new TextEditingController();
 bool error = true;
 bool passwordVisible = true;
@@ -56,22 +54,20 @@ class _CustomFieldState extends State<CustomField> {
   }
 }
 
-  String validateEmailCases(String value) {
-    Pattern pattern =
-        r'(?=.*?[@])';
-    RegExp regex = new RegExp(pattern);
-    if (value.isEmpty) {
-      return "Email field should not be empty";
-    } else if (!regex.hasMatch(value)) {
-      return "Email should have '@' character";
-    } else if (value.contains(" ")) {
-      return "Email should not have spaces";
-    } else
+String validateEmailCases(String value) {
+  Pattern pattern = r'(?=.*?[@])';
+  RegExp regex = new RegExp(pattern);
+  if (value.isEmpty) {
+    return "Email field should not be empty";
+  } else if (!regex.hasMatch(value)) {
+    return "Email should have '@' character";
+  } else if (value.contains(" ")) {
+    return "Email should not have spaces";
+  } else
     return null;
-  }
+}
 
 //===============================passwordtype pattern======================================
-
 
 class PasswordField extends StatefulWidget {
   final Icon prefixIcon;
@@ -106,12 +102,8 @@ class _PasswordFieldState extends State<PasswordField> {
   InputDecoration buildInputDecoration() {
     return InputDecoration(
       suffixIcon: IconButton(
-        icon: Icon(
-          // Based on passwordVisible state choose the icon
-          passwordVisible ? Icons.visibility : Icons.visibility_off,
-        ),
+        icon: Icon(passwordVisible ? Icons.visibility : Icons.visibility_off),
         onPressed: () {
-          // Update the state i.e. toogle the state of passwordVisible variable
           setState(() {
             passwordVisible = !passwordVisible;
             !passwordVisible
@@ -124,7 +116,6 @@ class _PasswordFieldState extends State<PasswordField> {
       hintText: "Password",
     );
   }
-
 
   String validateCases(String value) {
     Pattern pattern =

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'src/bloc/nullidea.dart';
+import 'package:nullidea/src/ui/nullidea.dart';
 
 void main() {
   runApp(Nullidea());
