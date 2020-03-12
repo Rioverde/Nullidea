@@ -20,7 +20,7 @@ class Login extends StatelessWidget {
                 //email Field
                 emailField(),
                 //Password field which is stateful widget
-                passwordField(),
+                newPasswordField(),
                 //Forgot password button
                 buildForgetPassword(),
                 //Sign in Button

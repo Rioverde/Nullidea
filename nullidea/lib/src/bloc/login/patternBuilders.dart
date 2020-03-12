@@ -3,21 +3,34 @@ import 'package:nullidea/src/bloc/login/fields.dart';
 
 import 'package:nullidea/src/bloc/login/textButton.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
-
 import 'mainButton.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nullidea/src/ui/signUp.dart';
 
-//Returns Nullidea with pacifico fonts
-final formPasswordKey = new GlobalKey<FormState>();
-final formEmailKey = new GlobalKey<FormState>();
-final formPasswordKeySignUp = new GlobalKey<FormState>();
-final formEmailKeySignUp = new GlobalKey<FormState>();
+final formKeyEmail = new GlobalKey<FormState>();
+final formKeyPassword = new GlobalKey<FormState>();
+final formEmail = formKeyEmail.currentState;
+final formPassword = formKeyPassword.currentState;
 
-final form = formPasswordKey.currentState;
-final form2 = formEmailKey.currentState;
-final form3 = formPasswordKeySignUp.currentState;
-final form4 = formEmailKeySignUp.currentState;
+validateAndSave() {
+  if (formEmail.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+  }
+
+  if (formPassword.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+  }
+
+  if (formEmail.validate() && formPassword.validate()) {
+    print(passwordController.text);
+    print(emailController.text);
+    print("SUCCESS");
+  }
+}
 
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
   return Text('Nullidea',
@@ -45,20 +58,37 @@ TextButton buildForgetPassword() {
       yellowText: "Forgot password ?");
 }
 
-CustomField emailField() {
-  return CustomField(
-      key: formEmailKey,
+TextEditingController emailController = new TextEditingController();
+
+Form emailField() {
+  return Form(
+    key: formKeyEmail,
+    child: CustomField(
+      validate: (value) => validateEmailCases(value),
+      editingController: emailController,
+      enableSuffix: false,
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
       prefixIcon: Icon(Icons.person),
       fieldRadius: 8,
       hinttext: 'Email',
-      maxLines: 1);
+    ),
+  );
 }
 
-PasswordField passwordField() {
-  return PasswordField(
-    key: formPasswordKey,
-    hinttext: 'Password',
-    prefixIcon: Icon(Icons.lock),
+TextEditingController passwordController = new TextEditingController();
+
+Form newPasswordField() {
+  return Form(
+    key: formKeyPassword,
+    child: CustomField(
+      fieldRadius: 8,
+      editingController: passwordController,
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+      validate: (value) => validateCases(value),
+      hinttext: 'Password',
+      prefixIcon: Icon(Icons.lock),
+      enableSuffix: true,
+    ),
   );
 }
 
@@ -89,37 +119,6 @@ Container customButton() {
   );
 }
 
-validateAndSave() {
-  if (form.validate()) {
-    print("Is valide");
-  } else {
-    print("Not valid");
-  }
-
-  if (form2.validate()) {
-    print("Is valide");
-  } else {
-    print("Not valid");
-  }
-}
-
-CustomField signUpEmailField() {
-  return CustomField(
-      key: formEmailKeySignUp,
-      prefixIcon: Icon(Icons.person),
-      fieldRadius: 8,
-      hinttext: 'Email',
-      maxLines: 1);
-}
-
-PasswordField signUpPasswordField() {
-  return PasswordField(
-    key: formPasswordKeySignUp,
-    hinttext: 'Password',
-    prefixIcon: Icon(Icons.lock),
-  );
-}
-
 TextButton buildTextButton(BuildContext context) {
   return TextButton(
     pressed: () {
@@ -131,5 +130,17 @@ TextButton buildTextButton(BuildContext context) {
     fontSize: 14,
     contentText: "Don`t have an account ? ",
     yellowText: ' SIGN UP',
+  );
+}
+
+TextButton buildTextButtonSignIn(BuildContext context) {
+  return TextButton(
+    alignment: Alignment.center,
+    fontSize: 14,
+    contentText: "Already have an account ? ",
+    yellowText: " SIGN IN",
+    pressed: () {
+      Navigator.of(context).pop();
+    },
   );
 }

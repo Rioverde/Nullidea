@@ -39,6 +39,7 @@ class _CustomButtonState extends State<CustomButton> {
           color: widget.color,
           textColor: Colors.black,
           onPressed: () {
+            if (!mounted) return;
             setState(widget.action);
           },
           child: Text(widget.functionality,
