@@ -22,6 +22,7 @@ class SignUp extends StatelessWidget {
                 emailFieldRegister(),
                 passwordFieldRegister(),
                 customButtonRegister(),
+                buildTextButtonRegister(context),
                 buildRowofLoginIcons(),
               ],
             ),

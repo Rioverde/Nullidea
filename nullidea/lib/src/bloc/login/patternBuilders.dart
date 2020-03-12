@@ -164,12 +164,7 @@ TextButton buildTextButton(BuildContext context) {
 }
 
 
-
-
-
-
-
-
+// ===============================================================================
 
 Form emailFieldRegister() {
   return Form(
@@ -219,7 +214,7 @@ CustomButton customButtonRegister() {
   return CustomButton(
     action: validateAndSaveRegister,
     color: primaryColor,
-    padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
     borderRadius: 8,
     functionality: 'SIGN UP',
     fontSize: 18,
