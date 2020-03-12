@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
-import 'package:nullidea/src/bloc/login/patternBuilders.dart';
+import 'package:nullidea/src/bloc/patternBuilders.dart';
 
 class Login extends StatelessWidget {
   @override
