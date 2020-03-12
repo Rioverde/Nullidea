@@ -14,9 +14,8 @@ class CustomButton extends StatefulWidget {
   final EdgeInsets padding;
 
   CustomButton(
-      {
-        this.padding,
-        this.color,
+      {this.padding,
+      this.color,
       this.action,
       this.functionality,
       this.borderRadius,
@@ -29,6 +28,15 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(

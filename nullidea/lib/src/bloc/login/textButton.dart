@@ -22,6 +22,15 @@ class TextButton extends StatefulWidget {
 }
 
 class _TextButtonState extends State<TextButton> {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +38,10 @@ class _TextButtonState extends State<TextButton> {
       child: FlatButton(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onPressed: () {setState(widget.pressed);},
+        onPressed: () {
+          if (!mounted) return;
+          setState(widget.pressed);
+        },
         child: RichText(
           text: TextSpan(
             text: widget.contentText,
@@ -48,4 +60,3 @@ class _TextButtonState extends State<TextButton> {
     );
   }
 }
-

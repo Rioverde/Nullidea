@@ -36,6 +36,15 @@ class CustomField extends StatefulWidget {
 }
 
 class _CustomFieldState extends State<CustomField> {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
