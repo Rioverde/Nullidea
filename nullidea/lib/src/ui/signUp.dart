@@ -19,8 +19,9 @@ class SignUp extends StatelessWidget {
               children: <Widget>[
                 //Create Nice view of Nullidea
                 primaryText(60.0, primaryColor),
-                SizedBox(height: 16),
-
+                emailFieldRegister(),
+                passwordFieldRegister(),
+                customButtonRegister(),
                 buildRowofLoginIcons(),
               ],
             ),
@@ -29,6 +30,4 @@ class SignUp extends StatelessWidget {
       ),
     );
   }
-
-
 }

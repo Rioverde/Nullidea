@@ -11,9 +11,12 @@ class CustomButton extends StatefulWidget {
   final double borderRadius;
   final double fontSize;
   final Function() action;
+  final EdgeInsets padding;
 
   CustomButton(
-      {this.color,
+      {
+        this.padding,
+        this.color,
       this.action,
       this.functionality,
       this.borderRadius,
@@ -29,7 +32,7 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
+      padding: widget.padding,
       child: ButtonTheme(
         height: widget.height,
         minWidth: widget.width,

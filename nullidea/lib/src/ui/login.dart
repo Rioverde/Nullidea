@@ -18,9 +18,9 @@ class Login extends StatelessWidget {
                 //Create Nice view of Nullidea
                 primaryText(60.0, primaryColor),
                 //email Field
-                emailField(),
+                emailFieldLogin(),
                 //Password field which is stateful widget
-                newPasswordField(),
+                passwordFieldLogin(),
                 //Forgot password button
                 buildForgetPassword(),
                 //Sign in Button

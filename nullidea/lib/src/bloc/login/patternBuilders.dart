@@ -7,11 +7,25 @@ import 'mainButton.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nullidea/src/ui/signUp.dart';
 
+TextEditingController emailController = new TextEditingController();
+TextEditingController passwordController = new TextEditingController();
+
+TextEditingController emailControllerRegister = new TextEditingController();
+TextEditingController passwordControllerRegister = new TextEditingController();
+
 final formKeyEmail = new GlobalKey<FormState>();
 final formKeyPassword = new GlobalKey<FormState>();
+
+final formKeyEmailRegister = new GlobalKey<FormState>();
+final formKeyPasswordRegister = new GlobalKey<FormState>();
+
 final formEmail = formKeyEmail.currentState;
 final formPassword = formKeyPassword.currentState;
 
+final formEmailRegister = formKeyEmailRegister.currentState;
+final formPasswordRegister = formKeyPasswordRegister.currentState;
+
+futureFunc() {}
 validateAndSave() {
   if (formEmail.validate()) {
     print("Is valide");
@@ -31,6 +45,29 @@ validateAndSave() {
     print("SUCCESS");
   }
 }
+
+validateAndSaveRegister() {
+  if (formEmailRegister.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+    print(emailControllerRegister.text);
+  }
+
+  if (formPasswordRegister.validate()) {
+    print("Is valide");
+  } else {
+    print("Not valid");
+  }
+
+  if (formEmailRegister.validate() && formPasswordRegister.validate()) {
+    print(passwordControllerRegister.text);
+    print(emailControllerRegister.text);
+    print("SUCCESS");
+  }
+}
+
+
 
 Text primaryText(double fontSizeCustom, dynamic colorCustom) {
   return Text('Nullidea',
@@ -58,9 +95,7 @@ TextButton buildForgetPassword() {
       yellowText: "Forgot password ?");
 }
 
-TextEditingController emailController = new TextEditingController();
-
-Form emailField() {
+Form emailFieldLogin() {
   return Form(
     key: formKeyEmail,
     child: CustomField(
@@ -75,16 +110,14 @@ Form emailField() {
   );
 }
 
-TextEditingController passwordController = new TextEditingController();
-
-Form newPasswordField() {
+Form passwordFieldLogin() {
   return Form(
     key: formKeyPassword,
     child: CustomField(
       fieldRadius: 8,
       editingController: passwordController,
       padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-      validate: (value) => validateCases(value),
+      validate: (value) => validatePasswordCases(value),
       hinttext: 'Password',
       prefixIcon: Icon(Icons.lock),
       enableSuffix: true,
@@ -103,19 +136,16 @@ Row buildRowofLoginIcons() {
   );
 }
 
-futureFunc() {}
-
-Container customButton() {
-  return Container(
-    child: CustomButton(
-      action: validateAndSave,
-      color: primaryColor,
-      borderRadius: 8,
-      functionality: 'SIGN IN',
-      fontSize: 18,
-      height: 50,
-      width: double.infinity,
-    ),
+CustomButton customButton() {
+  return CustomButton(
+    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+    action: validateAndSave,
+    color: primaryColor,
+    borderRadius: 8,
+    functionality: 'SIGN IN',
+    fontSize: 18,
+    height: 50,
+    width: double.infinity,
   );
 }
 
@@ -133,7 +163,46 @@ TextButton buildTextButton(BuildContext context) {
   );
 }
 
-TextButton buildTextButtonSignIn(BuildContext context) {
+
+
+
+
+
+
+
+
+Form emailFieldRegister() {
+  return Form(
+    key: formKeyEmailRegister,
+    child: CustomField(
+      validate: (value) => authUserEmail(value),
+      editingController: emailControllerRegister,
+      enableSuffix: false,
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      prefixIcon: Icon(Icons.person),
+      fieldRadius: 8,
+      hinttext: 'Email',
+    ),
+  );
+}
+
+Form passwordFieldRegister() {
+  return Form(
+    key: formKeyPasswordRegister,
+    child: CustomField(
+      fieldRadius: 8,
+      editingController: passwordControllerRegister,
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      validate: (value) => authUserPassword(value),
+      hinttext: 'Password',
+      prefixIcon: Icon(Icons.lock),
+      enableSuffix: true,
+    ),
+  );
+}
+
+
+TextButton buildTextButtonRegister(BuildContext context) {
   return TextButton(
     alignment: Alignment.center,
     fontSize: 14,
@@ -142,5 +211,19 @@ TextButton buildTextButtonSignIn(BuildContext context) {
     pressed: () {
       Navigator.of(context).pop();
     },
+  );
+}
+
+
+CustomButton customButtonRegister() {
+  return CustomButton(
+    action: validateAndSaveRegister,
+    color: primaryColor,
+    padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+    borderRadius: 8,
+    functionality: 'SIGN UP',
+    fontSize: 18,
+    height: 50,
+    width: double.infinity,
   );
 }

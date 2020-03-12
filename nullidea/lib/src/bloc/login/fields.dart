@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:nullidea/src/constants/nullideaTheme.dart';
 
-bool error = true;
+String email = '1';
+String password = '1';
 bool passwordVisible = true;
 bool enablesuffix;
 
@@ -86,8 +87,7 @@ class _CustomFieldState extends State<CustomField> {
   }
 }
 
-
-String validateCases(String value) {
+String validatePasswordCases(String value) {
   Pattern pattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
   RegExp regex = new RegExp(pattern);
@@ -100,8 +100,7 @@ String validateCases(String value) {
   } else if (!regex.hasMatch(value)) {
     return "Invalid password, try eg: Test123*!";
   } else
-    error = false;
-  return null;
+    return null;
 }
 
 String validateEmailCases(String value) {
@@ -115,4 +114,20 @@ String validateEmailCases(String value) {
     return "Email should not have spaces";
   } else
     return null;
+}
+
+String authUserEmail(String value) {
+  if (value == email) {
+    return null;
+  } else {
+    return "Email does not exists";
+  }
+}
+
+String authUserPassword(String value) {
+  if (value == password) {
+    return null;
+  } else {
+    return "Password is incorrect";
+  }
 }
