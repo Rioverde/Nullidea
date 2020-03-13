@@ -5,18 +5,25 @@ import 'package:nullidea/src/constants/nullideaTheme.dart';
 import 'package:nullidea/src/bloc/patternBuilders.dart';
 
 class SignUp extends StatefulWidget {
-
-
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-
   @override
   void setState(fn) {
-    if (!mounted) return;
-    super.setState(fn);
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void dispose() {
+    emailFieldRegister();
+    passwordFieldRegister();
+    customButtonRegister();
+    buildTextButtonRegister(context);
+    super.dispose();
   }
 
   @override

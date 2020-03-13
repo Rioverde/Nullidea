@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:nullidea/src/constants/nullideaTheme.dart';
 import 'package:nullidea/src/bloc/patternBuilders.dart';
+import 'package:nullidea/src/constants/nullideaTheme.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  @override
+  void setState(fn) {
+    super.setState(fn);
+  }
+  @override
+  void dispose() {
+    passwordFieldLogin();
+    //Forgot password button
+    buildForgetPassword();
+    customButton();
+    //are you already exist button. Sign Up with giving some padding using SizeBox
+    buildTextButton(context);
+    //Enter via google, facebook or git
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
