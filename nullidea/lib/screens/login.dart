@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/handleRequests.dart';
 
@@ -11,6 +12,7 @@ class Login extends StatefulWidget {
   LoginState createState() => LoginState();
 }
 
+bool success = true;
 bool passwordVisible = true;
 
 class LoginState extends State<Login> {
@@ -23,14 +25,29 @@ class LoginState extends State<Login> {
       return false;
   }
 
-  void validateAndSubmit() {
+  Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
-      postUser(email, password);
+      setState(() {
+        success = false;
+        toWait();
+        print(success);
+      });
+
+      // postUser(email, password);
+
+      setState(() {
+        success = true;
+        print(success);
+      });
     } else {}
   }
 
   void toLogin() => setState(() {
         formtype = FormType.login;
+      });
+
+  Future<void> toWait() async => setState(() {
+        formtype = FormType.waiting;
       });
 
   void toRegister() => setState(() {
@@ -103,9 +120,51 @@ class LoginState extends State<Login> {
       ];
     } else
       return [
-        signUpBotton(),
+        loadingbutton(success ? FormType.register : FormType.waiting),
         alreadyHaveAccount(),
       ];
+  }
+
+  dynamic loadingbutton(FormType waiting) {
+    if (formtype == waiting) {
+      return ButtonTheme(
+        disabledColor: disabledState,
+        height: 55,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: RaisedButton(
+              color: primaryColor,
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10)),
+              child: Text(
+                "SIGN UP",
+                style: GoogleFonts.ubuntu(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                    color: emailController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty
+                        ? Colors.black
+                        : Colors.black),
+              ),
+              onPressed: emailController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty
+                  ? validateAndSubmit
+                  : null),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Container(
+          height: 55,
+          child: SpinKitWanderingCubes(
+            duration: Duration(seconds: 2),
+            color: primaryColor,
+            size: 50.0,
+          ),
+        ),
+      );
+    }
   }
 
   Center nullideaText() {
@@ -139,34 +198,6 @@ class LoginState extends State<Login> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  ButtonTheme signUpBotton() {
-    return ButtonTheme(
-      disabledColor: disabledState,
-      height: 55,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: RaisedButton(
-            color: primaryColor,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10)),
-            child: Text(
-              "SIGN UP",
-              style: GoogleFonts.ubuntu(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: emailController.text.isNotEmpty &&
-                          passwordController.text.isNotEmpty
-                      ? Colors.black
-                      : Colors.black),
-            ),
-            onPressed: emailController.text.isNotEmpty &&
-                    passwordController.text.isNotEmpty
-                ? validateAndSubmit
-                : null),
       ),
     );
   }
