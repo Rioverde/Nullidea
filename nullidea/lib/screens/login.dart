@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/handleRequests.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../constants.dart';
 import '../mechanics.dart';
@@ -46,12 +47,30 @@ class LoginState extends State<Login> {
         formtype = FormType.login;
       });
 
+  void toPin() => setState(() {
+        formtype = FormType.pincode;
+      });
+
   Future<void> toWait() async => setState(() {
-        Future.delayed(const Duration(seconds: 3), () {
-
+        Future.delayed(const Duration(seconds: 2), () {
           setState(() {
-            formtype = FormType.register;
-
+            if (pin) {
+              print(pin);
+              formtype = FormType.pincode;
+            } else
+              formtype = FormType.register;
+            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                backgroundColor: primaryColor,
+                content: new Text(
+                  
+                  'User with this email already exists',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.ubuntu(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+                duration: new Duration(seconds: 3)));
           });
         });
         formtype = FormType.waiting;
@@ -83,9 +102,11 @@ class LoginState extends State<Login> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Form(
@@ -109,13 +130,16 @@ class LoginState extends State<Login> {
         loginEmailField(),
         loginPasswordField(),
       ];
-    } else {
+    } else if (formtype == FormType.register || formtype == FormType.waiting) {
       return [
         nullideaText(),
         registerEmailField(),
         registerPasswordField(),
       ];
-    }
+    } else
+      return [
+        nullideaText(),
+      ];
   }
 
   List<Widget> toggleButtons() {
@@ -125,10 +149,29 @@ class LoginState extends State<Login> {
         signInButton(),
         dontHaveAccount(),
       ];
-    } else
+    } else if (formtype == FormType.register || formtype == FormType.waiting) {
       return [
         loadingbutton(success ? FormType.register : FormType.waiting),
         alreadyHaveAccount(),
+      ];
+    } else
+      return [
+        PinCodeTextField(
+          length: 6,
+          activeColor: primaryColor,
+          backgroundColor: Colors.black,
+          disabledColor: Colors.grey.shade600,
+          obsecureText: false,
+          animationType: AnimationType.fade,
+          shape: PinCodeFieldShape.box,
+          animationDuration: Duration(milliseconds: 300),
+          borderRadius: BorderRadius.circular(5),
+          fieldHeight: 50,
+          fieldWidth: 40,
+          onChanged: (value) {
+            setState(() {});
+          },
+        )
       ];
   }
 

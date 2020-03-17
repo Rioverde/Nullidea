@@ -8,7 +8,8 @@ String password;
 enum FormType {
   login,
   register,
-  waiting
+  waiting,
+  pincode
 }
 
 FormType formtype = FormType.login;

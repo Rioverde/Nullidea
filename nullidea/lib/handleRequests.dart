@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// Sending a POST request
 
+bool pin = false;
 //post request
 Future<void> postUser(String email, String password) async {
 
@@ -19,6 +19,7 @@ Future<void> postUser(String email, String password) async {
     Map data = json.decode(response.body);
     // Assume the response body is something like: ['foo', { 'bar': 499 }]
     bool state = data['success'];
+    
 
     if (state == false) {
       print(email + ' not exists in DB');
@@ -29,6 +30,7 @@ Future<void> postUser(String email, String password) async {
       );
 
       if (response.statusCode == 200) {
+        pin = true;
         print("So I sent him verification code via email");
         // If the server did return a 200 CREATED response,
         // then parse the JSON.
