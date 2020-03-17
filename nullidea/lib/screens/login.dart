@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,14 +32,12 @@ class LoginState extends State<Login> {
       setState(() {
         success = false;
         toWait();
-        print(success);
       });
 
-      // postUser(email, password);
+      postUser(email, password);
 
       setState(() {
         success = true;
-        print(success);
       });
     } else {}
   }
@@ -47,6 +47,13 @@ class LoginState extends State<Login> {
       });
 
   Future<void> toWait() async => setState(() {
+        Future.delayed(const Duration(seconds: 3), () {
+
+          setState(() {
+            formtype = FormType.register;
+
+          });
+        });
         formtype = FormType.waiting;
       });
 
