@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,22 +56,11 @@ class LoginState extends State<Login> {
         Future.delayed(const Duration(seconds: 2), () {
           setState(() {
             if (pin) {
-              print(pin);
               formtype = FormType.pincode;
-            } else
+            } else if (!pin) {
               formtype = FormType.register;
-            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: primaryColor,
-                content: new Text(
-                  
-                  'User with this email already exists',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.ubuntu(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-                duration: new Duration(seconds: 3)));
+              _scaffoldKey.currentState.showSnackBar(snackBar());
+            }
           });
         });
         formtype = FormType.waiting;
@@ -103,6 +93,7 @@ class LoginState extends State<Login> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +129,48 @@ class LoginState extends State<Login> {
       ];
     } else
       return [
-        nullideaText(),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            verticalDirection: VerticalDirection.down,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "VERIFY",
+                style: GoogleFonts.ubuntu(
+                    color: primaryColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: 24),
+              Image(
+                image: AssetImage('assets/images/mailsvg.png'),
+                height: 100,
+                width: 100,
+              ),
+              SizedBox(width: 24),
+              Text(
+                "EMAIL",
+                style: GoogleFonts.ubuntu(
+                    color: primaryColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: Text(
+            "Enter the 6 digit code we sent you via email to proceed. Check your Spam folder as well, Usually email comes in 2-5 min",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.ubuntu(
+                color: Colors.white,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
       ];
   }
 
@@ -156,23 +188,100 @@ class LoginState extends State<Login> {
       ];
     } else
       return [
-        PinCodeTextField(
-          length: 6,
-          activeColor: primaryColor,
-          backgroundColor: Colors.black,
-          disabledColor: Colors.grey.shade600,
-          obsecureText: false,
-          animationType: AnimationType.fade,
-          shape: PinCodeFieldShape.box,
-          animationDuration: Duration(milliseconds: 300),
-          borderRadius: BorderRadius.circular(5),
-          fieldHeight: 50,
-          fieldWidth: 40,
-          onChanged: (value) {
-            setState(() {});
-          },
+        Column(
+          children: <Widget>[
+            pinCodeTextField(),
+            ButtonTheme(
+              disabledColor: disabledState,
+              height: 55,
+              minWidth: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: RaisedButton(
+                    color: primaryColor,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(10)),
+                    child: Text(
+                      "PROCEED",
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                          color: emailController.text.isNotEmpty &&
+                                  passwordController.text.isNotEmpty
+                              ? Colors.black
+                              : Colors.black),
+                    ),
+                    onPressed: null),
+              ),
+            ),
+            FlatButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: null,
+              child: RichText(
+                text: TextSpan(
+                  text: "Didn`t receive any code ? ",
+                  style: GoogleFonts.ubuntu(
+                      color: Colors.grey.shade700,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: " RESEND", style: TextStyle(color: primaryColor)),
+                  ],
+                ),
+              ),
+            ),
+            CountdownFormatted(
+              duration: Duration(seconds: 120),
+              builder: (BuildContext ctx, String remaining) {
+                return Text(
+                  remaining,
+                  style: TextStyle(fontSize: 16, fontFamily: "Ubuntu", color: primaryColor),
+                ); // 01:00:00
+              },
+            ),
+          ],
         )
       ];
+  }
+
+  Padding pinCodeTextField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+      child: PinCodeTextField(
+        textStyle: TextStyle(color: primaryColor, fontSize: 32.0),
+        selectedColor: primaryColor,
+        selectedFillColor: primaryColor,
+        length: 6,
+        activeColor: primaryColor,
+        backgroundColor: Colors.black,
+        inactiveColor: Colors.grey.shade600,
+        disabledColor: Colors.grey.shade600,
+        obsecureText: false,
+        animationType: AnimationType.fade,
+        shape: PinCodeFieldShape.box,
+        animationDuration: Duration(milliseconds: 300),
+        borderRadius: BorderRadius.circular(5),
+        fieldHeight: 47,
+        fieldWidth: 43,
+        onChanged: (value) {
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  SnackBar snackBar() {
+    return SnackBar(
+        backgroundColor: primaryColor,
+        content: new Text(
+          'User with this email already exists',
+          textAlign: TextAlign.center,
+          style: GoogleFonts.ubuntu(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        duration: new Duration(seconds: 3));
   }
 
   dynamic loadingbutton(FormType waiting) {

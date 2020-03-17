@@ -22,6 +22,8 @@ Future<void> postUser(String email, String password) async {
     
 
     if (state == false) {
+        pin = false;
+
       print(email + ' not exists in DB');
       final response = await http.post(
         url,
@@ -35,6 +37,7 @@ Future<void> postUser(String email, String password) async {
         // If the server did return a 200 CREATED response,
         // then parse the JSON.
       } else {
+        
         // If the server did not return a 200 CREATED response,
         // then throw an exception.
 
