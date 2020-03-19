@@ -14,4 +14,5 @@ enum FormType {
 
 FormType formtype = FormType.login;
 var emailController = TextEditingController();
+var pincodeController = TextEditingController();
 var passwordController = TextEditingController();
