@@ -4,9 +4,8 @@ import 'package:http/http.dart' as http;
 
 bool pin = false;
 bool newstate = false;
-
 bool correctPin = false;
-//post request
+//post requestw
 Future<void> postUser(String email) async {
   
   String body = jsonEncode({"email": email});

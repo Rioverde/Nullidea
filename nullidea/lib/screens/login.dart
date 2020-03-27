@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:countdown_flutter/countdown_flutter.dart';
+import 'package:quiver/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,12 +21,12 @@ bool passwordVisible = true;
 
 class LoginState extends State<Login> {
   Future<void> proceed() async {
-    
     pincode = pincodeController.text;
     await checkPin(email, pincode, password);
     setState(() {
-        _scaffoldKey.currentState.showSnackBar(
-            snackBar(newstate ? 'User Registered' : 'Verification code is incorrect, try again'));
+      _scaffoldKey.currentState.showSnackBar(snackBar(newstate
+          ? 'User Registered'
+          : 'Verification code is incorrect, try again'));
     });
   }
 
@@ -68,6 +67,7 @@ class LoginState extends State<Login> {
           setState(() {
             if (pin) {
               formtype = FormType.pincode;
+              startTimer();
             } else if (!pin) {
               formtype = FormType.register;
               _scaffoldKey.currentState.showSnackBar(
@@ -103,6 +103,28 @@ class LoginState extends State<Login> {
       setState(() {});
     });
     super.initState();
+  }
+
+  int _start = 10;
+  int _current = 10;
+
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -166,7 +188,13 @@ class LoginState extends State<Login> {
             pinCodeTextField(),
             proceedButton(),
             didntReceivedCode(),
-            countdown(),
+            Text(
+              "$_current",
+              style: GoogleFonts.ubuntu(
+                  color: _current == 0 ? Colors.white : primaryColor,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600),
+            ),
           ],
         )
       ];
@@ -178,7 +206,7 @@ class LoginState extends State<Login> {
       height: 55,
       minWidth: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
         child: RaisedButton(
             color: primaryColor,
             shape: new RoundedRectangleBorder(
@@ -243,24 +271,16 @@ class LoginState extends State<Login> {
     );
   }
 
-  CountdownFormatted countdown() {
-    return CountdownFormatted(
-      duration: Duration(seconds: 120),
-      builder: (BuildContext ctx, String remaining) {
-        return Text(
-          remaining,
-          style: TextStyle(
-              fontSize: 16, fontFamily: "Ubuntu", color: primaryColor),
-        ); // 01:00:00
-      },
-    );
+  void postResend() {
+    postUser(email);
+    startTimer();
   }
 
   FlatButton didntReceivedCode() {
     return FlatButton(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onPressed: null,
+      onPressed: _current == 0 ? postResend : null,
       child: RichText(
         text: TextSpan(
           text: "Didn`t receive any code ? ",
