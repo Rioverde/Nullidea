@@ -41,12 +41,13 @@ class LoginState extends State<Login> {
 
   Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
+      postUser(email);
       setState(() {
         success = false;
         toWait();
       });
 
-      postUser(email);
+      
 
       setState(() {
         success = true;
