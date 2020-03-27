@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-
-bool pin = false;
-bool newstate = false;
+bool sendingPin = false;
+bool responceState = false;
 bool correctPin = false;
 //post requestw
 Future<void> postUser(String email) async {
-  
   String body = jsonEncode({"email": email});
   var url = 'https://nullidea.herokuapp.com/v1/users/verify';
   final response =
@@ -21,9 +19,7 @@ Future<void> postUser(String email) async {
     // Assume the response body is something like: ['foo', { 'bar': 499 }]
     bool state = data['success'];
 
-    if (state == false) {
-      pin = false;
-
+    if (!state) {
       print(email + ' not exists in DB');
       final response = await http.post(
         url,
@@ -32,7 +28,7 @@ Future<void> postUser(String email) async {
       );
 
       if (response.statusCode == 200) {
-        pin = true;
+        sendingPin = true;
         print("So I sent him verification code via email");
 
         // If the server did return a 200 CREATED response,
@@ -43,7 +39,7 @@ Future<void> postUser(String email) async {
 
         throw Exception('Internal server error');
       }
-    } else if (state == true) {
+    } else if (state) {
       print("User already exists I will not send him verification code");
     }
   } else {
@@ -53,21 +49,18 @@ Future<void> postUser(String email) async {
   }
 }
 
-
 Future<void> checkPin(String email, String pincode, String password) async {
-  
   Map<String, String> registerbody = {"email": email, "password": password};
   var url = 'https://nullidea.herokuapp.com/v1/users';
-  
+
   final pinresponce = await http.get(
-    
       'https://nullidea.herokuapp.com/v1/users/verify/?email=' +
           email +
           '&code=' +
           pincode);
-          Map newdata = json.decode(pinresponce.body);
-  newstate = newdata['success'];
-  if (newstate) {
+  Map data = json.decode(pinresponce.body);
+  responceState = data['success'];
+  if (responceState) {
     final response = await http.post(
       url,
       headers: <String, String>{'Content-Type': 'application/json'},
@@ -75,8 +68,26 @@ Future<void> checkPin(String email, String pincode, String password) async {
     );
     print(response.body);
     print("User " + email + " Created");
-  
   } else {
     print('Incorrect verification code');
+  }
+}
+
+Future<void> getSignIn(String email, String password) async {
+
+  final signInResponce = await http.get(
+      'https://nullidea.herokuapp.com/v1/users/?email=' +
+          email +
+          '&password=' +
+          password);
+
+  Map data = json.decode(signInResponce.body);
+  responceState = data['success'];
+  if (responceState) {
+    print("Signed In");
+
+    
+  } else {
+    print("Email and password is incorrect");
   }
 }

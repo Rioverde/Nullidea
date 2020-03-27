@@ -15,19 +15,21 @@ class Login extends StatefulWidget {
   LoginState createState() => LoginState();
 }
 
-String pincode;
-bool success = true;
-bool passwordVisible = true;
-
 class LoginState extends State<Login> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  //===================================Fuctions==================================//
+  void postResend(){
+     postUser(email);
+    startTimer();
+  }
+
   Future<void> proceed() async {
     pincode = pincodeController.text;
     await checkPin(email, pincode, password);
-    setState(() {
-      _scaffoldKey.currentState.showSnackBar(snackBar(newstate
-          ? 'User Registered'
-          : 'Verification code is incorrect, try again'));
-    });
+    setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(responceState
+        ? 'User Registered'
+        : 'Verification code is incorrect, try again')));
   }
 
   bool validateAndSave() {
@@ -41,13 +43,11 @@ class LoginState extends State<Login> {
 
   Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
-      postUser(email);
+      await postUser(email);
       setState(() {
         success = false;
         toWait();
       });
-
-      
 
       setState(() {
         success = true;
@@ -63,13 +63,15 @@ class LoginState extends State<Login> {
         formtype = FormType.pincode;
       });
 
+
+
   Future<void> toWait() async => setState(() {
         Future.delayed(const Duration(seconds: 2), () {
           setState(() {
-            if (pin) {
+            if (sendingPin) {
               formtype = FormType.pincode;
               startTimer();
-            } else if (!pin) {
+            } else if (!sendingPin) {
               formtype = FormType.register;
               _scaffoldKey.currentState.showSnackBar(
                   snackBar('User with this email already exists'));
@@ -106,19 +108,16 @@ class LoginState extends State<Login> {
     super.initState();
   }
 
-  int _start = 10;
-  int _current = 10;
-
   void startTimer() {
     CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
+      new Duration(seconds: start),
       new Duration(seconds: 1),
     );
 
     var sub = countDownTimer.listen(null);
     sub.onData((duration) {
       setState(() {
-        _current = _start - duration.elapsed.inSeconds;
+        current = start - duration.elapsed.inSeconds;
       });
     });
 
@@ -128,8 +127,7 @@ class LoginState extends State<Login> {
     });
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  //===============================================================================//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,16 +187,22 @@ class LoginState extends State<Login> {
             pinCodeTextField(),
             proceedButton(),
             didntReceivedCode(),
-            Text(
-              "$_current",
-              style: GoogleFonts.ubuntu(
-                  color: _current == 0 ? Colors.white : primaryColor,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600),
-            ),
+            countDown(),
           ],
         )
       ];
+  }
+
+    //===================================Buildders==================================//
+
+  Text countDown() {
+    return Text(
+      "$current",
+      style: GoogleFonts.ubuntu(
+          color: current == 0 ? Colors.white : primaryColor,
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600),
+    );
   }
 
   ButtonTheme proceedButton() {
@@ -272,16 +276,11 @@ class LoginState extends State<Login> {
     );
   }
 
-  void postResend() {
-    postUser(email);
-    startTimer();
-  }
-
   FlatButton didntReceivedCode() {
     return FlatButton(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onPressed: _current == 0 ? postResend : null,
+      onPressed: current == 0 ? postResend : null,
       child: RichText(
         text: TextSpan(
           text: "Didn`t receive any code ? ",
@@ -290,7 +289,7 @@ class LoginState extends State<Login> {
               fontSize: 16.0,
               fontWeight: FontWeight.w600),
           children: <TextSpan>[
-            TextSpan(text: " RESEND", style: TextStyle(color: primaryColor)),
+            TextSpan(text: " RESEND", style: TextStyle(color: current == 0 ? primaryColor : disabledState)),
           ],
         ),
       ),
