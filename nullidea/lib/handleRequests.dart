@@ -89,5 +89,6 @@ Future<void> getSignIn(String email, String password) async {
     
   } else {
     print("Email and password is incorrect");
+    print(signInResponce.body);
   }
 }

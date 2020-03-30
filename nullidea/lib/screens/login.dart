@@ -19,9 +19,19 @@ class LoginState extends State<Login> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   //===================================Fuctions==================================//
-  void postResend(){
-     postUser(email);
+  void postResend() {
+    postUser(email);
     startTimer();
+  }
+
+  Future<void> validateAndSignIn() async {
+    if (validateAndSave()) {
+      await getSignIn(email, password);
+        setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+            responceState
+                ? 'You Logged in'
+                : 'Incorrect email or password')));
+    }
   }
 
   Future<void> proceed() async {
@@ -62,8 +72,6 @@ class LoginState extends State<Login> {
   void toPin() => setState(() {
         formtype = FormType.pincode;
       });
-
-
 
   Future<void> toWait() async => setState(() {
         Future.delayed(const Duration(seconds: 2), () {
@@ -193,7 +201,8 @@ class LoginState extends State<Login> {
       ];
   }
 
-    //===================================Buildders==================================//
+
+  //===================================Builders==================================//
 
   Text countDown() {
     return Text(
@@ -289,7 +298,10 @@ class LoginState extends State<Login> {
               fontSize: 16.0,
               fontWeight: FontWeight.w600),
           children: <TextSpan>[
-            TextSpan(text: " RESEND", style: TextStyle(color: current == 0 ? primaryColor : disabledState)),
+            TextSpan(
+                text: " RESEND",
+                style: TextStyle(
+                    color: current == 0 ? primaryColor : disabledState)),
           ],
         ),
       ),
@@ -487,7 +499,7 @@ class LoginState extends State<Login> {
             ),
             onPressed: emailController.text.isNotEmpty &&
                     passwordController.text.isNotEmpty
-                ? validateAndSave
+                ? validateAndSignIn
                 : null),
       ),
     );
