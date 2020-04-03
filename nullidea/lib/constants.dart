@@ -17,9 +17,12 @@ int start = 10;
 //current value of clock
 int current = 10;
 //states of screens for login
+bool changePass = false;
 enum FormType { login, register, waiting, pincode, changePassword }
 
 FormType formtype = FormType.login;
 var emailController = TextEditingController();
 var pincodeController = TextEditingController();
 var passwordController = TextEditingController();
+var changepasswordController = TextEditingController();
+var changepasswordControllerFirst = TextEditingController();

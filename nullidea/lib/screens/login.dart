@@ -27,19 +27,25 @@ class LoginState extends State<Login> {
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
       await getSignIn(email, password);
-        setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
-            responceState
-                ? 'You Logged in'
-                : 'Incorrect email or password')));
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+          responceState ? 'You Logged in' : 'Incorrect email or password')));
     }
   }
 
   Future<void> proceed() async {
     pincode = pincodeController.text;
-    await checkPin(email, pincode, password);
-    setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(responceState
-        ? 'User Registered'
-        : 'Verification code is incorrect, try again')));
+    if (changePass) {
+      await checkPintoChangePassword(email, pincode, password);
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(patched
+          ? 'Password Changed'
+          : 'Verification code is incorrect, try again')));
+    } else {
+      await checkPin(email, pincode, password);
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+          responceState
+              ? 'User Registered'
+              : 'Verification code is incorrect, try again')));
+    }
   }
 
   bool validateAndSave() {
@@ -65,12 +71,34 @@ class LoginState extends State<Login> {
     } else {}
   }
 
+//TODO
+  Future<void> submitChangedPassword() async {
+    if (validateAndSave()) {
+      if (changepasswordController.text != changepasswordControllerFirst.text) {
+        setState(() => _scaffoldKey.currentState
+            .showSnackBar(snackBar('Password fields do not match')));
+      } else if (changepasswordController.text ==
+          changepasswordControllerFirst.text) {
+        setState(() {
+          startTimer();
+        });
+        await changePasswordSendVerificarion(email);
+        toPin();
+        changePass = true;
+      }
+    }
+  }
+
   void toLogin() => setState(() {
         formtype = FormType.login;
       });
 
   void toPin() => setState(() {
         formtype = FormType.pincode;
+      });
+
+  void toChangepassword() => setState(() {
+        formtype = FormType.changePassword;
       });
 
   Future<void> toWait() async => setState(() {
@@ -99,11 +127,21 @@ class LoginState extends State<Login> {
     pincodeController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    changepasswordController.dispose();
+    changepasswordControllerFirst.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
+    changepasswordController.addListener(() {
+      //use setState to rebuild the widget
+      setState(() {});
+    });
+    changepasswordControllerFirst.addListener(() {
+      //use setState to rebuild the widget
+      setState(() {});
+    });
     emailController.addListener(() {
       //use setState to rebuild the widget
       setState(() {});
@@ -169,6 +207,12 @@ class LoginState extends State<Login> {
         registerEmailField(),
         registerPasswordField(),
       ];
+    } else if (formtype == FormType.changePassword) {
+      return [
+        loginEmailField(),
+        changePasswordField(),
+        changePasswordFieldconfirm(),
+      ];
     } else
       return [
         verify(),
@@ -182,6 +226,10 @@ class LoginState extends State<Login> {
         forgotPassword(),
         signInButton(),
         dontHaveAccount(),
+      ];
+    } else if (formtype == FormType.changePassword) {
+      return [
+        changePasswordButton(),
       ];
     } else if (formtype == FormType.register || formtype == FormType.waiting) {
       return [
@@ -200,7 +248,6 @@ class LoginState extends State<Login> {
         )
       ];
   }
-
 
   //===================================Builders==================================//
 
@@ -235,6 +282,36 @@ class LoginState extends State<Login> {
                       : Colors.black),
             ),
             onPressed: pincodeController.text.isNotEmpty ? proceed : null),
+      ),
+    );
+  }
+
+//TODO
+  ButtonTheme changePasswordButton() {
+    return ButtonTheme(
+      disabledColor: disabledState,
+      height: 55,
+      minWidth: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: RaisedButton(
+            color: primaryColor,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10)),
+            child: Text(
+              "CHANGE PASSWORD",
+              style: GoogleFonts.ubuntu(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: changepasswordControllerFirst.text.isNotEmpty &&
+                          changepasswordController.text.isNotEmpty
+                      ? Colors.black
+                      : Colors.black),
+            ),
+            onPressed: changepasswordControllerFirst.text.isNotEmpty &&
+                    changepasswordController.text.isNotEmpty
+                ? submitChangedPassword
+                : null),
       ),
     );
   }
@@ -513,7 +590,7 @@ class LoginState extends State<Login> {
           child: FlatButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: null,
+            onPressed: toChangepassword,
             child: Text("Forgot Password ?",
                 style: GoogleFonts.ubuntu(
                     color: primaryColor,
@@ -532,7 +609,41 @@ class LoginState extends State<Login> {
         onSaved: (value) => password = value,
         validator: (value) => validatePasswordCases(value),
         decoration: InputDecoration(
-          hintText: "Password",
+          hintText: "Enter new Password",
+          suffixIcon: buildmeIcon(),
+          prefixIcon: Icon(Icons.lock),
+        ),
+      ),
+    );
+  }
+
+  Padding changePasswordFieldconfirm() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: TextFormField(
+        obscureText: passwordVisible,
+        controller: changepasswordController,
+        onSaved: (value) => password = value,
+        validator: (value) => validatePasswordCases(value),
+        decoration: InputDecoration(
+          hintText: "Confirm new password",
+          suffixIcon: buildmeIcon(),
+          prefixIcon: Icon(Icons.lock),
+        ),
+      ),
+    );
+  }
+
+  Padding changePasswordField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: TextFormField(
+        obscureText: passwordVisible,
+        controller: changepasswordControllerFirst,
+        onSaved: (value) => password = value,
+        validator: (value) => validatePasswordCases(value),
+        decoration: InputDecoration(
+          hintText: "Enter new password",
           suffixIcon: buildmeIcon(),
           prefixIcon: Icon(Icons.lock),
         ),
