@@ -209,6 +209,7 @@ class LoginState extends State<Login> {
       ];
     } else if (formtype == FormType.changePassword) {
       return [
+        changepasswordimage(),
         loginEmailField(),
         changePasswordField(),
         changePasswordFieldconfirm(),
@@ -250,6 +251,14 @@ class LoginState extends State<Login> {
   }
 
   //===================================Builders==================================//
+
+  Image changepasswordimage() {
+    return Image(
+      image: AssetImage('assets/images/lock.png'),
+      height: 100,
+      width: 100,
+    );
+  }
 
   Text countDown() {
     return Text(
