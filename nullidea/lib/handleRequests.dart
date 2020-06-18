@@ -10,9 +10,9 @@ bool patched = false;
 //post reques
 Future<void> postUser(String email) async {
   String body = jsonEncode({"email": email});
-  var url = 'https://nullidea.herokuapp.com/v1/users/verify';
+  var url = 'https://nullidea-backend.herokuapp.com/v1/users/verify';
   final response =
-      await http.get('https://nullidea.herokuapp.com/v1/users/?email=' + email);
+      await http.get('https://nullidea-backend.herokuapp.com/v1/users/?email=' + email);
 
   // print('Response status: ${response.statusCode}');
   // print('Response body: ${response.body}');
@@ -54,10 +54,10 @@ Future<void> postUser(String email) async {
 
 Future<void> checkPin(String email, String pincode, String password) async {
   Map<String, String> registerbody = {"email": email, "password": password};
-  var url = 'https://nullidea.herokuapp.com/v1/users';
+  var url = 'https://nullidea-backend.herokuapp.com/v1/users';
 
   final pinresponce = await http.get(
-      'https://nullidea.herokuapp.com/v1/users/verify/?email=' +
+      'https://nullidea-backend.herokuapp.com/v1/users/verify/?email=' +
           email +
           '&code=' +
           pincode);
@@ -79,7 +79,7 @@ Future<void> checkPin(String email, String pincode, String password) async {
 Future<void> getSignIn(String email, String password) async {
 
   final signInResponce = await http.get(
-      'https://nullidea.herokuapp.com/v1/users/?email=' +
+      'https://nullidea-backend.herokuapp.com/v1/users/?email=' +
           email +
           '&password=' +
           password);
@@ -99,9 +99,9 @@ Future<void> getSignIn(String email, String password) async {
 
 Future<void> changePasswordSendVerificarion(String email) async {
   String body = jsonEncode({"email": email});
-  var url = 'https://nullidea.herokuapp.com/v1/users/verify';
+  var url = 'https://nullidea-backend.herokuapp.com/v1/users/verify';
   final response =
-      await http.get('https://nullidea.herokuapp.com/v1/users/?email=' + email);
+      await http.get('https://nullidea-backend.herokuapp.com/v1/users/?email=' + email);
 
   // print('Response status: ${response.statusCode}');
   // print('Response body: ${response.body}');
@@ -144,10 +144,10 @@ Future<void> changePasswordSendVerificarion(String email) async {
 
 Future<void> checkPintoChangePassword(String email, String pincode, String password) async {
   Map<String, String> registerbody = {"email": email, "password": password};
-  var url = 'https://nullidea.herokuapp.com/v1/users';
+  var url = 'https://nullidea-backend.herokuapp.com/v1/users';
 
   final pinresponce = await http.get(
-      'https://nullidea.herokuapp.com/v1/users/verify/?email=' +
+      'https://nullidea-backend.herokuapp.com/v1/users/verify/?email=' +
           email +
           '&code=' +
           pincode);

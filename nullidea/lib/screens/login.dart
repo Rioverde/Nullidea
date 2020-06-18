@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/handleRequests.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../constants.dart';
 import '../mechanics.dart';
@@ -71,7 +72,7 @@ class LoginState extends State<Login> {
     } else {}
   }
 
-//TODO
+
   Future<void> submitChangedPassword() async {
     if (validateAndSave()) {
       if (changepasswordController.text != changepasswordControllerFirst.text) {
@@ -132,8 +133,13 @@ class LoginState extends State<Login> {
     super.dispose();
   }
 
+  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
   @override
   void initState() {
+    firebaseMessaging.getToken().then((token) {
+      print('FCM Token: $token');
+    });
+
     changepasswordController.addListener(() {
       //use setState to rebuild the widget
       setState(() {});
@@ -295,7 +301,6 @@ class LoginState extends State<Login> {
     );
   }
 
-//TODO
   ButtonTheme changePasswordButton() {
     return ButtonTheme(
       disabledColor: disabledState,
