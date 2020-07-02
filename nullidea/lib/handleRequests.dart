@@ -77,12 +77,17 @@ Future<void> checkPin(String email, String pincode, String password) async {
 }
 
 Future<void> getSignIn(String email, String password) async {
-
-  final signInResponce = await http.get(
-      'https://nullidea-backend.herokuapp.com/v1/users/?email=' +
-          email +
-          '&password=' +
-          password);
+//TODO
+final http.Response signInResponce = await http.post(
+    'https://nullidea-backend.herokuapp.com/v1/users/login',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'password': password,
+    }),
+  );  
 
   Map data = json.decode(signInResponce.body);
   responceState = data['success'];
