@@ -44,7 +44,7 @@ class LoginState extends State<Login> {
       await checkPin(email, pincode, password);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
           responceState
-              ? 'User Registered'
+              ? 'You registered'
               : 'Verification code is incorrect, try again')));
     }
   }
@@ -71,6 +71,7 @@ class LoginState extends State<Login> {
       });
     } else {}
   }
+
 
 
   Future<void> submitChangedPassword() async {
@@ -215,6 +216,7 @@ class LoginState extends State<Login> {
       ];
     } else if (formtype == FormType.changePassword) {
       return [
+        
         changepasswordimage(),
         loginEmailField(),
         changePasswordField(),
