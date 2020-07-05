@@ -72,8 +72,6 @@ class LoginState extends State<Login> {
     } else {}
   }
 
-
-
   Future<void> submitChangedPassword() async {
     if (validateAndSave()) {
       if (changepasswordController.text != changepasswordControllerFirst.text) {
@@ -97,6 +95,7 @@ class LoginState extends State<Login> {
 
   void toPin() => setState(() {
         formtype = FormType.pincode;
+
       });
 
   void toChangepassword() => setState(() {
@@ -123,20 +122,13 @@ class LoginState extends State<Login> {
         formtype = FormType.register;
       });
 
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is disposed
-    pincodeController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    changepasswordController.dispose();
-    changepasswordControllerFirst.dispose();
-    super.dispose();
-  }
+
 
   FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
   @override
   void initState() {
+
+    
     firebaseMessaging.getToken().then((token) {
       print('FCM Token: $token');
     });
@@ -164,7 +156,7 @@ class LoginState extends State<Login> {
   void startTimer() {
     CountdownTimer countDownTimer = new CountdownTimer(
       new Duration(seconds: start),
-      new Duration(seconds: 1),
+      new Duration(milliseconds: 300),
     );
 
     var sub = countDownTimer.listen(null);
@@ -221,6 +213,7 @@ class LoginState extends State<Login> {
         loginEmailField(),
         changePasswordField(),
         changePasswordFieldconfirm(),
+       
       ];
     } else
       return [
@@ -239,6 +232,7 @@ class LoginState extends State<Login> {
     } else if (formtype == FormType.changePassword) {
       return [
         changePasswordButton(),
+         backtoLogin(),
       ];
     } else if (formtype == FormType.register || formtype == FormType.waiting) {
       return [
@@ -259,6 +253,26 @@ class LoginState extends State<Login> {
   }
 
   //===================================Builders==================================//
+
+  FlatButton backtoLogin() {
+    return FlatButton(
+      splashColor: Colors.transparent,
+      textColor: primaryColor,
+      disabledTextColor: Colors.black,
+      
+      padding: EdgeInsets.all(8.0),
+      onPressed: () {
+        toLogin();
+        /*...*/
+      },
+      child: Text(
+        "Back to Sign In",
+        style: GoogleFonts.ubuntu(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,),
+      ),
+    );
+  }
 
   Image changepasswordimage() {
     return Image(
@@ -625,7 +639,7 @@ class LoginState extends State<Login> {
         onSaved: (value) => password = value,
         validator: (value) => validatePasswordCases(value),
         decoration: InputDecoration(
-          hintText: "Enter new Password",
+          hintText: "Enter Password",
           suffixIcon: buildmeIcon(),
           prefixIcon: Icon(Icons.lock),
         ),

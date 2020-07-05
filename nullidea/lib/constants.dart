@@ -21,8 +21,8 @@ bool changePass = false;
 enum FormType { login, register, waiting, pincode, changePassword }
 
 FormType formtype = FormType.login;
-var emailController = TextEditingController();
-var pincodeController = TextEditingController();
-var passwordController = TextEditingController();
-var changepasswordController = TextEditingController();
-var changepasswordControllerFirst = TextEditingController();
+TextEditingController emailController = TextEditingController();
+TextEditingController pincodeController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController changepasswordController = TextEditingController();
+TextEditingController changepasswordControllerFirst = TextEditingController();
