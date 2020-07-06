@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nullidea/constants.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:nullidea/my_flutter_app_icons.dart';
 
 import '../theme.dart';
 
@@ -17,12 +17,15 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
+        animationCurve: Curves.fastLinearToSlowEaseIn,
+        animationDuration: const Duration(milliseconds: 1000),
         height: 55,
         color: primaryColor,
     backgroundColor: Colors.transparent,
     items: <Widget>[
       Icon(Icons.home, size: 30,color: Colors.black,),
       Icon(Icons.search, size: 30,color: Colors.black,),
+      Icon(MyFlutterApp.postidea, color: Colors.black, size: 36,),
       Icon(Icons.notifications, size: 30, color: Colors.black,),
       Icon(Icons.person, size: 30, color: Colors.black,),
     ],
