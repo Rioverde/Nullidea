@@ -27,7 +27,7 @@ class LoginState extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
-      await getSignIn(email, password);
+      await getSignIn(email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
           responceState ? 'You Logged in' : 'Incorrect email or password')));
     }
@@ -95,7 +95,6 @@ class LoginState extends State<Login> {
 
   void toPin() => setState(() {
         formtype = FormType.pincode;
-
       });
 
   void toChangepassword() => setState(() {
@@ -122,15 +121,12 @@ class LoginState extends State<Login> {
         formtype = FormType.register;
       });
 
-
-
   FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
   @override
   void initState() {
-
-    
     firebaseMessaging.getToken().then((token) {
       print('FCM Token: $token');
+      fcmToken = token;
     });
 
     changepasswordController.addListener(() {
@@ -208,12 +204,10 @@ class LoginState extends State<Login> {
       ];
     } else if (formtype == FormType.changePassword) {
       return [
-        
         changepasswordimage(),
         loginEmailField(),
         changePasswordField(),
         changePasswordFieldconfirm(),
-       
       ];
     } else
       return [
@@ -233,7 +227,7 @@ class LoginState extends State<Login> {
     } else if (formtype == FormType.changePassword) {
       return [
         changePasswordButton(),
-         backtoLogin(),
+        backtoLogin(),
       ];
     } else if (formtype == FormType.register || formtype == FormType.waiting) {
       return [
@@ -260,17 +254,20 @@ class LoginState extends State<Login> {
       splashColor: Colors.transparent,
       textColor: primaryColor,
       disabledTextColor: Colors.black,
-      
       padding: EdgeInsets.all(8.0),
       onPressed: () {
-        toLogin();
-        /*...*/
+        setState(
+          () {
+            toLogin();
+          },
+        );
       },
       child: Text(
         "Back to Sign In",
         style: GoogleFonts.ubuntu(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,),
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -354,10 +351,13 @@ class LoginState extends State<Login> {
         email,
         textAlign: TextAlign.center,
         style: GoogleFonts.ubuntu(
-            color: Colors.yellow[800], fontSize: 18.0, fontWeight: FontWeight.w600),
+            color: Colors.yellow[800],
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600),
       ),
     );
   }
+
   Padding textforPincode() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -511,11 +511,13 @@ class LoginState extends State<Login> {
   Center nullideaText() {
     return Center(
       child: Container(
-        child: Text("Nullidea",
-            style: GoogleFonts.pacifico(
-                fontSize: 70.0,
-                fontWeight: FontWeight.normal,
-                color: primaryColor)),
+        child: Text(
+          "Nullidea",
+          style: GoogleFonts.pacifico(
+              fontSize: 70.0,
+              fontWeight: FontWeight.normal,
+              color: primaryColor),
+        ),
       ),
     );
   }

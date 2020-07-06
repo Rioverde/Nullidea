@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
 
-//email string 
+//email string
 String email;
 //password string
 String password;
-//pincode string 
+//pincode string
 String pincode;
+String fcmToken;
 //success state of responce
 bool success = true;
 //state of visibility of password
@@ -21,8 +22,10 @@ bool changePass = false;
 enum FormType { login, register, waiting, pincode, changePassword }
 
 FormType formtype = FormType.login;
+
 TextEditingController emailController = TextEditingController();
 TextEditingController pincodeController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 TextEditingController changepasswordController = TextEditingController();
 TextEditingController changepasswordControllerFirst = TextEditingController();
+TextEditingController name = TextEditingController();

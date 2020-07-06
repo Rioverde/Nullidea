@@ -8,7 +8,7 @@ bool correctPin = false;
 bool patched = false;
 //post reques
 Future<void> postUser(String email) async {
-  String body = jsonEncode({"email": email});
+  String body = jsonEncode({"email": email, "mail_type": "verify_account_email"});
   //we send request for temproary user to be reqistered in database
   //if he does not exist we send him verification code
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
@@ -68,7 +68,7 @@ Future<void> checkPin(String email, String pincode, String password) async {
 }
 
 //Sighning In User
-Future<void> getSignIn(String email, String password) async {
+Future<void> getSignIn(String email, String password, String fcmToken) async {
 //TODO
   final http.Response signInResponce = await http.post(
     'https://nullidea-backend.herokuapp.com/v1/users/login',
@@ -78,6 +78,7 @@ Future<void> getSignIn(String email, String password) async {
     body: jsonEncode(<String, String>{
       'email': email,
       'password': password,
+      'fcm_token': fcmToken,
     }),
   );
 
@@ -92,7 +93,7 @@ Future<void> getSignIn(String email, String password) async {
 }
 
 Future<void> changePasswordSendVerificarion(String email) async {
-  String body = jsonEncode({"email": email});
+  String body = jsonEncode({"email": email, "mail_type": "change_account_password"});
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
