@@ -29,3 +29,4 @@ TextEditingController passwordController = TextEditingController();
 TextEditingController changepasswordController = TextEditingController();
 TextEditingController changepasswordControllerFirst = TextEditingController();
 TextEditingController name = TextEditingController();
+TextEditingController username = TextEditingController();

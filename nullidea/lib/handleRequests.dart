@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:nullidea/constants.dart';
 
+
+String holder = "";
+Map data;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
@@ -69,7 +73,6 @@ Future<void> checkPin(String email, String pincode, String password) async {
 
 //Sighning In User
 Future<void> getSignIn(String email, String password, String fcmToken) async {
-//TODO
   final http.Response signInResponce = await http.post(
     'https://nullidea-backend.herokuapp.com/v1/users/login',
     headers: <String, String>{
@@ -84,6 +87,7 @@ Future<void> getSignIn(String email, String password, String fcmToken) async {
 
   Map data = json.decode(signInResponce.body);
   responceState = data['success'];
+  username.text = data['username'];
   if (responceState) {
     print("Signed In");
   } else {
@@ -159,4 +163,22 @@ Future<void> checkPintoChangePassword(
   } else {
     print('Incorrect verification code');
   }
+}
+
+
+Future<void> changeUsername(String email,String username) async {
+  Map<String, String> usernamebody = {"email": email, "username": username};
+  Map<String, String> headers = {"Content-type": "application/json"};
+  String url = 'https://nullidea-backend.herokuapp.com/v1/users';
+
+    // make PATCH request
+    final response = await http.patch(url,
+        headers: headers, body: json.encode(usernamebody));
+    print(response.body);
+    print("username changed");
+       data = json.decode(response.body);
+      holder = data['data']['username'];
+      print(holder);
+
+
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:nullidea/screens/profile.dart';
 import 'package:quiver/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -31,6 +32,13 @@ class LoginState extends State<Login> {
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
           responceState ? 'You Logged in' : 'Incorrect email or password')));
     }
+    if (responceState) {
+      Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => Profile()),
+  );
+      
+    }
   }
 
   Future<void> proceed() async {
@@ -46,6 +54,14 @@ class LoginState extends State<Login> {
           responceState
               ? 'You registered'
               : 'Verification code is incorrect, try again')));
+    }
+
+    if (responceState) {
+            Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => Profile()),
+  );
+      
     }
   }
 

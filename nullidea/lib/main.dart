@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/screens/login.dart';
-import 'package:nullidea/screens/profile.dart';
 import 'package:nullidea/theme.dart';
 
 void main() {
@@ -13,7 +12,7 @@ class Nullidea extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: nullideatheme(),
-      home: Profile(),
+      home: Login(),
     );
   }
 }

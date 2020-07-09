@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:nullidea/my_flutter_app_icons.dart';
 
+import 'package:nullidea/my_flutter_app_icons.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import '../constants.dart';
+import '../handleRequests.dart';
 import '../theme.dart';
+
+List<dynamic> achievements = new List();
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -13,6 +18,48 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  onAlertWithCustomContentPressed(context) {
+  Alert(
+      style: AlertStyle(
+          backgroundColor: Colors.black,
+          titleStyle: TextStyle(color: primaryColor)),
+      context: context,
+      title: "Change your Username",
+      content: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: username,
+              onSaved: (value) => username.text = value,
+              decoration: InputDecoration(
+                labelStyle: TextStyle(color: Colors.white),
+                labelText: 'Username',
+              ),
+            ),
+          ],
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          onPressed: () {
+
+            changeUsername(email, username.text);
+            setState(() {
+              holder = username.text;
+            });
+            Navigator.pop(context);
+          },
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+        )
+      ]).show();
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,18 +68,38 @@ class _ProfileState extends State<Profile> {
         animationDuration: const Duration(milliseconds: 1000),
         height: 55,
         color: primaryColor,
-    backgroundColor: Colors.transparent,
-    items: <Widget>[
-      Icon(Icons.home, size: 30,color: Colors.black,),
-      Icon(Icons.search, size: 30,color: Colors.black,),
-      Icon(MyFlutterApp.postidea, color: Colors.black, size: 36,),
-      Icon(Icons.notifications, size: 30, color: Colors.black,),
-      Icon(Icons.person, size: 30, color: Colors.black,),
-    ],
-    onTap: (index) {
-      //Handle button tap
-    },
-  ),
+        backgroundColor: Colors.transparent,
+        items: <Widget>[
+          Icon(
+            Icons.home,
+            size: 30,
+            color: Colors.black,
+          ),
+          Icon(
+            Icons.search,
+            size: 30,
+            color: Colors.black,
+          ),
+          Icon(
+            MyFlutterApp.postidea,
+            color: Colors.black,
+            size: 36,
+          ),
+          Icon(
+            Icons.notifications,
+            size: 30,
+            color: Colors.black,
+          ),
+          Icon(
+            Icons.person,
+            size: 30,
+            color: Colors.black,
+          ),
+        ],
+        onTap: (index) {
+          //Handle button tap
+        },
+      ),
       appBar: AppBar(
         actions: <Widget>[
           // action button
@@ -43,132 +110,118 @@ class _ProfileState extends State<Profile> {
             icon: Icon(Icons.dehaze),
           ),
         ],
-        title: Text("Nullidea",
-            style: GoogleFonts.pacifico(
-                fontSize: 30.0,
-                fontWeight: FontWeight.normal,
-                color: Colors.black)),
+        title: FlatButton(
+          onPressed: () => onAlertWithCustomContentPressed(context),
+          child: Text(holder,
+              style: GoogleFonts.pacifico(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black)),
+        ),
       ),
       resizeToAvoidBottomInset: false,
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Folowers",
-                            style: GoogleFonts.ubuntu(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.normal,
-                                color: primaryColor),
-                          ),
-                          Text(
-                            "145",
-                            style: GoogleFonts.ubuntu(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(24.0),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: SafeArea(
+                    child: Row(children: [
+                      CircleAvatar(
                         child: CircleAvatar(
-                          child: CircleAvatar(
-                            radius: 56,
-                            backgroundColor: Colors.black,
-                          ),
-                          backgroundColor: primaryColor,
-                          radius: 60,
+                          radius: 62,
+                          backgroundColor: Colors.black,
                         ),
+                        backgroundColor: primaryColor,
+                        radius: 66,
                       ),
                       Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            "Folowing",
-                            style: GoogleFonts.ubuntu(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.normal,
-                                color: primaryColor),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: userextradata("Entries", primaryColor, 14.0),
                           ),
-                          Text(
-                            "345",
-                            style: GoogleFonts.ubuntu(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: userextradata("234", Colors.white, 16.0),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
+                              child:
+                                  userextradata("Rating", Colors.yellow, 16.0)),
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
+                              child: userextradata("4553", Colors.white, 20.0)),
+                          Padding(
+                              padding: EdgeInsets.only(right: 20),
+                              child:
+                                  userextradata("Earned", primaryColor, 14.0)),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: userextradata("543", Colors.white, 16.0),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Ideas",
-                        style: GoogleFonts.ubuntu(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.normal,
-                            color: primaryColor),
+                      Spacer(),
+                      Container(
+                        child: Image.asset(
+                          'assets/images/trophy.png',
+                          scale: 2,
+                        ),
+                        alignment: Alignment.topLeft,
                       ),
-                      Text(
-                        "34 ",
-                        style: GoogleFonts.ubuntu(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white),
-                      ),
-                    ],
+                    ]),
                   ),
-                ],
+                ),
               ),
-            ),
+              Divider(
+                color: primaryColor,
+                thickness: 1.5,
+                endIndent: 24,
+                indent: 24,
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Container(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  userdata("Name", primaryColor),
-                  userdata("Actual Name", Colors.white),
-                  userdata("Username", primaryColor),
-                  userdata("Email Address", Colors.white),
-                  userdata("Phone number", primaryColor),
-                  userdata("+905428873591", Colors.white),
-                  userdata("Bio", primaryColor),
-                  userdata("Some text", Colors.white),
-                  userdata("Website", primaryColor),
-                  userdata("www.nullidea.com", Colors.white),
-                ],
+              width: double.infinity,
+              height: 110,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade900,
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
           )
         ],
       ),
     );
+
+    
   }
 }
 
-Padding userdata(String text, Color color) {
+Padding userdata(String text, Color color, double size) {
   return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Text(
       text,
       style: GoogleFonts.ubuntu(
-          fontSize: 16.0, fontWeight: FontWeight.normal, color: color),
+          fontSize: size, fontWeight: FontWeight.w600, color: color),
     ),
   );
 }
+
+Text userextradata(String text, Color color, double size) {
+  return Text(
+    text,
+    textAlign: TextAlign.center,
+    style: GoogleFonts.ubuntu(
+        fontSize: size, fontWeight: FontWeight.w600, color: color),
+  );
+}
+
+
