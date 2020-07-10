@@ -1,18 +1,21 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nullidea/constants.dart';
-
+import 'package:nullidea/screens/profile.dart';
 
 String holder = "";
+
 Map data;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
+bool responceStateUsername = false;
 bool correctPin = false;
 bool patched = false;
 //post reques
 Future<void> postUser(String email) async {
-  String body = jsonEncode({"email": email, "mail_type": "verify_account_email"});
+  String body =
+      jsonEncode({"email": email, "mail_type": "verify_account_email"});
   //we send request for temproary user to be reqistered in database
   //if he does not exist we send him verification code
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
@@ -97,7 +100,8 @@ Future<void> getSignIn(String email, String password, String fcmToken) async {
 }
 
 Future<void> changePasswordSendVerificarion(String email) async {
-  String body = jsonEncode({"email": email, "mail_type": "change_account_password"});
+  String body =
+      jsonEncode({"email": email, "mail_type": "change_account_password"});
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
@@ -165,20 +169,25 @@ Future<void> checkPintoChangePassword(
   }
 }
 
-
-Future<void> changeUsername(String email,String username) async {
+Future<void> changeUsername(String email, String username) async {
   Map<String, String> usernamebody = {"email": email, "username": username};
   Map<String, String> headers = {"Content-type": "application/json"};
   String url = 'https://nullidea-backend.herokuapp.com/v1/users';
 
-    // make PATCH request
-    final response = await http.patch(url,
-        headers: headers, body: json.encode(usernamebody));
-    print(response.body);
+  // make PATCH request
+  final response =
+      await http.patch(url, headers: headers, body: json.encode(usernamebody));
+
+  print(response.body);
+  print(holder);
+  Map data = json.decode(response.body);
+  responceStateUsername = data['success'];
+  if (!responceStateUsername) {
+    usernameExist = true;
+    print("Username already exists");
+  } else if (responceStateUsername) {
     print("username changed");
-       data = json.decode(response.body);
-      holder = data['data']['username'];
-      print(holder);
-
-
+    data = json.decode(response.body);
+    holder = data['data']['username'];
+  }
 }

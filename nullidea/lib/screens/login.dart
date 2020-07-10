@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/handleRequests.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../constants.dart';
@@ -30,7 +29,7 @@ class LoginState extends State<Login> {
     if (validateAndSave()) {
       await getSignIn(email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
-          responceState ? 'You Logged in' : 'Incorrect email or password')));
+          responceState ? null : 'Incorrect email or password')));
     }
     if (responceState) {
       Navigator.pushReplacement(
@@ -41,29 +40,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  Future<void> proceed() async {
-    pincode = pincodeController.text;
-    if (changePass) {
-      await checkPintoChangePassword(email, pincode, password);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(patched
-          ? 'Password Changed'
-          : 'Verification code is incorrect, try again')));
-    } else {
-      await checkPin(email, pincode, password);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
-          responceState
-              ? 'You registered'
-              : 'Verification code is incorrect, try again')));
-    }
 
-    if (responceState) {
-            Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => Profile()),
-  );
-      
-    }
-  }
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -226,6 +203,7 @@ class LoginState extends State<Login> {
         changePasswordFieldconfirm(),
       ];
     } else
+       
       return [
         verify(),
         emailTextForPincode(),
@@ -252,141 +230,13 @@ class LoginState extends State<Login> {
       ];
     } else
       return [
-        Column(
-          children: <Widget>[
-            pinCodeTextField(),
-            proceedButton(),
-            didntReceivedCode(),
-            countDown(),
-          ],
-        )
+        
       ];
   }
 
   //===================================Builders==================================//
 
-  FlatButton backtoLogin() {
-    return FlatButton(
-      splashColor: Colors.transparent,
-      textColor: primaryColor,
-      disabledTextColor: Colors.black,
-      padding: EdgeInsets.all(8.0),
-      onPressed: () {
-        setState(
-          () {
-            toLogin();
-          },
-        );
-      },
-      child: Text(
-        "Back to Sign In",
-        style: GoogleFonts.ubuntu(
-          fontSize: 16.0,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  Image changepasswordimage() {
-    return Image(
-      image: AssetImage('assets/images/lock.png'),
-      height: 100,
-      width: 100,
-    );
-  }
-
-  Text countDown() {
-    return Text(
-      "$current",
-      style: GoogleFonts.ubuntu(
-          color: current == 0 ? Colors.white : primaryColor,
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600),
-    );
-  }
-
-  ButtonTheme proceedButton() {
-    return ButtonTheme(
-      disabledColor: disabledState,
-      height: 55,
-      minWidth: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-        child: RaisedButton(
-            color: primaryColor,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10)),
-            child: Text(
-              "PROCEED",
-              style: GoogleFonts.ubuntu(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: pincodeController.text.isNotEmpty
-                      ? Colors.black
-                      : Colors.black),
-            ),
-            onPressed: pincodeController.text.isNotEmpty ? proceed : null),
-      ),
-    );
-  }
-
-  ButtonTheme changePasswordButton() {
-    return ButtonTheme(
-      disabledColor: disabledState,
-      height: 55,
-      minWidth: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-        child: RaisedButton(
-            color: primaryColor,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10)),
-            child: Text(
-              "CHANGE PASSWORD",
-              style: GoogleFonts.ubuntu(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: changepasswordControllerFirst.text.isNotEmpty &&
-                          changepasswordController.text.isNotEmpty
-                      ? Colors.black
-                      : Colors.black),
-            ),
-            onPressed: changepasswordControllerFirst.text.isNotEmpty &&
-                    changepasswordController.text.isNotEmpty
-                ? submitChangedPassword
-                : null),
-      ),
-    );
-  }
-
-  Padding emailTextForPincode() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Text(
-        email,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.ubuntu(
-            color: Colors.yellow[800],
-            fontSize: 18.0,
-            fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  Padding textforPincode() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Text(
-        "Enter the 6 digit code we sent you via email to proceed. Check your Spam folder as well, Usually email comes in 2-5 min",
-        textAlign: TextAlign.center,
-        style: GoogleFonts.ubuntu(
-            color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  Padding verify() {
+    Padding verify() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -420,55 +270,100 @@ class LoginState extends State<Login> {
     );
   }
 
-  FlatButton didntReceivedCode() {
+Padding emailTextForPincode() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Text(
+        email,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.ubuntu(
+            color: Colors.yellow[800],
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+    Padding textforPincode() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      child: Text(
+        "Enter the 6 digit code we sent you via email to proceed. Check your Spam folder as well, Usually email comes in 2-5 min",
+        textAlign: TextAlign.center,
+        style: GoogleFonts.ubuntu(
+            color: Colors.white, fontSize: 14.0, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+  FlatButton backtoLogin() {
     return FlatButton(
       splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onPressed: current == 0 ? postResend : null,
-      child: RichText(
-        text: TextSpan(
-          text: "Didn`t receive any code ? ",
-          style: GoogleFonts.ubuntu(
-              color: Colors.grey.shade700,
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600),
-          children: <TextSpan>[
-            TextSpan(
-                text: " RESEND",
-                style: TextStyle(
-                    color: current == 0 ? primaryColor : disabledState)),
-          ],
+      textColor: primaryColor,
+      disabledTextColor: Colors.black,
+      padding: EdgeInsets.all(8.0),
+      onPressed: () {
+        setState(
+          () {
+            toLogin();
+          },
+        );
+      },
+      child: Text(
+        "Back to Sign In",
+        style: GoogleFonts.ubuntu(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
   }
 
-  Padding pinCodeTextField() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: PinCodeTextField(
-        textStyle: TextStyle(color: primaryColor, fontSize: 32.0),
-        selectedColor: primaryColor,
-        selectedFillColor: primaryColor,
-        length: 6,
-        activeColor: primaryColor,
-        backgroundColor: Colors.black,
-        inactiveColor: Colors.grey.shade600,
-        disabledColor: Colors.grey.shade600,
-        obsecureText: false,
-        animationType: AnimationType.fade,
-        shape: PinCodeFieldShape.box,
-        animationDuration: Duration(milliseconds: 300),
-        borderRadius: BorderRadius.circular(5),
-        fieldHeight: 47,
-        fieldWidth: 43,
-        controller: pincodeController,
-        onChanged: (value) {
-          setState(() {});
-        },
+  Image changepasswordimage() {
+    return Image(
+      image: AssetImage('assets/images/lock.png'),
+      height: 100,
+      width: 100,
+    );
+  }
+
+
+  ButtonTheme changePasswordButton() {
+    return ButtonTheme(
+      disabledColor: disabledState,
+      height: 55,
+      minWidth: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: RaisedButton(
+            color: primaryColor,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10)),
+            child: Text(
+              "CHANGE PASSWORD",
+              style: GoogleFonts.ubuntu(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: changepasswordControllerFirst.text.isNotEmpty &&
+                          changepasswordController.text.isNotEmpty
+                      ? Colors.black
+                      : Colors.black),
+            ),
+            onPressed: changepasswordControllerFirst.text.isNotEmpty &&
+                    changepasswordController.text.isNotEmpty
+                ? submitChangedPassword
+                : null),
       ),
     );
   }
+
+
+
+ 
+
+
+
+
+
 
   SnackBar snackBar(String text) {
     return SnackBar(

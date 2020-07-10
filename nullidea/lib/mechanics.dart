@@ -1,5 +1,5 @@
 import 'constants.dart';
-
+import 'package:nullidea/handleRequests.dart';
 String validatePasswordCases(String value) {
   Pattern pattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -45,4 +45,14 @@ String authUserPassword(String value) {
   } else {
     return "Password is incorrect";
   }
+}
+
+String validateUsername(String value) {
+  if (value.isEmpty) {
+    return "Username should not be empty";
+  } else if(value == holder){
+    return "Username already exists";
+  }
+  else
+    return null;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:nullidea/mechanics.dart';
 
 import 'package:nullidea/my_flutter_app_icons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -9,6 +10,7 @@ import '../handleRequests.dart';
 import '../theme.dart';
 
 List<dynamic> achievements = new List();
+bool usernameExist = false;
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -19,46 +21,51 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+  void usernameCheck() {
+    if (username.text.isNotEmpty && holder != username.text) {
+      changeUsername(email, username.text);
+      setState(() {
+        holder = username.text;
+        Navigator.pop(context);
+      });
+    }
+  }
+
   onAlertWithCustomContentPressed(context) {
-  Alert(
-      style: AlertStyle(
-          backgroundColor: Colors.black,
-          titleStyle: TextStyle(color: primaryColor)),
-      context: context,
-      title: "Change your Username",
-      content: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: username,
-              onSaved: (value) => username.text = value,
-              decoration: InputDecoration(
-                labelStyle: TextStyle(color: Colors.white),
-                labelText: 'Username',
+    Alert(
+        style: AlertStyle(
+            backgroundColor: Colors.black,
+            titleStyle: TextStyle(color: primaryColor)),
+        context: context,
+        title: "Change your username",
+        content: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                validator: (value) => validateUsername(value),
+                controller: username,
+                onSaved: (value) => username.text = value,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: Colors.white),
+                  labelText: 'Username',
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-      buttons: [
-        DialogButton(
-          onPressed: () {
-
-            changeUsername(email, username.text);
-            setState(() {
-              holder = username.text;
-            });
-            Navigator.pop(context);
-          },
-          child: Text(
-            "OK",
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            ],
           ),
-        )
-      ]).show();
-}
-
+        ),
+        buttons: [
+          DialogButton(
+            onPressed: () {
+              usernameCheck();
+            },
+            child: Text(
+              "OK",
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+          )
+        ]).show();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,29 +206,25 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
-
-    
   }
-}
 
-Padding userdata(String text, Color color, double size) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Text(
+  Padding userdata(String text, Color color, double size) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: GoogleFonts.ubuntu(
+            fontSize: size, fontWeight: FontWeight.w600, color: color),
+      ),
+    );
+  }
+
+  Text userextradata(String text, Color color, double size) {
+    return Text(
       text,
+      textAlign: TextAlign.center,
       style: GoogleFonts.ubuntu(
           fontSize: size, fontWeight: FontWeight.w600, color: color),
-    ),
-  );
+    );
+  }
 }
-
-Text userextradata(String text, Color color, double size) {
-  return Text(
-    text,
-    textAlign: TextAlign.center,
-    style: GoogleFonts.ubuntu(
-        fontSize: size, fontWeight: FontWeight.w600, color: color),
-  );
-}
-
-
