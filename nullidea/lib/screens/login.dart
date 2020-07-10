@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:nullidea/screens/profile.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quiver/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -28,19 +29,16 @@ class LoginState extends State<Login> {
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
       await getSignIn(email, password, fcmToken);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
-          responceState ? null : 'Incorrect email or password')));
+      setState(() => _scaffoldKey.currentState.showSnackBar(
+          snackBar(responceState ? null : 'Incorrect email or password')));
     }
     if (responceState) {
       Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => Profile()),
-  );
-      
+        context,
+        MaterialPageRoute(builder: (context) => Profile()),
+      );
     }
   }
-
-
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -161,6 +159,27 @@ class LoginState extends State<Login> {
     });
   }
 
+   Future<void> proceed() async {
+    pincode = pincodeController.text;
+    if (changePass) {
+      await checkPintoChangePassword(email, pincode, password);
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(patched
+          ? 'Password Changed'
+          : 'Verification code is incorrect, try again')));
+    } else {
+      await checkPin(email, pincode, password);
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+          responceState
+              ? 'You registered'
+              : 'Verification code is incorrect, try again')));
+    }
+    if (responceState) {
+       Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Profile()),
+      );
+    }
+  }
   //===============================================================================//
   @override
   Widget build(BuildContext context) {
@@ -203,7 +222,6 @@ class LoginState extends State<Login> {
         changePasswordFieldconfirm(),
       ];
     } else
-       
       return [
         verify(),
         emailTextForPincode(),
@@ -230,13 +248,103 @@ class LoginState extends State<Login> {
       ];
     } else
       return [
-        
+        Column(
+          children: <Widget>[
+            pinCodeTextField(),
+            proceedButton(),
+            didntReceivedCode(),
+            countDown(),
+          ],
+        )
       ];
   }
 
   //===================================Builders==================================//
 
-    Padding verify() {
+
+Padding pinCodeTextField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+      child: PinCodeTextField(
+        textStyle: TextStyle(color: primaryColor, fontSize: 32.0),
+        selectedColor: primaryColor,
+        selectedFillColor: primaryColor,
+        length: 6,
+        activeColor: primaryColor,
+        backgroundColor: Colors.black,
+        inactiveColor: Colors.grey.shade600,
+        disabledColor: Colors.grey.shade600,
+        obsecureText: false,
+        animationType: AnimationType.fade,
+        shape: PinCodeFieldShape.box,
+        animationDuration: Duration(milliseconds: 300),
+        borderRadius: BorderRadius.circular(5),
+        fieldHeight: 47,
+        fieldWidth: 43,
+        controller: pincodeController,
+        onChanged: (value) {
+          setState(() {});
+        },
+      ),
+    );
+  }
+   FlatButton didntReceivedCode() {
+    return FlatButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onPressed: current == 0 ? postResend : null,
+      child: RichText(
+        text: TextSpan(
+          text: "Didn`t receive any code ? ",
+          style: GoogleFonts.ubuntu(
+              color: Colors.grey.shade700,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600),
+          children: <TextSpan>[
+            TextSpan(
+                text: " RESEND",
+                style: TextStyle(
+                    color: current == 0 ? primaryColor : disabledState)),
+          ],
+        ),
+      ),
+    );
+  }
+ButtonTheme proceedButton() {
+    return ButtonTheme(
+      disabledColor: disabledState,
+      height: 55,
+      minWidth: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: RaisedButton(
+            color: primaryColor,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10)),
+            child: Text(
+              "PROCEED",
+              style: GoogleFonts.ubuntu(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: pincodeController.text.isNotEmpty
+                      ? Colors.black
+                      : Colors.black),
+            ),
+            onPressed: pincodeController.text.isNotEmpty ? proceed : null),
+      ),
+    );
+  }
+
+  Text countDown() {
+    return Text(
+      "$current",
+      style: GoogleFonts.ubuntu(
+          color: current == 0 ? Colors.white : primaryColor,
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600),
+    );
+  }
+  Padding verify() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -270,7 +378,7 @@ class LoginState extends State<Login> {
     );
   }
 
-Padding emailTextForPincode() {
+  Padding emailTextForPincode() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Text(
@@ -284,7 +392,7 @@ Padding emailTextForPincode() {
     );
   }
 
-    Padding textforPincode() {
+  Padding textforPincode() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Text(
@@ -295,6 +403,7 @@ Padding emailTextForPincode() {
       ),
     );
   }
+
   FlatButton backtoLogin() {
     return FlatButton(
       splashColor: Colors.transparent,
@@ -326,7 +435,6 @@ Padding emailTextForPincode() {
     );
   }
 
-
   ButtonTheme changePasswordButton() {
     return ButtonTheme(
       disabledColor: disabledState,
@@ -355,15 +463,6 @@ Padding emailTextForPincode() {
       ),
     );
   }
-
-
-
- 
-
-
-
-
-
 
   SnackBar snackBar(String text) {
     return SnackBar(

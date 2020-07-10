@@ -11,7 +11,7 @@ import '../theme.dart';
 
 List<dynamic> achievements = new List();
 bool usernameExist = false;
-
+final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
 
@@ -21,6 +21,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+    final GlobalKey<ScaffoldState> _scaffoldKeyProfile = new GlobalKey<ScaffoldState>();
+
   void usernameCheck() {
     if (username.text.isNotEmpty && holder != username.text) {
       changeUsername(email, username.text);
@@ -28,11 +30,15 @@ class _ProfileState extends State<Profile> {
         holder = username.text;
         Navigator.pop(context);
       });
+    } else if (holder == username.text) {
+      print("Same");
+      //_scaffoldKeyProfile.currentState.showSnackBar(snackBar);
     }
   }
 
   onAlertWithCustomContentPressed(context) {
     Alert(
+      
         style: AlertStyle(
             backgroundColor: Colors.black,
             titleStyle: TextStyle(color: primaryColor)),
@@ -70,6 +76,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKeyProfile,
       bottomNavigationBar: CurvedNavigationBar(
         animationCurve: Curves.fastLinearToSlowEaseIn,
         animationDuration: const Duration(milliseconds: 1000),
