@@ -11,7 +11,7 @@ import '../constants.dart';
 import '../handleRequests.dart';
 import '../theme.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:simple_image_crop/simple_image_crop.dart';
 
 List<dynamic> achievements = new List();
 bool usernameExist = false;
@@ -29,27 +29,48 @@ class _ProfileState extends State<Profile> {
       new GlobalKey<ScaffoldState>();
   final formKeyProfile = GlobalKey<FormState>();
 
-
   File imageFile;
+  final imgCropKey = GlobalKey<ImgCropState>();
 
-  Widget _decideImage(){
+  Widget _buildCropImage(image) {
+    return Container(
+      color: Colors.black,
+      child: ImgCrop(
+        maximumScale: 1,
+        key: imgCropKey,
+        chipRadius: 300, // crop area radius
+        chipShape: 'circle', // crop type "circle" or "rect"
+        image: image, // you selected image file
+      ),
+    );
+  }
+
+  Widget _decideImage() {
     if (imageFile == null) {
       return Text("is null");
     } else {
-      return Image.file(imageFile, width: 65,  height: 65,);
+      _buildCropImage(FileImage(File(imageFile.path)));
+      return Image.file(
+        imageFile,
+        width: 100,
+        height: 100,
+      );
     }
   }
 
   _openGallery(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.gallery);
+
     this.setState(() {
       imageFile = File(picture.path);
+
       Navigator.of(context).pop();
     });
   }
 
-  _openCamera(BuildContext context) async{
-        var picture = await ImagePicker().getImage(source: ImageSource.camera);
+  _openCamera(BuildContext context) async {
+    var picture = await ImagePicker().getImage(source: ImageSource.camera);
+
     this.setState(() {
       imageFile = File(picture.path);
       Navigator.of(context).pop();
@@ -66,7 +87,7 @@ class _ProfileState extends State<Profile> {
               child: ListBody(
             children: <Widget>[
               GestureDetector(
-                child: Text("Gallary"),
+                child: Text("Gallery"),
                 onTap: () {
                   _openGallery(context);
                 },
