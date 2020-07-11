@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -8,10 +10,13 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
 import '../handleRequests.dart';
 import '../theme.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 List<dynamic> achievements = new List();
 bool usernameExist = false;
 final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
+
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
 
@@ -20,25 +25,95 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final GlobalKey<ScaffoldState> _scaffoldKeyProfile =
+      new GlobalKey<ScaffoldState>();
+  final formKeyProfile = GlobalKey<FormState>();
 
-    final GlobalKey<ScaffoldState> _scaffoldKeyProfile = new GlobalKey<ScaffoldState>();
+
+  File imageFile;
+
+  Widget _decideImage(){
+    if (imageFile == null) {
+      return Text("is null");
+    } else {
+      return Image.file(imageFile, width: 65,  height: 65,);
+    }
+  }
+
+  _openGallery(BuildContext context) async {
+    var picture = await ImagePicker().getImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = File(picture.path);
+      Navigator.of(context).pop();
+    });
+  }
+
+  _openCamera(BuildContext context) async{
+        var picture = await ImagePicker().getImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = File(picture.path);
+      Navigator.of(context).pop();
+    });
+  }
+
+  Future<void> _showChoiseDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Make a choise"),
+          content: SingleChildScrollView(
+              child: ListBody(
+            children: <Widget>[
+              GestureDetector(
+                child: Text("Gallary"),
+                onTap: () {
+                  _openGallery(context);
+                },
+              ),
+              Padding(
+                  padding: EdgeInsets.all(
+                8,
+              )),
+              GestureDetector(
+                child: Text("Camera"),
+                onTap: () {
+                  _openCamera(context);
+                },
+              )
+            ],
+          )),
+        );
+      },
+    );
+  }
 
   void usernameCheck() {
-    if (username.text.isNotEmpty && holder != username.text) {
-      changeUsername(email, username.text);
-      setState(() {
-        holder = username.text;
-        Navigator.pop(context);
-      });
-    } else if (holder == username.text) {
-      print("Same");
-      //_scaffoldKeyProfile.currentState.showSnackBar(snackBar);
+    if (formKeyProfile.currentState.validate()) {
+      if (validateUsername(username.text) == null) {
+        changeUsername(email, username.text);
+        setState(() {
+          holder = username.text;
+          Navigator.pop(context);
+        });
+      } else if (holder == username.text) {
+        print("Same");
+        //_scaffoldKeyProfile.currentState.showSnackBar(snackBar);
+      }
     }
+  }
+
+  bool validateAndSave() {
+    final form = formKeyProfile.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else
+      return false;
   }
 
   onAlertWithCustomContentPressed(context) {
     Alert(
-      
         style: AlertStyle(
             backgroundColor: Colors.black,
             titleStyle: TextStyle(color: primaryColor)),
@@ -49,6 +124,7 @@ class _ProfileState extends State<Profile> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                autovalidate: true,
                 validator: (value) => validateUsername(value),
                 controller: username,
                 onSaved: (value) => username.text = value,
@@ -124,13 +200,16 @@ class _ProfileState extends State<Profile> {
             icon: Icon(Icons.dehaze),
           ),
         ],
-        title: FlatButton(
-          onPressed: () => onAlertWithCustomContentPressed(context),
-          child: Text(holder,
-              style: GoogleFonts.pacifico(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black)),
+        title: Form(
+          key: formKeyProfile,
+          child: FlatButton(
+            onPressed: () => onAlertWithCustomContentPressed(context),
+            child: Text(holder,
+                style: GoogleFonts.pacifico(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black)),
+          ),
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -144,13 +223,18 @@ class _ProfileState extends State<Profile> {
                   alignment: Alignment.center,
                   child: SafeArea(
                     child: Row(children: [
-                      CircleAvatar(
+                      FlatButton(
+                        onPressed: () {
+                          _showChoiseDialog(context);
+                        },
                         child: CircleAvatar(
-                          radius: 62,
-                          backgroundColor: Colors.black,
+                          child: CircleAvatar(
+                            radius: 62,
+                            child: _decideImage(),
+                          ),
+                          backgroundColor: primaryColor,
+                          radius: 66,
                         ),
-                        backgroundColor: primaryColor,
-                        radius: 66,
                       ),
                       Column(
                         children: [

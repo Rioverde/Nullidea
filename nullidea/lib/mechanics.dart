@@ -1,5 +1,6 @@
 import 'constants.dart';
 import 'package:nullidea/handleRequests.dart';
+
 String validatePasswordCases(String value) {
   Pattern pattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -48,11 +49,22 @@ String authUserPassword(String value) {
 }
 
 String validateUsername(String value) {
+  Pattern pattern =
+      r'^[a-zA-Z0-9]+([._\s\-]?[a-zA-Z0-9])*$';
+  RegExp regex = new RegExp(pattern);
   if (value.isEmpty) {
     return "Username should not be empty";
-  } else if(value == holder){
+  } else if (value.length > 15) {
+    return "Should be less than 15 characters";
+  }else if (value == holder) {
     return "Username already exists";
-  }
-  else
+  } else if (value.contains(" ")) {
+    return "Password should not have spaces";
+  } else if (!regex.hasMatch(value)) {
+    return "Invalid username";
+  } else if(value == pattern){
     return null;
+  }
+  else 
+  return null;
 }

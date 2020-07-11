@@ -30,7 +30,7 @@ class LoginState extends State<Login> {
     if (validateAndSave()) {
       await getSignIn(email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(
-          snackBar(responceState ? null : 'Incorrect email or password')));
+          snackBar(responceState ? "Logging In" : 'Incorrect email or password')));
     }
     if (responceState) {
       Navigator.pushReplacement(
@@ -159,7 +159,7 @@ class LoginState extends State<Login> {
     });
   }
 
-   Future<void> proceed() async {
+  Future<void> proceed() async {
     pincode = pincodeController.text;
     if (changePass) {
       await checkPintoChangePassword(email, pincode, password);
@@ -174,12 +174,13 @@ class LoginState extends State<Login> {
               : 'Verification code is incorrect, try again')));
     }
     if (responceState) {
-       Navigator.pushReplacement(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Profile()),
       );
     }
   }
+
   //===============================================================================//
   @override
   Widget build(BuildContext context) {
@@ -261,8 +262,7 @@ class LoginState extends State<Login> {
 
   //===================================Builders==================================//
 
-
-Padding pinCodeTextField() {
+  Padding pinCodeTextField() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: PinCodeTextField(
@@ -288,7 +288,8 @@ Padding pinCodeTextField() {
       ),
     );
   }
-   FlatButton didntReceivedCode() {
+
+  FlatButton didntReceivedCode() {
     return FlatButton(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -310,7 +311,8 @@ Padding pinCodeTextField() {
       ),
     );
   }
-ButtonTheme proceedButton() {
+
+  ButtonTheme proceedButton() {
     return ButtonTheme(
       disabledColor: disabledState,
       height: 55,
@@ -344,6 +346,7 @@ ButtonTheme proceedButton() {
           fontWeight: FontWeight.w600),
     );
   }
+
   Padding verify() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
