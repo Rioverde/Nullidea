@@ -11,7 +11,7 @@ import '../constants.dart';
 import '../handleRequests.dart';
 import '../theme.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:simple_image_crop/simple_image_crop.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 List<dynamic> achievements = new List();
 bool usernameExist = false;
@@ -30,39 +30,36 @@ class _ProfileState extends State<Profile> {
   final formKeyProfile = GlobalKey<FormState>();
 
   File imageFile;
-  final imgCropKey = GlobalKey<ImgCropState>();
+  File cropped;
 
-  Widget _buildCropImage(image) {
-    return Container(
-      color: Colors.black,
-      child: ImgCrop(
-        maximumScale: 1,
-        key: imgCropKey,
-        chipRadius: 300, // crop area radius
-        chipShape: 'circle', // crop type "circle" or "rect"
-        image: image, // you selected image file
-      ),
-    );
-  }
-
+//TODO
   Widget _decideImage() {
     if (imageFile == null) {
-      return Text("is null");
+      return Icon(Icons.person, size: 100, color: primaryColor,);
     } else {
-      _buildCropImage(FileImage(File(imageFile.path)));
-      return Image.file(
-        imageFile,
-        width: 100,
-        height: 100,
+      return ClipRRect(
+        borderRadius: new BorderRadius.circular(360),
+        child: Image.file(
+          imageFile,
+          width: 100,
+          height: 100,
+        ),
       );
     }
   }
 
   _openGallery(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.gallery);
+    cropped = await ImageCropper.cropImage(
+        sourcePath: picture.path,
+        cropStyle: CropStyle.circle,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        maxWidth: 1200,
+        maxHeight: 1200,
+        compressFormat: ImageCompressFormat.jpg);
 
     this.setState(() {
-      imageFile = File(picture.path);
+      imageFile = cropped;
 
       Navigator.of(context).pop();
     });
@@ -70,9 +67,16 @@ class _ProfileState extends State<Profile> {
 
   _openCamera(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.camera);
+    cropped = await ImageCropper.cropImage(
+        sourcePath: picture.path,
+        cropStyle: CropStyle.circle,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        maxWidth: 1000,
+        maxHeight: 1000,
+        compressFormat: ImageCompressFormat.jpg);
 
     this.setState(() {
-      imageFile = File(picture.path);
+      imageFile = cropped;
       Navigator.of(context).pop();
     });
   }
@@ -141,7 +145,7 @@ class _ProfileState extends State<Profile> {
         context: context,
         title: "Change your username",
         content: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
+          padding: const EdgeInsets.fromLTRB(24, 24, 0, 8),
           child: Column(
             children: <Widget>[
               TextFormField(
@@ -239,61 +243,60 @@ class _ProfileState extends State<Profile> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.fromLTRB(8, 24, 0, 24),
                 child: Container(
                   alignment: Alignment.center,
-                  child: SafeArea(
-                    child: Row(children: [
-                      FlatButton(
+                  child: Row(children: [
+                    Container(
+                      height: 120,
+                      //TODO
+                      
+                      decoration: ShapeDecoration(shape: CircleBorder(side: BorderSide(width: 2, color: primaryColor))),
+                      child: FlatButton(
                         onPressed: () {
                           _showChoiseDialog(context);
                         },
-                        child: CircleAvatar(
-                          child: CircleAvatar(
-                            radius: 62,
-                            child: _decideImage(),
-                          ),
-                          backgroundColor: primaryColor,
-                          radius: 66,
+                        child: _decideImage(),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: userextradata("Entries", primaryColor, 14.0),
                         ),
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: userextradata("Entries", primaryColor, 14.0),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: userextradata("234", Colors.white, 16.0),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
-                              child:
-                                  userextradata("Rating", Colors.yellow, 16.0)),
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
-                              child: userextradata("4553", Colors.white, 20.0)),
-                          Padding(
-                              padding: EdgeInsets.only(right: 20),
-                              child:
-                                  userextradata("Earned", primaryColor, 14.0)),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: userextradata("543", Colors.white, 16.0),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Container(
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: userextradata("234", Colors.white, 16.0),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
+                            child:
+                                userextradata("Rating", Colors.yellow, 16.0)),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
+                            child: userextradata("4553", Colors.white, 20.0)),
+                        Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: userextradata("Earned", primaryColor, 14.0)),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: userextradata("543", Colors.white, 16.0),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: Container(
                         child: Image.asset(
                           'assets/images/trophy.png',
                           scale: 2,
                         ),
                         alignment: Alignment.topLeft,
                       ),
-                    ]),
-                  ),
+                    ),
+                  ]),
                 ),
               ),
               Divider(

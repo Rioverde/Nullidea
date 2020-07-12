@@ -137,6 +137,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
+  image_cropper:
+    dependency: "direct main"
+    description:
+      name: image_cropper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   image_picker:
     dependency: "direct main"
     description:
@@ -249,13 +256,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.18.1"
-  simple_image_crop:
-    dependency: "direct main"
-    description:
-      name: simple_image_crop
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   sky_engine:
     dependency: transitive
     description: flutter
