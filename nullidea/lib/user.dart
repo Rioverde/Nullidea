@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'constants.dart';
 import 'handleRequests.dart';
 
 class User {
   static String email;
   static String username = checkUsername(temp);
+  static File profilePhoto;
 }
 
 Future<void> returnUsername() async {

@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nullidea/constants.dart';
 import 'package:nullidea/screens/profile.dart';
 import 'package:nullidea/user.dart';
+import 'package:dio/dio.dart';
 
+var dio = Dio();
+String path;
 Map data;
+String initPhotolink;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
@@ -205,18 +210,38 @@ Future<String> getUsername(String email) async {
     return 'Error';
 }
 
-Future<String> getEmail(String email) async {
-  final response = await http
-      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+// ignore: missing_return
+Future<void> getPhoto(String email, File photo) async {
+  Map<String, dynamic> imageBody = {
+    "email": email,
+    "image": await MultipartFile.fromFile(photo.path)
+  };
 
-  data = json.decode(response.body);
-  String initUsername = data['data']['email'];
-  print(initUsername);
+  String newSize;
+  if (newSize == null) {
+    newSize = '35000';
+  }
+  print(newSize);
+
+  String url =
+      'https://nullidea-backend.herokuapp.com/v1/users/image?email=' + email;
+
+  FormData formData = new FormData.fromMap(imageBody);
+  var response = await dio.patch(url, data: formData);
 
   if (response.statusCode == 200) {
-    return initUsername;
+    print("sended, updated");
   } else if (response.statusCode == 400) {
-    return email + ' not exists in DB';
+    print("Error 400");
   } else
-    return 'Error';
+    print("Error 500");
+}
+
+Future<void> getImageFromAWS(String email) async {
+  Response response;
+  response = await dio
+      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+  print(response.data.toString());
+  String imageURL = response.data['data']['image_url'];
+  tempImageUrl = imageURL;
 }

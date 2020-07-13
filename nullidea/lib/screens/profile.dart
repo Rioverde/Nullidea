@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -31,22 +32,33 @@ class _ProfileState extends State<Profile> {
       new GlobalKey<ScaffoldState>();
   final formKeyProfile = GlobalKey<FormState>();
 
-  File imageFile;
   File cropped;
 
 //TODO add class cache
   Widget _decideImage() {
-    if (imageFile == null) {
-      return Icon(
-        Icons.person,
-        size: 100,
-        color: primaryColor,
+    if (User.profilePhoto == null) {
+      getImageFromAWS(User.email);
+      return ClipRRect(
+        borderRadius: new BorderRadius.circular(360),
+        child: CachedNetworkImage(
+          imageUrl: tempImageUrl,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(
+            Icons.person,
+            size: 100,
+            color: primaryColor,
+          ),
+          width: 100,
+          height: 100,
+        ),
       );
     } else {
+      print("Sending request");
+      getPhoto(User.email, User.profilePhoto);
       return ClipRRect(
         borderRadius: new BorderRadius.circular(360),
         child: Image.file(
-          imageFile,
+          User.profilePhoto,
           width: 100,
           height: 100,
         ),
@@ -65,7 +77,7 @@ class _ProfileState extends State<Profile> {
         compressFormat: ImageCompressFormat.jpg);
 
     this.setState(() {
-      imageFile = cropped;
+      User.profilePhoto = cropped;
 
       Navigator.of(context).pop();
     });
@@ -82,7 +94,7 @@ class _ProfileState extends State<Profile> {
         compressFormat: ImageCompressFormat.jpg);
 
     this.setState(() {
-      imageFile = cropped;
+      User.profilePhoto = cropped;
       Navigator.of(context).pop();
     });
   }

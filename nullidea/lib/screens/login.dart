@@ -33,6 +33,8 @@ class LoginState extends State<Login> {
     });
     if (validateAndSave()) {
       String preload = (User.username);
+      getImageFromAWS(User.email);
+
       print(preload);
       await getSignIn(User.email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(

@@ -1,8 +1,11 @@
+
+
+
 import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
 
-
+String tempImageUrl = '';
 //email string
 String temp = '';
 //password string
