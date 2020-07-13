@@ -28,12 +28,16 @@ class LoginState extends State<Login> {
   }
 
   Future<void> validateAndSignIn() async {
+    setState(() {
+      formtype = FormType.waiting;
+    });
     if (validateAndSave()) {
-       String preload = (User.username);
-       print(preload);
+      String preload = (User.username);
+      print(preload);
       await getSignIn(User.email, password, fcmToken);
-      setState(() => _scaffoldKey.currentState.showSnackBar(
-          snackBar(responceState ? "Logging In" : 'Incorrect email or password')));
+      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+          responceState ? "Logging In" : 'Incorrect email or password')));
+      formtype = FormType.login;
     }
     if (responceState) {
       Navigator.pushReplacement(
@@ -96,7 +100,7 @@ class LoginState extends State<Login> {
       });
 
   Future<void> toWait() async => setState(() {
-        Future.delayed(const Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 4), () {
           setState(() {
             if (sendingPin) {
               formtype = FormType.pincode;
@@ -184,8 +188,6 @@ class LoginState extends State<Login> {
     }
   }
 
- 
-
   //===============================================================================//
   @override
   Widget build(BuildContext context) {
@@ -236,7 +238,7 @@ class LoginState extends State<Login> {
   }
 
   List<Widget> toggleButtons() {
-    if (formtype == FormType.login) {
+    if (formtype == FormType.login || formtype == FormType.waiting) {
       return [
         forgotPassword(),
         signInButton(),
@@ -616,32 +618,46 @@ class LoginState extends State<Login> {
     );
   }
 
-  ButtonTheme signInButton() {
-    return ButtonTheme(
-      disabledColor: disabledState,
-      height: 55,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        child: RaisedButton(
+  dynamic signInButton() {
+    if (formtype == FormType.login) {
+      return ButtonTheme(
+        disabledColor: disabledState,
+        height: 55,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: RaisedButton(
+              color: primaryColor,
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10)),
+              child: Text(
+                "SIGN IN",
+                style: GoogleFonts.ubuntu(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                    color: emailController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty
+                        ? Colors.black
+                        : Colors.black),
+              ),
+              onPressed: emailController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty
+                  ? validateAndSignIn
+                  : null),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Container(
+          height: 55,
+          child: SpinKitWanderingCubes(
+            duration: Duration(seconds: 2),
             color: primaryColor,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10)),
-            child: Text(
-              "SIGN IN",
-              style: GoogleFonts.ubuntu(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: emailController.text.isNotEmpty &&
-                          passwordController.text.isNotEmpty
-                      ? Colors.black
-                      : Colors.black),
-            ),
-            onPressed: emailController.text.isNotEmpty &&
-                    passwordController.text.isNotEmpty
-                ? validateAndSignIn
-                : null),
-      ),
-    );
+            size: 50.0,
+          ),
+        ),
+      );
+    }
   }
 
   Container forgotPassword() {

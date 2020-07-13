@@ -34,8 +34,6 @@ class _ProfileState extends State<Profile> {
   File imageFile;
   File cropped;
 
-
-
 //TODO add class cache
   Widget _decideImage() {
     if (imageFile == null) {
@@ -94,22 +92,54 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Make a choise"),
+          backgroundColor: primaryColor,
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Text(
+              "Open with:",
+              style: GoogleFonts.ubuntuMono(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
+            ),
+          ),
           content: SingleChildScrollView(
               child: ListBody(
             children: <Widget>[
               GestureDetector(
-                child: Text("Gallery"),
+                child: Center(
+                  child: Text(
+                    "Gallery",
+                    style: GoogleFonts.ubuntuMono(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black),
+                  ),
+                ),
                 onTap: () {
                   _openGallery(context);
                 },
               ),
               Padding(
-                  padding: EdgeInsets.all(
-                8,
-              )),
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Divider(
+                    color: Colors.black,
+                    thickness: 1.5,
+                    indent: 50,
+                    endIndent: 50,
+                  ),
+                ),
+              ),
               GestureDetector(
-                child: Text("Camera"),
+                child: Center(
+                    child: Text(
+                  "Camera",
+                  style: GoogleFonts.ubuntuMono(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black),
+                )),
                 onTap: () {
                   _openCamera(context);
                 },
