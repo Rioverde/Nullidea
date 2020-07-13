@@ -1,5 +1,4 @@
 import 'constants.dart';
-import 'package:nullidea/handleRequests.dart';
 
 String validatePasswordCases(String value) {
   Pattern pattern =

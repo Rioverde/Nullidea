@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:nullidea/constants.dart';
 import 'package:nullidea/screens/profile.dart';
 
-String holder = "";
-
 Map data;
 bool registered = false;
 bool sendingPin = false;
@@ -190,4 +188,21 @@ Future<void> changeUsername(String email, String username) async {
     data = json.decode(response.body);
     holder = data['data']['username'];
   }
+}
+
+Future<String> getUsername(String email) async {
+  final response = await http
+      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+
+  Map data = json.decode(response.body);
+  String initUsername = data['data']['username'];
+  print(initUsername);
+
+
+  if (response.statusCode == 200) {
+    return initUsername;
+  } else if (response.statusCode == 400) {
+    return email + ' not exists in DB';
+  } else
+    return 'Error';
 }

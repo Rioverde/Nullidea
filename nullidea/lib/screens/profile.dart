@@ -14,8 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 List<dynamic> achievements = new List();
+
 bool usernameExist = false;
-final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -32,10 +32,27 @@ class _ProfileState extends State<Profile> {
   File imageFile;
   File cropped;
 
-//TODO
+
+
+  dynamic checkUsername(String username) async{
+    if (username == '') {
+      username =  holder = await getUsername(email).then((String value) {
+      return value;
+    });
+    } else if (username == null){
+      username = "Null";
+    }
+  }
+
+
+//TODO add class cache
   Widget _decideImage() {
     if (imageFile == null) {
-      return Icon(Icons.person, size: 100, color: primaryColor,);
+      return Icon(
+        Icons.person,
+        size: 100,
+        color: primaryColor,
+      );
     } else {
       return ClipRRect(
         borderRadius: new BorderRadius.circular(360),
@@ -225,11 +242,14 @@ class _ProfileState extends State<Profile> {
             icon: Icon(Icons.dehaze),
           ),
         ],
+
+        
         title: Form(
           key: formKeyProfile,
           child: FlatButton(
             onPressed: () => onAlertWithCustomContentPressed(context),
             child: Text(holder,
+            //TODO
                 style: GoogleFonts.pacifico(
                     fontSize: 30.0,
                     fontWeight: FontWeight.normal,
@@ -250,8 +270,10 @@ class _ProfileState extends State<Profile> {
                     Container(
                       height: 120,
                       //TODO
-                      
-                      decoration: ShapeDecoration(shape: CircleBorder(side: BorderSide(width: 2, color: primaryColor))),
+
+                      decoration: ShapeDecoration(
+                          shape: CircleBorder(
+                              side: BorderSide(width: 2, color: primaryColor))),
                       child: FlatButton(
                         onPressed: () {
                           _showChoiseDialog(context);

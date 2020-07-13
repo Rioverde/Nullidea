@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 final formKey = GlobalKey<FormState>();
 
 
-
+String holder = '';
 //email string
 String email;
 //password string
