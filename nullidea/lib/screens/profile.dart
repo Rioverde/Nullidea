@@ -13,6 +13,8 @@ import '../theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+import '../user.dart';
+
 List<dynamic> achievements = new List();
 
 bool usernameExist = false;
@@ -32,17 +34,6 @@ class _ProfileState extends State<Profile> {
   File imageFile;
   File cropped;
 
-
-
-  dynamic checkUsername(String username) async{
-    if (username == '') {
-      username =  holder = await getUsername(email).then((String value) {
-      return value;
-    });
-    } else if (username == null){
-      username = "Null";
-    }
-  }
 
 
 //TODO add class cache
@@ -133,12 +124,12 @@ class _ProfileState extends State<Profile> {
   void usernameCheck() {
     if (formKeyProfile.currentState.validate()) {
       if (validateUsername(username.text) == null) {
-        changeUsername(email, username.text);
+        changeUsername(User.email, username.text);
         setState(() {
-          holder = username.text;
+          User.username = username.text;
           Navigator.pop(context);
         });
-      } else if (holder == username.text) {
+      } else if (User.username == username.text) {
         print("Same");
         //_scaffoldKeyProfile.currentState.showSnackBar(snackBar);
       }
@@ -242,14 +233,12 @@ class _ProfileState extends State<Profile> {
             icon: Icon(Icons.dehaze),
           ),
         ],
-
-        
         title: Form(
           key: formKeyProfile,
           child: FlatButton(
             onPressed: () => onAlertWithCustomContentPressed(context),
-            child: Text(holder,
-            //TODO
+            child: Text(User.username,
+                //TODO
                 style: GoogleFonts.pacifico(
                     fontSize: 30.0,
                     fontWeight: FontWeight.normal,

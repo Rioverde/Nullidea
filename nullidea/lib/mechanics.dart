@@ -1,3 +1,5 @@
+import 'package:nullidea/user.dart';
+
 import 'constants.dart';
 
 String validatePasswordCases(String value) {
@@ -55,7 +57,7 @@ String validateUsername(String value) {
     return "Username should not be empty";
   } else if (value.length > 15) {
     return "Should be less than 15 characters";
-  }else if (value == holder) {
+  }else if (value == User.username) {
     return "Username already exists";
   } else if (value.contains(" ")) {
     return "Password should not have spaces";

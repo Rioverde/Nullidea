@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nullidea/constants.dart';
 import 'package:nullidea/screens/profile.dart';
+import 'package:nullidea/user.dart';
 
 Map data;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
-bool responceStateUsername = false;
 bool correctPin = false;
 bool patched = false;
 //post reques
@@ -86,7 +86,7 @@ Future<void> getSignIn(String email, String password, String fcmToken) async {
     }),
   );
 
-  Map data = json.decode(signInResponce.body);
+  data = json.decode(signInResponce.body);
   responceState = data['success'];
   username.text = data['username'];
   if (responceState) {
@@ -108,7 +108,7 @@ Future<void> changePasswordSendVerificarion(String email) async {
   // print('Response body: ${response.body}');
 
   if (response.statusCode == 200) {
-    Map data = json.decode(response.body);
+    data = json.decode(response.body);
     // Assume the response body is something like: ['foo', { 'bar': 499 }]
     bool state = data['success'];
 
@@ -177,16 +177,15 @@ Future<void> changeUsername(String email, String username) async {
       await http.patch(url, headers: headers, body: json.encode(usernamebody));
 
   print(response.body);
-  print(holder);
   Map data = json.decode(response.body);
-  responceStateUsername = data['success'];
-  if (!responceStateUsername) {
+  responceState = data['success'];
+  if (!responceState) {
     usernameExist = true;
     print("Username already exists");
-  } else if (responceStateUsername) {
+  } else if (responceState) {
     print("username changed");
     data = json.decode(response.body);
-    holder = data['data']['username'];
+    User.username = data['data']['username'];
   }
 }
 
@@ -194,10 +193,25 @@ Future<String> getUsername(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
-  Map data = json.decode(response.body);
+  data = json.decode(response.body);
   String initUsername = data['data']['username'];
   print(initUsername);
 
+  if (response.statusCode == 200) {
+    return initUsername;
+  } else if (response.statusCode == 400) {
+    return email + ' not exists in DB';
+  } else
+    return 'Error';
+}
+
+Future<String> getEmail(String email) async {
+  final response = await http
+      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+
+  data = json.decode(response.body);
+  String initUsername = data['data']['email'];
+  print(initUsername);
 
   if (response.statusCode == 200) {
     return initUsername;

@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../constants.dart';
 import '../mechanics.dart';
 import '../theme.dart';
+import '../user.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -22,13 +23,15 @@ class LoginState extends State<Login> {
 
   //===================================Fuctions==================================//
   void postResend() {
-    postUser(email);
+    postUser(User.email);
     startTimer();
   }
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
-      await getSignIn(email, password, fcmToken);
+       String preload = (User.username);
+       print(preload);
+      await getSignIn(User.email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(
           snackBar(responceState ? "Logging In" : 'Incorrect email or password')));
     }
@@ -51,7 +54,7 @@ class LoginState extends State<Login> {
 
   Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
-      await postUser(email);
+      await postUser(User.email);
       setState(() {
         success = false;
         toWait();
@@ -73,7 +76,7 @@ class LoginState extends State<Login> {
         setState(() {
           startTimer();
         });
-        await changePasswordSendVerificarion(email);
+        await changePasswordSendVerificarion(User.email);
         toPin();
         changePass = true;
       }
@@ -162,12 +165,12 @@ class LoginState extends State<Login> {
   Future<void> proceed() async {
     pincode = pincodeController.text;
     if (changePass) {
-      await checkPintoChangePassword(email, pincode, password);
+      await checkPintoChangePassword(User.email, pincode, password);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(patched
           ? 'Password Changed'
           : 'Verification code is incorrect, try again')));
     } else {
-      await checkPin(email, pincode, password);
+      await checkPin(User.email, pincode, password);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
           responceState
               ? 'You registered'
@@ -180,6 +183,8 @@ class LoginState extends State<Login> {
       );
     }
   }
+
+ 
 
   //===============================================================================//
   @override
@@ -385,7 +390,7 @@ class LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Text(
-        email,
+        User.email,
         textAlign: TextAlign.center,
         style: GoogleFonts.ubuntu(
             color: Colors.yellow[800],
@@ -562,7 +567,7 @@ class LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: TextFormField(
-        onSaved: (value) => email = value,
+        onSaved: (value) => User.email = value,
         controller: emailController,
         validator: (value) => validateEmailCases(value),
         decoration: InputDecoration(
@@ -577,7 +582,7 @@ class LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: TextFormField(
-        onSaved: (value) => email = value,
+        onSaved: (value) => User.email = value,
         controller: emailController,
         validator: (value) => validateEmailCases(value),
         decoration: InputDecoration(
