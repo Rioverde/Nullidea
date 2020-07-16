@@ -7,6 +7,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:nullidea/mechanics.dart';
 
 import 'package:nullidea/my_flutter_app_icons.dart';
+import 'package:nullidea/screens/login.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
 import '../handleRequests.dart';
@@ -34,7 +35,6 @@ class _ProfileState extends State<Profile> {
 
   File cropped;
 
-//TODO add class cache
   Widget _decideImage() {
     if (User.profilePhoto == null) {
       getImageFromAWS(User.email);
@@ -233,28 +233,38 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       endDrawer: SafeArea(
         child: Drawer(
-          child: Container(
-            color: Colors.black,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Text(
-                      User.username,
-                      style: GoogleFonts.ubuntu(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    ),
-                  ),
-                  height: 55,
-                  width: double.infinity,
-                  color: primaryColor,
+          child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+            Container(
+              child: Center(
+                child: Text(
+                  User.username,
+                  style: GoogleFonts.ubuntu(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
                 ),
-              ],
+              ),
+              height: 55,
+              width: double.infinity,
+              color: primaryColor,
             ),
-          ),
+            RaisedButton(
+              color: Colors.black,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+              child: settingsBar(Icons.exit_to_app, "Log Out", 0, 16),
+            ),
+            Expanded(
+              child: Align(
+                child: settingsBar(Icons.settings, "Settings", 16, 16),
+                alignment: Alignment.bottomCenter,
+              ),
+            ),
+          ]),
         ),
       ),
       key: _scaffoldKeyProfile,
@@ -313,7 +323,6 @@ class _ProfileState extends State<Profile> {
           child: FlatButton(
             onPressed: () => onAlertWithCustomContentPressed(context),
             child: Text(User.username,
-                //TODO
                 style: GoogleFonts.pacifico(
                     fontSize: 30.0,
                     fontWeight: FontWeight.normal,
@@ -333,8 +342,6 @@ class _ProfileState extends State<Profile> {
                   child: Row(children: [
                     Container(
                       height: 120,
-                      //TODO
-
                       decoration: ShapeDecoration(
                           shape: CircleBorder(
                               side: BorderSide(width: 2, color: primaryColor))),
@@ -406,6 +413,30 @@ class _ProfileState extends State<Profile> {
           )
         ],
       ),
+    );
+  }
+
+  Container settingsBar(IconData icon, String text, double left, double right) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(left, 0, right, 0),
+            child: Icon(
+              icon,
+              color: primaryColor,
+              size: 24,
+            ),
+          ),
+          Text(
+            text,
+            style: GoogleFonts.ubuntu(
+                fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+          ),
+        ],
+      ),
+      height: 55,
+      color: Colors.black,
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/screens/login.dart';
+import 'package:nullidea/screens/profile.dart';
 
 import 'package:nullidea/theme.dart';
 
@@ -12,8 +13,16 @@ class Nullidea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        initialRoute: '/Login',
+
       theme: nullideatheme(),
-      home: Login(),
+
+      routes: {
+    // When navigating to the "/" route, build the FirstScreen widget.
+    '/Login': (context) => Login(),
+    // When navigating to the "/second" route, build the SecondScreen widget.
+    '/Profile': (context) => Profile(),
+  },
     );
   }
 }
