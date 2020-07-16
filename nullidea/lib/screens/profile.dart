@@ -224,9 +224,39 @@ class _ProfileState extends State<Profile> {
         ]).show();
   }
 
+  void _openEndDrawer() {
+    _scaffoldKeyProfile.currentState.openEndDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: SafeArea(
+        child: Drawer(
+          child: Container(
+            color: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Center(
+                    child: Text(
+                      User.username,
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ),
+                  height: 55,
+                  width: double.infinity,
+                  color: primaryColor,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       key: _scaffoldKeyProfile,
       bottomNavigationBar: CurvedNavigationBar(
         animationCurve: Curves.fastLinearToSlowEaseIn,
@@ -266,12 +296,15 @@ class _ProfileState extends State<Profile> {
         },
       ),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           // action button
           IconButton(
             iconSize: 24,
             color: Colors.black,
-            onPressed: () {},
+            onPressed: () {
+              _openEndDrawer();
+            },
             icon: Icon(Icons.dehaze),
           ),
         ],

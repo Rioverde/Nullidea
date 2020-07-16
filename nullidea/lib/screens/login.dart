@@ -28,10 +28,10 @@ class LoginState extends State<Login> {
   }
 
   Future<void> validateAndSignIn() async {
-    setState(() {
-      formtype = FormType.waiting;
-    });
     if (validateAndSave()) {
+      setState(() {
+        formtype = FormType.waiting;
+      });
       String preload = (User.username);
       getImageFromAWS(User.email);
 
