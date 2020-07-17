@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nullidea/screens/allIdeas.dart';
-import 'package:nullidea/screens/ideas.dart';
+import 'package:nullidea/screens/idea.dart';
 import 'package:nullidea/screens/profilePage.dart';
 import 'package:nullidea/screens/search.dart';
 import 'package:nullidea/screens/userNotification.dart';
@@ -21,7 +21,7 @@ final Search search = Search();
 final UserNotification userNotification = UserNotification();
 final Allideas allideas = Allideas();
 final ProfilePage profilePage = ProfilePage();
-final Ideas ideas = Ideas();
+final Idea idea = Idea();
 
 Widget showPage = new ProfilePage();
 
@@ -36,7 +36,7 @@ Widget pageChooser(int page) {
       break;
 
     case 2:
-      return ideas;
+      return idea;
       break;
 
     case 3:
