@@ -13,17 +13,14 @@ class Nullidea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/Login',
-
+      initialRoute: '/Login',
       theme: nullideatheme(),
-
       routes: {
-    // When navigating to the "/" route, build the FirstScreen widget.
-    '/Login': (context) => Login(),
-    // When navigating to the "/second" route, build the SecondScreen widget.
-    '/Router': (context) => AccountRouter(),
-  },
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/Login': (context) => Login(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/Router': (context) => AccountRouter(),
+      },
     );
   }
 }
-

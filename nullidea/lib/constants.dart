@@ -50,8 +50,10 @@ Widget pageChooser(int page) {
     default:
       return allideas;
   }
-}
 
+
+}
+String accountfcmToken = '';
 String tempImageUrl = '';
 //email string
 String temp = '';

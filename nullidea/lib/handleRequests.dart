@@ -217,12 +217,6 @@ Future<void> getPhoto(String email, File photo) async {
     "image": await MultipartFile.fromFile(photo.path)
   };
 
-  String newSize;
-  if (newSize == null) {
-    newSize = '35000';
-  }
-  print(newSize);
-
   String url =
       'https://nullidea-backend.herokuapp.com/v1/users/image?email=' + email;
 
@@ -244,4 +238,13 @@ Future<void> getImageFromAWS(String email) async {
   print(response.data.toString());
   String imageURL = response.data['data']['image_url'];
   tempImageUrl = imageURL;
+}
+
+
+Future<void> getFCMtoken(String email) async {
+  Response response;
+  response = await dio
+      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+  print(response.data.toString());
+  accountfcmToken = response.data['data']['fcm_token'];
 }
