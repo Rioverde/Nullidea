@@ -1,9 +1,56 @@
-
-
-
 import 'package:flutter/material.dart';
+import 'package:nullidea/screens/allIdeas.dart';
+import 'package:nullidea/screens/ideas.dart';
+import 'package:nullidea/screens/profilePage.dart';
+import 'package:nullidea/screens/search.dart';
+import 'package:nullidea/screens/userNotification.dart';
 
 final formKey = GlobalKey<FormState>();
+
+List<dynamic> achievements = new List();
+GlobalKey bottomNavigationKey = GlobalKey();
+
+final GlobalKey<ScaffoldState> scaffoldKeyAccountRouter =
+    new GlobalKey<ScaffoldState>();
+final formKeyAccountRouter = GlobalKey<FormState>();
+
+bool usernameExist = false;
+
+int pageIndex = 0;
+final Search search = Search();
+final UserNotification userNotification = UserNotification();
+final Allideas allideas = Allideas();
+final ProfilePage profilePage = ProfilePage();
+final Ideas ideas = Ideas();
+
+Widget showPage = new ProfilePage();
+
+Widget pageChooser(int page) {
+  switch (page) {
+    case 0:
+      return allideas;
+      break;
+
+    case 1:
+      return search;
+      break;
+
+    case 2:
+      return ideas;
+      break;
+
+    case 3:
+      return userNotification;
+      break;
+
+    case 4:
+      return profilePage;
+      break;
+
+    default:
+      return allideas;
+  }
+}
 
 String tempImageUrl = '';
 //email string

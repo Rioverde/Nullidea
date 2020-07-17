@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nullidea/constants.dart';
-import 'package:nullidea/screens/profile.dart';
+
 import 'package:nullidea/user.dart';
 import 'package:dio/dio.dart';
 

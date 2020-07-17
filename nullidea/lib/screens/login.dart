@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:nullidea/screens/profile.dart';
+import 'package:nullidea/screens/accountRouter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quiver/async.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class LoginState extends State<Login> {
     if (responceState) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Profile()),
+        MaterialPageRoute(builder: (context) => AccountRouter()),
       );
     }
   }
@@ -185,7 +185,7 @@ class LoginState extends State<Login> {
     if (responceState) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Profile()),
+        MaterialPageRoute(builder: (context) => AccountRouter()),
       );
     }
   }
