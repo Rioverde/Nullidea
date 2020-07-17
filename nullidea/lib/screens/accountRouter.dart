@@ -130,7 +130,7 @@ class _AccountRouterState extends State<AccountRouter> {
 
   CurvedNavigationBar navigationBar() {
     return CurvedNavigationBar(
-        index: 0,
+        index: 4,
         key: bottomNavigationKey,
         animationCurve: Curves.fastLinearToSlowEaseIn,
         animationDuration: const Duration(milliseconds: 1000),

@@ -16,7 +16,7 @@ final formKeyAccountRouter = GlobalKey<FormState>();
 
 bool usernameExist = false;
 
-int pageIndex = 0;
+
 final Search search = Search();
 final UserNotification userNotification = UserNotification();
 final Allideas allideas = Allideas();
