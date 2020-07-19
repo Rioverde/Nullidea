@@ -72,7 +72,7 @@ int start = 10;
 int current = 10;
 //states of screens for login
 bool changePass = false;
-enum FormType { login, register, waiting, pincode, changePassword }
+enum FormType { login, register, waiting, pincode, changePassword, waitingRegister}
 
 FormType formtype = FormType.login;
 

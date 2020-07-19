@@ -29,9 +29,7 @@ class LoginState extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
-      setState(() {
-        formtype = FormType.waiting;
-      });
+      setState(() {});
       String preload = (User.username);
       getImageFromAWS(User.email);
 
@@ -39,7 +37,6 @@ class LoginState extends State<Login> {
       await getSignIn(User.email, password, fcmToken);
       setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
-      formtype = FormType.login;
     }
     if (responceState) {
       Navigator.pushReplacement(
@@ -61,14 +58,22 @@ class LoginState extends State<Login> {
   Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
       await postUser(User.email);
-      setState(() {
-        success = false;
-        toWait();
-      });
-
-      setState(() {
-        success = true;
-      });
+      if (sendingPin) {
+        setState(() {
+          success = false;
+          setState(() => _scaffoldKey.currentState
+              .showSnackBar(snackBar('Sending Email..')));
+          toPin();
+          startTimer();
+        });
+      } else {
+        setState(() {
+          success = true;
+          setState(() => _scaffoldKey.currentState
+              .showSnackBar(snackBar('User already Exist')));
+          toRegister();
+        });
+      }
     } else {}
   }
 
@@ -194,7 +199,6 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: SafeArea(

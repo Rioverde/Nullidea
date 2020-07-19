@@ -13,6 +13,7 @@ String initPhotolink;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
+bool newresponce = false;
 bool correctPin = false;
 bool patched = false;
 //post reques
@@ -32,6 +33,7 @@ Future<void> postUser(String email) async {
     print("User already exists I will not send him verification code");
   } else if (response.statusCode == 400) {
     print(email + ' not exists in DB');
+    responceState = false;
 
     final newresponse = await http.post(
       url,
@@ -42,6 +44,7 @@ Future<void> postUser(String email) async {
     if (newresponse.statusCode == 200) {
       sendingPin = true;
       print("So I sent him verification code via email");
+      responceState = true;
     }
   } else {
     // If the server returns 404,
