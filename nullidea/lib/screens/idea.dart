@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullidea/myCustomIcons.dart';
 import 'package:nullidea/theme.dart';
 
 class Idea extends StatefulWidget {
@@ -19,13 +22,7 @@ class _IdeaState extends State<Idea> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Text(
-                    "+1000",
-                    style: GoogleFonts.ubuntu(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
-                  ),
+                  buildInfo("+100", Colors.black, 16),
                   Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -34,13 +31,7 @@ class _IdeaState extends State<Idea> {
                         Icons.timer,
                         color: Colors.black,
                       ),
-                      Text(
-                        "10:06:23",
-                        style: GoogleFonts.ubuntu(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black),
-                      ),
+                      buildInfo("10:09:21", Colors.black, 16),
                     ],
                   ),
                 ],
@@ -63,15 +54,85 @@ class _IdeaState extends State<Idea> {
             Expanded(
               flex: 1,
               child: Container(
-                child: Row(),
-                
+                child: Center(
+                  child: Row(
+                    children: [
+                      Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 16.0, right: 4),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  MyCustomIcons.ticket,
+                                  size: 32,
+                                  color: primaryColor,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child:
+                                      buildInfo("150" + '\$', primaryColor, 16),
+                                ),
+                              ],
+                            ),
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16.0, right: 4),
+                                  child: Icon(
+                                    MyCustomIcons.reward,
+                                    size: 24,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child:
+                                      buildInfo("500" + '\$', Colors.green, 16),
+                                ),
+                              ],
+                            ),
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16.0, right: 4),
+                                  child: Icon(
+                                    Icons.group,
+                                    size: 28,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: buildInfo("500", primaryColor, 16),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18), bottomRight: Radius.circular(18)),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(18),
+                      bottomRight: Radius.circular(18)),
                   color: Colors.grey.shade900,
                 ),
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 width: double.infinity,
-                
               ),
             )
           ]),
@@ -84,5 +145,15 @@ class _IdeaState extends State<Idea> {
         ),
       ),
     ]);
+  }
+
+  Text buildInfo(String text, Color color, double size) {
+    return Text(
+      text,
+      maxLines: 1,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.ubuntu(
+          fontSize: size, fontWeight: FontWeight.w600, color: color),
+    );
   }
 }

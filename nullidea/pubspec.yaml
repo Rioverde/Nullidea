@@ -38,6 +38,12 @@ flutter:
    - assets/images/
    - assets/fonts/
   fonts:
-    - family: MyFlutterApp
+    - family: postidea
       fonts:
-        - asset: assets/fonts/MyFlutterApp.ttf
+        - asset: assets/fonts/postidea.ttf
+    - family: reward
+      fonts:
+        - asset: assets/fonts/reward.ttf
+    - family: ticket
+      fonts:
+        - asset: assets/fonts/ticket.ttf

@@ -15,11 +15,13 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class MyFlutterApp {
-  MyFlutterApp._();
-
-  static const _kFontFam = 'MyFlutterApp';
+class MyCustomIcons {
+  MyCustomIcons._();
   static const _kFontPkg = null;
 
-  static const IconData postidea = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData postidea = IconData(0xe800, fontFamily: 'postidea', fontPackage: _kFontPkg);
+  static const IconData reward = IconData(0xe801, fontFamily: 'reward', fontPackage: _kFontPkg);
+  static const IconData ticket = IconData(0xe800, fontFamily: 'ticket', fontPackage: _kFontPkg);
+
+
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:nullidea/my_flutter_app_icons.dart';
+import 'package:nullidea/myCustomIcons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constants.dart';
@@ -151,7 +151,7 @@ class _AccountRouterState extends State<AccountRouter> {
             color: Colors.black,
           ),
           Icon(
-            MyFlutterApp.postidea,
+            MyCustomIcons.postidea,
             color: Colors.black,
             size: 36,
           ),
