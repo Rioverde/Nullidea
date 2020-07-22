@@ -15,10 +15,11 @@ import '../Account/accountRouter.dart';
 final GlobalKey<ScaffoldState> scaffoldKeyLogin =
     new GlobalKey<ScaffoldState>();
 FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  String preload = '';
 
 class Login extends StatefulWidget {
   @override
-  _Login  createState() => _Login ();
+  _Login createState() => _Login();
 }
 
 class _Login extends State<Login> {
@@ -40,10 +41,9 @@ class _Login extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
-      String preload = (User.username);
+      checkUsername(temp);
       await getImageFromAWS(User.email);
       await getSignIn(User.email, password, fcmToken);
-      print(preload);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
       if (responceState == false) {

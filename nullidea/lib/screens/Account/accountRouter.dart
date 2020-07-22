@@ -69,6 +69,8 @@ class _AccountRouterState extends State<AccountRouter> {
     );
   }
 
+
+  
   void usernameCheck() {
     if (formKeyAccountRouter.currentState.validate()) {
       if (validateUsername(username.text) == null) {

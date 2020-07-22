@@ -197,10 +197,9 @@ Future<String> getUsername(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
-  String initUsername = data['data']['username'];
-
+Map data = json.decode(response.body);
   if (response.statusCode == 200) {
-    return initUsername;
+    return data['data']['username'];
   } else if (response.statusCode == 400) {
     return email + ' not exists in DB';
   } else

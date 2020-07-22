@@ -285,7 +285,8 @@ Drawer rightBar(BuildContext context) {
       RaisedButton(
         color: Colors.black,
         onPressed: () {
-          Navigator.push(
+
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Login()),
           );
