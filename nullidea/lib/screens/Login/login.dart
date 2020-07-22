@@ -43,7 +43,7 @@ class _Login extends State<Login> {
       String preload = (User.username);
       await getImageFromAWS(User.email);
       await getSignIn(User.email, password, fcmToken);
-      print(User.username);
+      print(preload);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
       if (responceState == false) {
