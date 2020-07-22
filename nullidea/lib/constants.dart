@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nullidea/screens/allIdeas.dart';
-import 'package:nullidea/screens/idea.dart';
-import 'package:nullidea/screens/profilePage.dart';
-import 'package:nullidea/screens/search.dart';
-import 'package:nullidea/screens/userNotification.dart';
+import 'package:nullidea/screens/Account/allIdeas.dart';
+import 'package:nullidea/screens/Account/idea.dart';
+import 'package:nullidea/screens/Account/profilePage.dart';
+import 'package:nullidea/screens/Account/search.dart';
+import 'package:nullidea/screens/Account/userNotification.dart';
 
 final formKey = GlobalKey<FormState>();
 
@@ -11,11 +11,10 @@ List<dynamic> achievements = new List();
 GlobalKey bottomNavigationKey = GlobalKey();
 
 final GlobalKey<ScaffoldState> scaffoldKeyAccountRouter =
-    new GlobalKey<ScaffoldState>();
+    GlobalKey<ScaffoldState>();
 final formKeyAccountRouter = GlobalKey<FormState>();
 
 bool usernameExist = false;
-
 
 final Search search = Search();
 final UserNotification userNotification = UserNotification();
@@ -50,9 +49,8 @@ Widget pageChooser(int page) {
     default:
       return allideas;
   }
-
-
 }
+
 String accountfcmToken = '';
 String tempImageUrl = '';
 //email string
@@ -72,7 +70,14 @@ int start = 10;
 int current = 10;
 //states of screens for login
 bool changePass = false;
-enum FormType { login, register, waiting, pincode, changePassword, waitingRegister}
+enum FormType {
+  login,
+  register,
+  waiting,
+  pincode,
+  changePassword,
+  waitingRegister
+}
 
 FormType formtype = FormType.login;
 

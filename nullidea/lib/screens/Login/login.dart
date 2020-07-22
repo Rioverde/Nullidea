@@ -1,58 +1,100 @@
-import 'dart:async';
-import 'package:nullidea/screens/accountRouter.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:quiver/async.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullidea/user.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:quiver/async.dart';
 import 'package:nullidea/handleRequests.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../constants.dart';
-import '../mechanics.dart';
-import '../theme.dart';
-import '../user.dart';
+import '../../constants.dart';
+import '../../mechanics.dart';
+import '../../theme.dart';
+import '../Account/accountRouter.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKeyLogin =
+    new GlobalKey<ScaffoldState>();
+FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 
 class Login extends StatefulWidget {
   @override
-  LoginState createState() => LoginState();
+  _Login  createState() => _Login ();
 }
 
-class LoginState extends State<Login> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _Login extends State<Login> {
+  //==============================================Functions==============
 
-  //===================================Fuctions==================================//
-  void postResend() {
-    postUser(User.email);
-    startTimer();
+  bool loading = false;
+
+  bool validateAndSave() {
+    final form = formKey.currentState;
+    setState(() {
+      loading = true;
+    });
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else
+      return false;
   }
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
-      setState(() {});
-      String preload = (User.username);
-      getImageFromAWS(User.email);
-
-      print(preload);
+      await getImageFromAWS(User.email);
       await getSignIn(User.email, password, fcmToken);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
+      setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
+      if (responceState == false) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
     if (responceState) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => AccountRouter()),
       );
+      setState(() {
+        loading = false;
+      });
     }
   }
 
-  bool validateAndSave() {
-    final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      return true;
-    } else
-      return false;
+  void postResend() {
+    postUser(User.email);
+    startTimer();
+  }
+
+  Future<void> proceed() async {
+    pincode = pincodeController.text;
+    if (changePass) {
+      setState(() {
+        loading = true;
+      });
+      await checkPintoChangePassword(User.email, pincode, password);
+      setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(patched
+          ? 'Password Changed'
+          : 'Verification code is incorrect, try again')));
+    } else {
+      await checkPin(User.email, pincode, password);
+      setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
+          responceState
+              ? 'You registered'
+              : 'Verification code is incorrect, try again')));
+      setState(() {
+        loading = false;
+      });
+    }
+    if (responceState) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AccountRouter()),
+      );
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   Future<void> validateAndSubmit() async {
@@ -61,17 +103,24 @@ class LoginState extends State<Login> {
       if (sendingPin) {
         setState(() {
           success = false;
-          setState(() => _scaffoldKey.currentState
+          setState(() => scaffoldKeyLogin.currentState
               .showSnackBar(snackBar('Sending Email..')));
+
           toPin();
+          setState(() {
+            loading = false;
+          });
           startTimer();
         });
       } else {
         setState(() {
           success = true;
-          setState(() => _scaffoldKey.currentState
+          setState(() => scaffoldKeyLogin.currentState
               .showSnackBar(snackBar('User already Exist')));
           toRegister();
+          setState(() {
+            loading = false;
+          });
         });
       }
     } else {}
@@ -80,14 +129,21 @@ class LoginState extends State<Login> {
   Future<void> submitChangedPassword() async {
     if (validateAndSave()) {
       if (changepasswordController.text != changepasswordControllerFirst.text) {
-        setState(() => _scaffoldKey.currentState
+        setState(() => scaffoldKeyLogin.currentState
             .showSnackBar(snackBar('Password fields do not match')));
+        setState(() {
+          loading = false;
+        });
       } else if (changepasswordController.text ==
           changepasswordControllerFirst.text) {
         setState(() {
+          loading = false;
           startTimer();
         });
         await changePasswordSendVerificarion(User.email);
+        setState(() {
+          loading = false;
+        });
         toPin();
         changePass = true;
       }
@@ -105,28 +161,29 @@ class LoginState extends State<Login> {
   void toChangepassword() => setState(() {
         formtype = FormType.changePassword;
       });
-
-  Future<void> toWait() async => setState(() {
-        Future.delayed(const Duration(seconds: 4), () {
-          setState(() {
-            if (sendingPin) {
-              formtype = FormType.pincode;
-              startTimer();
-            } else if (!sendingPin) {
-              formtype = FormType.register;
-              _scaffoldKey.currentState.showSnackBar(
-                  snackBar('User with this email already exists'));
-            }
-          });
-        });
-        formtype = FormType.waiting;
-      });
-
   void toRegister() => setState(() {
         formtype = FormType.register;
       });
 
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: start),
+      new Duration(milliseconds: 300),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        current = start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
+  }
+
   @override
   void initState() {
     firebaseMessaging.getToken().then((token) {
@@ -154,52 +211,10 @@ class LoginState extends State<Login> {
     super.initState();
   }
 
-  void startTimer() {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: start),
-      new Duration(milliseconds: 300),
-    );
-
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        current = start - duration.elapsed.inSeconds;
-      });
-    });
-
-    sub.onDone(() {
-      print("Done");
-      sub.cancel();
-    });
-  }
-
-  Future<void> proceed() async {
-    pincode = pincodeController.text;
-    if (changePass) {
-      await checkPintoChangePassword(User.email, pincode, password);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(patched
-          ? 'Password Changed'
-          : 'Verification code is incorrect, try again')));
-    } else {
-      await checkPin(User.email, pincode, password);
-      setState(() => _scaffoldKey.currentState.showSnackBar(snackBar(
-          responceState
-              ? 'You registered'
-              : 'Verification code is incorrect, try again')));
-    }
-    if (responceState) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AccountRouter()),
-      );
-    }
-  }
-
-  //===============================================================================//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKeyLogin,
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Form(
@@ -208,7 +223,7 @@ class LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: toggleInputs() + toggleButtons(),
+              children: showPage(),
             ),
           ),
         ),
@@ -216,65 +231,44 @@ class LoginState extends State<Login> {
     );
   }
 
-  List<Widget> toggleInputs() {
+  List<Widget> showPage() {
     if (formtype == FormType.login) {
       return [
         nullideaText(),
         loginEmailField(),
         loginPasswordField(),
+        forgotPassword(),
+        loading ? turningSpins() : signInButton(),
+        dontHaveAccount(),
       ];
-    } else if (formtype == FormType.register || formtype == FormType.waiting) {
+    } else if (formtype == FormType.register) {
       return [
         nullideaText(),
         registerEmailField(),
         registerPasswordField(),
+        loading ? turningSpins() : loadingbutton(),
+        alreadyHaveAccount(),
       ];
     } else if (formtype == FormType.changePassword) {
       return [
         changepasswordimage(),
         loginEmailField(),
-        changePasswordField(),
+        loading ? turningSpins() : changePasswordField(),
         changePasswordFieldconfirm(),
+        changePasswordButton(),
+        backtoLogin(),
       ];
     } else
       return [
         verify(),
         emailTextForPincode(),
         textforPincode(),
+        pinCodeTextField(),
+        loading ? turningSpins() : proceedButton(),
+        didntReceivedCode(),
+        Center(child: countDown()),
       ];
   }
-
-  List<Widget> toggleButtons() {
-    if (formtype == FormType.login || formtype == FormType.waiting) {
-      return [
-        forgotPassword(),
-        signInButton(),
-        dontHaveAccount(),
-      ];
-    } else if (formtype == FormType.changePassword) {
-      return [
-        changePasswordButton(),
-        backtoLogin(),
-      ];
-    } else if (formtype == FormType.register || formtype == FormType.waiting) {
-      return [
-        loadingbutton(success ? FormType.register : FormType.waiting),
-        alreadyHaveAccount(),
-      ];
-    } else
-      return [
-        Column(
-          children: <Widget>[
-            pinCodeTextField(),
-            proceedButton(),
-            didntReceivedCode(),
-            countDown(),
-          ],
-        )
-      ];
-  }
-
-  //===================================Builders==================================//
 
   Padding pinCodeTextField() {
     return Padding(
@@ -429,9 +423,7 @@ class LoginState extends State<Login> {
       padding: EdgeInsets.all(8.0),
       onPressed: () {
         setState(
-          () {
-            toLogin();
-          },
+          () {},
         );
       },
       child: Text(
@@ -493,46 +485,32 @@ class LoginState extends State<Login> {
         duration: new Duration(seconds: 3));
   }
 
-  dynamic loadingbutton(FormType waiting) {
-    if (formtype == waiting) {
-      return ButtonTheme(
-        disabledColor: disabledState,
-        height: 55,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: RaisedButton(
-              color: primaryColor,
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(10)),
-              child: Text(
-                "SIGN UP",
-                style: GoogleFonts.ubuntu(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                    color: emailController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty
-                        ? Colors.black
-                        : Colors.black),
-              ),
-              onPressed: emailController.text.isNotEmpty &&
-                      passwordController.text.isNotEmpty
-                  ? validateAndSubmit
-                  : null),
-        ),
-      );
-    } else {
-      return Padding(
+  ButtonTheme loadingbutton() {
+    return ButtonTheme(
+      disabledColor: disabledState,
+      height: 55,
+      child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: Container(
-          height: 55,
-          child: SpinKitWanderingCubes(
-            duration: Duration(seconds: 2),
+        child: RaisedButton(
             color: primaryColor,
-            size: 50.0,
-          ),
-        ),
-      );
-    }
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10)),
+            child: Text(
+              "SIGN UP",
+              style: GoogleFonts.ubuntu(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty
+                      ? Colors.black
+                      : Colors.black),
+            ),
+            onPressed: emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty
+                ? validateAndSubmit
+                : null),
+      ),
+    );
   }
 
   Center nullideaText() {
@@ -653,17 +631,7 @@ class LoginState extends State<Login> {
         ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: Container(
-          height: 55,
-          child: SpinKitWanderingCubes(
-            duration: Duration(seconds: 2),
-            color: primaryColor,
-            size: 50.0,
-          ),
-        ),
-      );
+      return turningSpins();
     }
   }
 
@@ -675,7 +643,7 @@ class LoginState extends State<Login> {
           child: FlatButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: toChangepassword,
+            onPressed: null,
             child: Text("Forgot Password ?",
                 style: GoogleFonts.ubuntu(
                     color: primaryColor,
@@ -765,6 +733,20 @@ class LoginState extends State<Login> {
               : iconPrimaryColor = primaryColor;
         });
       },
+    );
+  }
+
+  Padding turningSpins() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Container(
+        height: 55,
+        child: SpinKitWanderingCubes(
+          duration: Duration(seconds: 2),
+          color: primaryColor,
+          size: 50.0,
+        ),
+      ),
     );
   }
 }

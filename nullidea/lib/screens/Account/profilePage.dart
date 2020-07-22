@@ -3,15 +3,15 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullidea/screens/Login/login.dart';
 
-import 'package:nullidea/screens/login.dart';
-import '../constants.dart';
-import '../handleRequests.dart';
-import '../theme.dart';
+import '../../constants.dart';
+import '../../handleRequests.dart';
+import '../../theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-import '../user.dart';
+import '../../user.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

@@ -7,24 +7,21 @@ import 'package:nullidea/user.dart';
 import 'package:dio/dio.dart';
 
 var dio = Dio();
-String path;
 Map data;
 String initPhotolink;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
-bool newresponce = false;
-bool correctPin = false;
 bool patched = false;
 //post reques
 Future<void> postUser(String email) async {
   String body =
       jsonEncode({"email": email, "mail_type": "verify_account_email"});
-  //we send request for temproary user to be reqistered in database
-  //if he does not exist we send him verification code
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
+  //we send request for temproary user to be reqistered in database
+  //if he does not exist we send him verification code
 
   // print('Response status: ${response.statusCode}');
   // print('Response body: ${response.body}');
@@ -35,16 +32,15 @@ Future<void> postUser(String email) async {
     print(email + ' not exists in DB');
     responceState = false;
 
-    final newresponse = await http.post(
+    final responce = await http.post(
       url,
       headers: <String, String>{'Content-Type': 'application/json'},
       body: body,
     );
 
-    if (newresponse.statusCode == 200) {
+    if (responce.statusCode == 200) {
       sendingPin = true;
       print("So I sent him verification code via email");
-      responceState = true;
     }
   } else {
     // If the server returns 404,
@@ -201,9 +197,7 @@ Future<String> getUsername(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
-  data = json.decode(response.body);
   String initUsername = data['data']['username'];
-  print(initUsername);
 
   if (response.statusCode == 200) {
     return initUsername;
@@ -242,7 +236,6 @@ Future<void> getImageFromAWS(String email) async {
   String imageURL = response.data['data']['image_url'];
   tempImageUrl = imageURL;
 }
-
 
 Future<void> getFCMtoken(String email) async {
   Response response;

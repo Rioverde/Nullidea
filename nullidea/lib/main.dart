@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nullidea/screens/login.dart';
-import 'package:nullidea/screens/accountRouter.dart';
+import 'package:nullidea/screens/Login/login.dart';
+import 'package:nullidea/screens/Account/accountRouter.dart';
 
 import 'package:nullidea/theme.dart';
 

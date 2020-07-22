@@ -6,12 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/myCustomIcons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
 
-import '../handleRequests.dart';
-import '../mechanics.dart';
-import '../theme.dart';
-import '../user.dart';
+import '../../handleRequests.dart';
+import '../../mechanics.dart';
+import '../../theme.dart';
+import '../../user.dart';
 import 'profilePage.dart';
 
 class AccountRouter extends StatefulWidget {
