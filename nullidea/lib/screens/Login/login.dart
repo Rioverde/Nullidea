@@ -40,8 +40,10 @@ class _Login extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
+      String preload = (User.username);
       await getImageFromAWS(User.email);
       await getSignIn(User.email, password, fcmToken);
+      print(User.username);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
       if (responceState == false) {
