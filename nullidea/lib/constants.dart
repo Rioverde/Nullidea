@@ -73,10 +73,8 @@ bool changePass = false;
 enum FormType {
   login,
   register,
-  waiting,
   pincode,
   changePassword,
-  waitingRegister
 }
 
 FormType formtype = FormType.login;
