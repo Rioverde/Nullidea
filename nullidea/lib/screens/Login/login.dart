@@ -427,11 +427,7 @@ class _Login extends State<Login> {
       textColor: primaryColor,
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
-      onPressed: () {
-        setState(
-          () {},
-        );
-      },
+      onPressed: toLogin,
       child: Text(
         "Back to Sign In",
         style: GoogleFonts.ubuntu(
