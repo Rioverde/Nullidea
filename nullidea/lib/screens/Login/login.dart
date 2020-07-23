@@ -15,7 +15,7 @@ import '../Account/accountRouter.dart';
 final GlobalKey<ScaffoldState> scaffoldKeyLogin =
     new GlobalKey<ScaffoldState>();
 FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-  String preload = '';
+String preload = '';
 
 class Login extends StatefulWidget {
   @override
@@ -151,6 +151,10 @@ class _Login extends State<Login> {
       }
     }
   }
+
+  void toChangePassword() => setState(() {
+        formtype = FormType.changePassword;
+      });
 
   void toLogin() => setState(() {
         formtype = FormType.login;
@@ -645,7 +649,7 @@ class _Login extends State<Login> {
           child: FlatButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: null,
+            onPressed: toChangePassword,
             child: Text("Forgot Password ?",
                 style: GoogleFonts.ubuntu(
                     color: primaryColor,
