@@ -36,30 +36,33 @@ class _Login extends State<Login> {
       form.save();
       return true;
     } else
-      return false;
+      setState(() {
+        loading = false;
+      });
+    return false;
   }
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
+      setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
+          responceState ? "Logging In" : 'Incorrect email or password')));
+          setState(() {
+        loading = false;
+      });
+    }
+    if (responceState) {
+
+      
       checkUsername(temp);
       await getImageFromAWS(User.email);
       await getSignIn(User.email, password, fcmToken);
-      setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
-          responceState ? "Logging In" : 'Incorrect email or password')));
-      if (responceState == false) {
-        setState(() {
-          loading = false;
-        });
-      }
-    }
-    if (responceState) {
+            setState(() {
+        loading = false;
+      });
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => AccountRouter()),
       );
-      setState(() {
-        loading = false;
-      });
     }
   }
 
@@ -78,6 +81,7 @@ class _Login extends State<Login> {
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(patched
           ? 'Password Changed'
           : 'Verification code is incorrect, try again')));
+      loading = false;
     } else {
       await checkPin(User.email, pincode, password);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
