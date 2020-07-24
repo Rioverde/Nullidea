@@ -6,6 +6,7 @@ import 'package:nullidea/user.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quiver/async.dart';
 import 'package:nullidea/handleRequests.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 import '../../mechanics.dart';
@@ -44,19 +45,25 @@ class _Login extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
+      await getSignIn(User.email, password, fcmToken);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
-          setState(() {
+      setState(() {
         loading = false;
       });
     }
+    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
+    SharedPreferences sessionMail = await SharedPreferences.getInstance();
     if (responceState) {
+      setState(() {
+        sessionStatus.setBool('isLogged', true);
+        sessionMail.setString('userMail', User.email);
+      });
 
-      
       checkUsername(temp);
       await getImageFromAWS(User.email);
-      await getSignIn(User.email, password, fcmToken);
-            setState(() {
+
+      setState(() {
         loading = false;
       });
       Navigator.pushReplacement(
@@ -64,6 +71,7 @@ class _Login extends State<Login> {
         MaterialPageRoute(builder: (context) => AccountRouter()),
       );
     }
+    sessionStatus.setBool('isLogged', false);
   }
 
   void postResend() {
@@ -194,12 +202,29 @@ class _Login extends State<Login> {
     });
   }
 
+  Future<void> getSession() async {
+    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
+    SharedPreferences sessionMail = await SharedPreferences.getInstance();
+    if (sessionStatus.getBool('isLogged') == null) {
+      sessionStatus.setBool('isLogged', false);
+    }
+    if (sessionStatus.getBool('isLogged')) {
+      User.email = sessionMail.getString('userMail');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AccountRouter()),
+      );
+    }
+  }
+
   @override
-  void initState() {
+  initState() {
     firebaseMessaging.getToken().then((token) {
       print('FCM Token: $token');
       fcmToken = token;
     });
+
+    getSession();
 
     changepasswordController.addListener(() {
       //use setState to rebuild the widget
