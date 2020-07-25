@@ -15,6 +15,7 @@ import '../Account/accountRouter.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKeyLogin =
     new GlobalKey<ScaffoldState>();
+
 FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 String preload = '';
 bool inSession = false;
@@ -54,28 +55,29 @@ class _Login extends State<Login> {
       setState(() {
         loading = false;
       });
+
+      if (responceState) {
+        SharedPreferences sessionStatus = await SharedPreferences.getInstance();
+        SharedPreferences sessionMail = await SharedPreferences.getInstance();
+        await getImageFromAWS(User.email);
+
+        setState(() {
+          sessionStatus.setBool('isLogged', true);
+          sessionMail.setString('userMail', User.email);
+
+          User.email = sessionMail.getString('userMail');
+
+          loading = false;
+        });
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AccountRouter()),
+        );
+      }
     }
-    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
-    SharedPreferences sessionMail = await SharedPreferences.getInstance();
-    if (responceState) {
-      await getImageFromAWS(User.email);
-      
-      setState(() {
-        sessionStatus.setBool('isLogged', true);
-        sessionMail.setString('userMail', User.email);
 
-        User.email = sessionMail.getString('userMail');
-
-
-
-        loading = false;
-      });
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AccountRouter()),
-      );
-    }
+    toLogin();
   }
 
   void postResend() {
