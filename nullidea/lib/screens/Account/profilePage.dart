@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nullidea/screens/Account/accountRouter.dart';
 import 'package:nullidea/screens/Login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -259,6 +258,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    checkUsername(User.username);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: profilePage(context),
@@ -272,7 +277,7 @@ void openEndDrawer() {
 
 Future<void> closeSession() async {
   final sessionStatus = await SharedPreferences.getInstance();
-  await sessionStatus.clear();
+  await sessionStatus.setBool('isLogged', false);
   final sessionMail = await SharedPreferences.getInstance();
   await sessionMail.clear();
 }
@@ -296,6 +301,7 @@ Drawer rightBar(BuildContext context) {
         color: Colors.black,
         onPressed: () {
           closeSession();
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Login()),

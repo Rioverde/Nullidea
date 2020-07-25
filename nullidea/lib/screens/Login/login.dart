@@ -56,20 +56,24 @@ class _Login extends State<Login> {
     SharedPreferences sessionStatus = await SharedPreferences.getInstance();
     SharedPreferences sessionMail = await SharedPreferences.getInstance();
     if (responceState) {
+      await getImageFromAWS(User.email);
+      print(User.email);
+      setState(() {
+        returnUsername();
+        checkUsername(User.username);
+      });
+
+      print(User.username);
+
       setState(() {
         sessionStatus.setBool('isLogged', true);
-        inSession = true;
         sessionMail.setString('userMail', User.email);
+
         User.email = sessionMail.getString('userMail');
-        
-      });
 
-      checkUsername(User.username);
-      await getImageFromAWS(User.email);
-
-      setState(() {
         loading = false;
       });
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => AccountRouter()),
@@ -213,6 +217,9 @@ class _Login extends State<Login> {
     }
     if (sessionStatus.getBool('isLogged')) {
       User.email = sessionMail.getString('userMail');
+
+      await returnUsername();
+      await getImageFromAWS(User.email);
 
       Navigator.pushReplacement(
         context,

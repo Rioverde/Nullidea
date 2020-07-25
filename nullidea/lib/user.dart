@@ -18,11 +18,10 @@ Future<void> returnUsername() async {
 }
 
 String checkUsername(String username) {
-  print(username);
   if (username == '' || username == null) {
     returnUsername();
     if (username == '') {
-      return '';
+      return 'Username';
     }
     return username;
   }
