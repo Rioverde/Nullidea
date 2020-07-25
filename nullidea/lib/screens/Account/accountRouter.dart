@@ -22,10 +22,8 @@ class AccountRouter extends StatefulWidget {
 }
 
 bool sessionEnded = false;
+
 class _AccountRouterState extends State<AccountRouter> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +32,6 @@ class _AccountRouterState extends State<AccountRouter> {
           width: 250,
           child: rightBar(context),
         ),
-        
       ),
       key: scaffoldKeyAccountRouter,
       bottomNavigationBar: navigationBar(),
@@ -71,8 +68,6 @@ class _AccountRouterState extends State<AccountRouter> {
       ),
     );
   }
-
-
 
   void usernameCheck() {
     if (formKeyAccountRouter.currentState.validate()) {

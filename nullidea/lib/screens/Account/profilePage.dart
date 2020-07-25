@@ -258,12 +258,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    checkUsername(User.username);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       child: profilePage(context),

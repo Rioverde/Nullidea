@@ -5,7 +5,7 @@ import 'handleRequests.dart';
 
 class User {
   static String email;
-  static String username = checkUsername(temp);
+  static String username;
   static File profilePhoto;
 }
 
