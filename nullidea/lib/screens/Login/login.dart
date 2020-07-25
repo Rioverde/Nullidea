@@ -46,6 +46,8 @@ class _Login extends State<Login> {
 
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
+      checkUsername(User.username);
+
       await getSignIn(User.email, password, fcmToken);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
@@ -57,15 +59,14 @@ class _Login extends State<Login> {
     SharedPreferences sessionMail = await SharedPreferences.getInstance();
     if (responceState) {
       await getImageFromAWS(User.email);
-
+      
       setState(() {
         sessionStatus.setBool('isLogged', true);
         sessionMail.setString('userMail', User.email);
-        
 
         User.email = sessionMail.getString('userMail');
-        
-        User.username = checkUsername(temp);
+
+
 
         loading = false;
       });
