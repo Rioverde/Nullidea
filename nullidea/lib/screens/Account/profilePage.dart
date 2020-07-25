@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullidea/screens/Account/accountRouter.dart';
 import 'package:nullidea/screens/Login/login.dart';
 
 import '../../constants.dart';
@@ -20,6 +21,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File cropped;
+  bool sessionEnded = false;
 
   //------------------------------------------------//
 
@@ -285,7 +287,7 @@ Drawer rightBar(BuildContext context) {
       RaisedButton(
         color: Colors.black,
         onPressed: () {
-
+          sessionEnded = true;
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Login()),

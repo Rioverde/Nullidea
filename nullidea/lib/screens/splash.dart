@@ -13,7 +13,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
-      seconds: 2,
+      seconds: 3,
       title: nullideaText(),
       navigateAfterSeconds: new Login(),
       backgroundColor: Colors.black,

@@ -17,6 +17,7 @@ final GlobalKey<ScaffoldState> scaffoldKeyLogin =
     new GlobalKey<ScaffoldState>();
 FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 String preload = '';
+bool inSession = false;
 
 class Login extends StatefulWidget {
   @override
@@ -57,10 +58,12 @@ class _Login extends State<Login> {
     if (responceState) {
       setState(() {
         sessionStatus.setBool('isLogged', true);
+        inSession = true;
         sessionMail.setString('userMail', User.email);
+
       });
 
-      checkUsername(temp);
+      checkUsername(User.username);
       await getImageFromAWS(User.email);
 
       setState(() {
@@ -71,7 +74,6 @@ class _Login extends State<Login> {
         MaterialPageRoute(builder: (context) => AccountRouter()),
       );
     }
-    sessionStatus.setBool('isLogged', false);
   }
 
   void postResend() {
@@ -210,6 +212,7 @@ class _Login extends State<Login> {
     }
     if (sessionStatus.getBool('isLogged')) {
       User.email = sessionMail.getString('userMail');
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => AccountRouter()),
