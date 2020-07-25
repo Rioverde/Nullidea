@@ -60,7 +60,8 @@ class _Login extends State<Login> {
         sessionStatus.setBool('isLogged', true);
         inSession = true;
         sessionMail.setString('userMail', User.email);
-
+        User.email = sessionMail.getString('userMail');
+        
       });
 
       checkUsername(User.username);

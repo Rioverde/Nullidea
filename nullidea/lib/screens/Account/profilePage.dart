@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/screens/Account/accountRouter.dart';
 import 'package:nullidea/screens/Login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 import '../../handleRequests.dart';
@@ -22,7 +23,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   File cropped;
   bool sessionEnded = false;
-
+//TODO needed to preload data from cash
   //------------------------------------------------//
 
   Widget decideImage() {
@@ -269,6 +270,13 @@ void openEndDrawer() {
   scaffoldKeyAccountRouter.currentState.openEndDrawer();
 }
 
+Future<void> closeSession() async {
+  final sessionStatus = await SharedPreferences.getInstance();
+  await sessionStatus.clear();
+  final sessionMail = await SharedPreferences.getInstance();
+  await sessionMail.clear();
+}
+
 Drawer rightBar(BuildContext context) {
   return Drawer(
     child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
@@ -287,7 +295,7 @@ Drawer rightBar(BuildContext context) {
       RaisedButton(
         color: Colors.black,
         onPressed: () {
-          sessionEnded = true;
+          closeSession();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Login()),
