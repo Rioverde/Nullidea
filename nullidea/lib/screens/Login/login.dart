@@ -99,16 +99,7 @@ class _Login extends State<Login> {
           : 'Verification code is incorrect, try again')));
 
       if (responceState) {
-        setState(() {
-          checkUsername(User.username);
-        });
-        await getImageFromAWS(User.email);
-        openSession();
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AccountRouter()),
-        );
+        toLogin();
       }
       setState(() {
         loading = false;
