@@ -17,7 +17,7 @@ class Nullidea extends StatelessWidget {
       initialRoute: '/SplashScreen',
       theme: nullideatheme(),
       routes: {
-        '/SplashScreen' : (context) => Splash(),
+        '/SplashScreen': (context) => SplashScreen(),
         // When navigating to the "/" route, build the FirstScreen widget.
         '/Login': (context) => Login(),
         // When navigating to the "/second" route, build the SecondScreen widget.
@@ -26,4 +26,3 @@ class Nullidea extends StatelessWidget {
     );
   }
 }
-

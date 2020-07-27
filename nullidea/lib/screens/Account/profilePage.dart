@@ -282,7 +282,7 @@ Drawer rightBar(BuildContext context) {
       Container(
         child: Center(
           child: Text(
-            User.username,
+            checkUsername(User.username),
             style: GoogleFonts.ubuntu(
                 fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
           ),

@@ -1,25 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullidea/screens/Account/accountRouter.dart';
 import 'package:nullidea/screens/Login/login.dart';
 import 'package:nullidea/theme.dart';
-import 'package:splashscreen/splashscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Splash extends StatefulWidget {
+import '../handleRequests.dart';
+import '../user.dart';
+
+class SplashScreen extends StatefulWidget {
   @override
-  _SplashState createState() => _SplashState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      setState(() {
+        whichScreen();
+      });
+    });
+  }
+
+  Future<void> whichScreen() async {
+    await getSession();
+  }
+
+  Future<void> getSession() async {
+    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
+    SharedPreferences sessionMail = await SharedPreferences.getInstance();
+    if (sessionStatus.getBool('isLogged') == null) {
+      sessionStatus.setBool('isLogged', false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    }
+    if (sessionStatus.getBool('isLogged')) {
+      User.email = sessionMail.getString('userMail');
+      returnUsername();
+      checkUsername(User.username);
+      print(User.username);
+
+      await getImageFromAWS(User.email);
+      print("here");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AccountRouter()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SplashScreen(
-      seconds: 5,
-      title: nullideaText(),
-      navigateAfterSeconds: new Login(),
+    return Scaffold(
+      body: SafeArea(
+          child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: Container(
+                child: nullideaText(),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Container(
+                height: 55,
+                child: SpinKitWanderingCubes(
+                  duration: Duration(seconds: 2),
+                  color: primaryColor,
+                  size: 50.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      )),
       backgroundColor: Colors.black,
-      styleTextUnderTheLoader: new TextStyle(),
-      photoSize: 100.0,
-      loaderColor: primaryColor,
     );
   }
 }

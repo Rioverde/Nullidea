@@ -208,35 +208,12 @@ class _Login extends State<Login> {
     });
   }
 
-  Future<void> getSession() async {
-    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
-    SharedPreferences sessionMail = await SharedPreferences.getInstance();
-    if (sessionStatus.getBool('isLogged') == null) {
-      sessionStatus.setBool('isLogged', false);
-    }
-    if (sessionStatus.getBool('isLogged')) {
-      setState(() {
-        User.email = sessionMail.getString('userMail');
-        checkUsername(User.username);
-      });
-
-      await getImageFromAWS(User.email);
-      print(sessionStatus.getBool('isLogged'));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AccountRouter()),
-      );
-    }
-  }
-
   @override
   initState() {
     firebaseMessaging.getToken().then((token) {
       print('FCM Token: $token');
       fcmToken = token;
     });
-
-    getSession();
 
     changepasswordController.addListener(() {
       //use setState to rebuild the widget
