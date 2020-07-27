@@ -99,7 +99,16 @@ class _Login extends State<Login> {
           : 'Verification code is incorrect, try again')));
 
       if (responceState) {
-        toLogin();
+        setState(() {
+          checkUsername(User.username);
+        });
+        await getImageFromAWS(User.email);
+        openSession();
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AccountRouter()),
+        );
       }
       setState(() {
         loading = false;
@@ -117,6 +126,7 @@ class _Login extends State<Login> {
         setState(() {
           checkUsername(User.username);
         });
+
         await getImageFromAWS(User.email);
         openSession();
 
@@ -221,6 +231,7 @@ class _Login extends State<Login> {
 
   @override
   initState() {
+    toLogin();
     firebaseMessaging.getToken().then((token) {
       print('FCM Token: $token');
       fcmToken = token;
