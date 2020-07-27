@@ -45,9 +45,22 @@ class _Login extends State<Login> {
     return false;
   }
 
+  Future<void> openSession() async {
+    SharedPreferences sessionStatus = await SharedPreferences.getInstance();
+    SharedPreferences sessionMail = await SharedPreferences.getInstance();
+
+    sessionStatus.setBool('isLogged', true);
+    sessionMail.setString('userMail', User.email);
+
+    User.email = sessionMail.getString('userMail');
+
+    loading = false;
+  }
+
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
       checkUsername(User.username);
+      await getImageFromAWS(User.email);
 
       await getSignIn(User.email, password, fcmToken);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
@@ -57,18 +70,7 @@ class _Login extends State<Login> {
       });
 
       if (responceState) {
-        SharedPreferences sessionStatus = await SharedPreferences.getInstance();
-        SharedPreferences sessionMail = await SharedPreferences.getInstance();
-        await getImageFromAWS(User.email);
-
-        setState(() {
-          sessionStatus.setBool('isLogged', true);
-          sessionMail.setString('userMail', User.email);
-
-          User.email = sessionMail.getString('userMail');
-
-          loading = false;
-        });
+        openSession();
 
         Navigator.pushReplacement(
           context,
@@ -95,7 +97,22 @@ class _Login extends State<Login> {
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(patched
           ? 'Password Changed'
           : 'Verification code is incorrect, try again')));
-      loading = false;
+
+      if (responceState) {
+        setState(() {
+          checkUsername(User.username);
+        });
+        await getImageFromAWS(User.email);
+        openSession();
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AccountRouter()),
+        );
+      }
+      setState(() {
+        loading = false;
+      });
     } else {
       await checkPin(User.email, pincode, password);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
@@ -105,15 +122,18 @@ class _Login extends State<Login> {
       setState(() {
         loading = false;
       });
-    }
-    if (responceState) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AccountRouter()),
-      );
-      setState(() {
-        loading = false;
-      });
+      if (responceState) {
+        setState(() {
+          checkUsername(User.username);
+        });
+        await getImageFromAWS(User.email);
+        openSession();
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AccountRouter()),
+        );
+      }
     }
   }
 

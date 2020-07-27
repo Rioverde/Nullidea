@@ -65,9 +65,9 @@ bool success = true;
 //state of visibility of password
 bool passwordVisible = true;
 //start point of clock
-int start = 10;
+int start = 60;
 //current value of clock
-int current = 10;
+int current = 60;
 //states of screens for login
 bool changePass = false;
 enum FormType {
