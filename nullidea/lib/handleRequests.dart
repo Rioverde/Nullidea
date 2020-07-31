@@ -7,24 +7,21 @@ import 'package:nullidea/user.dart';
 import 'package:dio/dio.dart';
 
 var dio = Dio();
+Response response;
 Map data;
 String initPhotolink;
 bool registered = false;
 bool sendingPin = false;
 bool responceState = false;
 bool patched = false;
-//post reques
+
+//Post request to send email
 Future<void> postUser(String email) async {
   String body =
       jsonEncode({"email": email, "mail_type": "verify_account_email"});
   var url = 'https://nullidea-backend.herokuapp.com/v1/users/temp';
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
-  //we send request for temproary user to be reqistered in database
-  //if he does not exist we send him verification code
-
-  // print('Response status: ${response.statusCode}');
-  // print('Response body: ${response.body}');
 
   if (response.statusCode == 200) {
     print("User already exists I will not send him verification code");
@@ -43,12 +40,11 @@ Future<void> postUser(String email) async {
       print("So I sent him verification code via email");
     }
   } else {
-    // If the server returns 404,
-    // then throw an exception.
     throw Exception('Internal server error');
   }
 }
 
+//Function to check PIN code
 Future<void> checkPin(String email, String pincode, String password) async {
   Map<String, String> registerbody = {"email": email, "password": password};
   //first we check if user email does exist and his pincode is correct
@@ -101,6 +97,7 @@ Future<void> getSignIn(String email, String password, String fcmToken) async {
   }
 }
 
+//Fuction to send verification code in change password or in register
 Future<void> changePasswordSendVerificarion(String email) async {
   String body =
       jsonEncode({"email": email, "mail_type": "change_account_password"});
@@ -108,14 +105,9 @@ Future<void> changePasswordSendVerificarion(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
-  // print('Response status: ${response.statusCode}');
-  // print('Response body: ${response.body}');
-
   if (response.statusCode == 200) {
     data = json.decode(response.body);
-    // Assume the response body is something like: ['foo', { 'bar': 499 }]
     bool state = data['success'];
-
     if (state) {
       print(email + ' exists in DB');
       final response = await http.post(
@@ -126,15 +118,13 @@ Future<void> changePasswordSendVerificarion(String email) async {
 
       if (response.statusCode == 200) {
         print(
-            "User exists, I will send him verification code to change his password");
+            'User exists, I will send him verification code to change his password');
         registered = false;
-        // If the server did return a 200 CREATED response,
-        // then parse the JSON.
       } else if (response.statusCode == 400) {
         print("So user should go and register first");
         registered = true;
       } else
-        // If the server returns 404 error,
+        // If the server returns 500 or 404 error,
         // then throw an exception.
         throw Exception('Internal server error');
     }
@@ -144,6 +134,7 @@ Future<void> changePasswordSendVerificarion(String email) async {
     throw Exception("Internal server error");
 }
 
+//Checking PinCode to change password
 Future<void> checkPintoChangePassword(
     String email, String pincode, String password) async {
   Map<String, String> registerbody = {"email": email, "password": password};
@@ -171,6 +162,7 @@ Future<void> checkPintoChangePassword(
   }
 }
 
+//Function to change username
 Future<void> changeUsername(String email, String username) async {
   Map<String, String> usernamebody = {"email": email, "username": username};
   Map<String, String> headers = {"Content-type": "application/json"};
@@ -181,23 +173,22 @@ Future<void> changeUsername(String email, String username) async {
       await http.patch(url, headers: headers, body: json.encode(usernamebody));
 
   print(response.body);
-  Map data = json.decode(response.body);
   responceState = data['success'];
   if (!responceState) {
-    usernameExist = true;
     print("Username already exists");
   } else if (responceState) {
     print("username changed");
     data = json.decode(response.body);
     User.username = data['data']['username'];
-  }
+  } else
+    throw Exception("Internal server error");
 }
 
+//Function to take Username from Database by email provided
 Future<String> getUsername(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
-Map data = json.decode(response.body);
   if (response.statusCode == 200) {
     return data['data']['username'];
   } else if (response.statusCode == 400) {
@@ -206,7 +197,7 @@ Map data = json.decode(response.body);
     return 'Error';
 }
 
-// ignore: missing_return
+//Get profile photo from caamera or gallery to send it to => Database => AWS
 Future<void> getPhoto(String email, File photo) async {
   Map<String, dynamic> imageBody = {
     "email": email,
@@ -217,7 +208,7 @@ Future<void> getPhoto(String email, File photo) async {
       'https://nullidea-backend.herokuapp.com/v1/users/image?email=' + email;
 
   FormData formData = new FormData.fromMap(imageBody);
-  var response = await dio.patch(url, data: formData);
+  response = await dio.patch(url, data: formData);
 
   if (response.statusCode == 200) {
     print("sended, updated");
@@ -225,21 +216,14 @@ Future<void> getPhoto(String email, File photo) async {
     print("Error 400");
   } else
     print("Error 500");
+  throw Exception("Internal server error");
 }
 
+//Function to  take image from amazon cloud directly by providinglink from Database
 Future<void> getImageFromAWS(String email) async {
-  Response response;
   response = await dio
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
   print(response.data.toString());
   String imageURL = response.data['data']['image_url'];
   tempImageUrl = imageURL;
-}
-
-Future<void> getFCMtoken(String email) async {
-  Response response;
-  response = await dio
-      .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
-  print(response.data.toString());
-  accountfcmToken = response.data['data']['fcm_token'];
 }

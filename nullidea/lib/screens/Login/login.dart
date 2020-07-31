@@ -17,7 +17,6 @@ final GlobalKey<ScaffoldState> scaffoldKeyLogin =
     new GlobalKey<ScaffoldState>();
 
 FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-String preload = '';
 bool inSession = false;
 
 class Login extends StatefulWidget {
@@ -28,23 +27,19 @@ class Login extends StatefulWidget {
 class _Login extends State<Login> {
   //==============================================Functions==============
 
-  bool loading = false;
-
+//Validate the form of data that user write in login and password from Regex
   bool validateAndSave() {
     final form = formKey.currentState;
-    setState(() {
-      loading = true;
-    });
+    load(true);
     if (form.validate()) {
       form.save();
       return true;
     } else
-      setState(() {
-        loading = false;
-      });
+      load(false);
     return false;
   }
 
+//openSession is funtion that responsible for oppening new Session if user already Logined
   Future<void> openSession() async {
     SharedPreferences sessionStatus = await SharedPreferences.getInstance();
     SharedPreferences sessionMail = await SharedPreferences.getInstance();
@@ -54,9 +49,10 @@ class _Login extends State<Login> {
 
     User.email = sessionMail.getString('userMail');
 
-    loading = false;
+    load(false);
   }
 
+//Validate User by VAS function and Sign In
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
       checkUsername(User.username);
@@ -65,11 +61,10 @@ class _Login extends State<Login> {
       await getSignIn(User.email, password, fcmToken);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
-      setState(() {
-        loading = false;
-      });
+      load(false);
 
       if (responceState) {
+        //If we are signed in we go to AccountRouter
         openSession();
 
         Navigator.pushReplacement(
@@ -78,21 +73,29 @@ class _Login extends State<Login> {
         );
       }
     }
-
+    //else we stay in Login
     toLogin();
   }
 
+//If we want to resend verification code we use postResend
   void postResend() {
     postUser(User.email);
     startTimer();
   }
 
+//Change state of loading to be sure that animation is workig correctly
+  void load(bool state) {
+    setState(() {
+      loading = state;
+    });
+  }
+
+//Fucntion for Proceed Button
   Future<void> proceed() async {
     pincode = pincodeController.text;
     if (changePass) {
-      setState(() {
-        loading = true;
-      });
+      //If we have change password state
+      load(false);
       await checkPintoChangePassword(User.email, pincode, password);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(patched
           ? 'Password Changed'
@@ -100,30 +103,29 @@ class _Login extends State<Login> {
 
       if (responceState) {
         setState(() {
+          current = 0;
+          start = 0;
           checkUsername(User.username);
         });
         await getImageFromAWS(User.email);
         openSession();
-
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => AccountRouter()),
         );
       }
-      setState(() {
-        loading = false;
-      });
+      load(false);
     } else {
       await checkPin(User.email, pincode, password);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState
               ? 'You registered'
               : 'Verification code is incorrect, try again')));
-      setState(() {
-        loading = false;
-      });
+      load(false);
       if (responceState) {
         setState(() {
+          current = 0;
+          start = 0;
           checkUsername(User.username);
         });
 
@@ -138,43 +140,44 @@ class _Login extends State<Login> {
     }
   }
 
+//Validate and submit function to check state of user
   Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
       await postUser(User.email);
       if (sendingPin) {
         setState(() {
           success = false;
-          setState(() => scaffoldKeyLogin.currentState
-              .showSnackBar(snackBar('Sending Email..')));
+          scaffoldKeyLogin.currentState
+              .showSnackBar(snackBar('Sending Email..'));
 
           toPin();
-          setState(() {
-            loading = false;
-          });
+          load(false);
           startTimer();
         });
       } else {
         setState(() {
           success = true;
-          setState(() => scaffoldKeyLogin.currentState
-              .showSnackBar(snackBar('User already Exist')));
+          scaffoldKeyLogin.currentState
+              .showSnackBar(snackBar('User already Exist'));
           toRegister();
-          setState(() {
-            loading = false;
-          });
+          load(false);
         });
       }
-    } else {}
+    } else {
+      setState(() => scaffoldKeyLogin.currentState
+          .showSnackBar(snackBar('Internal Server Error')));
+      toRegister();
+      load(false);
+    }
   }
 
+//Submit and go to change password fucntion
   Future<void> submitChangedPassword() async {
     if (validateAndSave()) {
       if (changepasswordController.text != changepasswordControllerFirst.text) {
         setState(() => scaffoldKeyLogin.currentState
             .showSnackBar(snackBar('Password fields do not match')));
-        setState(() {
-          loading = false;
-        });
+        load(false);
       } else if (changepasswordController.text ==
           changepasswordControllerFirst.text) {
         setState(() {
@@ -182,9 +185,7 @@ class _Login extends State<Login> {
           startTimer();
         });
         await changePasswordSendVerificarion(User.email);
-        setState(() {
-          loading = false;
-        });
+        load(false);
         toPin();
         changePass = true;
       }
@@ -210,6 +211,7 @@ class _Login extends State<Login> {
         formtype = FormType.register;
       });
 
+//Start the clock fucntion
   void startTimer() {
     CountdownTimer countDownTimer = new CountdownTimer(
       new Duration(seconds: start),

@@ -19,12 +19,9 @@ Future<void> returnUsername() async {
 
 String checkUsername(String username) {
   returnUsername();
-  if (username == '' || username == null) {
+  while (username == '' || username == null) {
     returnUsername();
-    if (username == '') {
-      return 'Username';
-    }
-    return username;
+    return 'Username';
   }
   returnUsername();
   return username;

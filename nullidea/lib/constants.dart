@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:nullidea/screens/Account/allIdeas.dart';
 import 'package:nullidea/screens/Account/idea.dart';
@@ -5,25 +7,25 @@ import 'package:nullidea/screens/Account/profilePage.dart';
 import 'package:nullidea/screens/Account/search.dart';
 import 'package:nullidea/screens/Account/userNotification.dart';
 
+//Feed list
+List<dynamic> feed = new List();
+
+//GLobal keys
+GlobalKey bottomNavigationKey = GlobalKey();
+GlobalKey<ScaffoldState> scaffoldKeyAccountRouter = GlobalKey<ScaffoldState>();
+final formKeyAccountRouter = GlobalKey<FormState>();
 final formKey = GlobalKey<FormState>();
 
-List<dynamic> achievements = new List();
-GlobalKey bottomNavigationKey = GlobalKey();
-
-final GlobalKey<ScaffoldState> scaffoldKeyAccountRouter =
-    GlobalKey<ScaffoldState>();
-final formKeyAccountRouter = GlobalKey<FormState>();
-
-bool usernameExist = false;
-
+//Classes for account router
 final Search search = Search();
 final UserNotification userNotification = UserNotification();
 final Allideas allideas = Allideas();
 final ProfilePage profilePage = ProfilePage();
 final Idea idea = Idea();
 
+//ShowPage needed to provide widget or any page
 Widget showPage = new ProfilePage();
-
+//Choose any page from bottom bar
 Widget pageChooser(int page) {
   switch (page) {
     case 0:
@@ -51,7 +53,13 @@ Widget pageChooser(int page) {
   }
 }
 
-String accountfcmToken = '';
+//Take the file that is already cropped
+File cropped;
+//Check the session if its end we clear or data from application, it comes whe we log out
+bool sessionEnded = false;
+//should the button be cunverted to loading
+bool loading = false;
+//Url of image
 String tempImageUrl = '';
 //email string
 String temp = '';
@@ -59,6 +67,7 @@ String temp = '';
 String password;
 //pincode string
 String pincode;
+//FCM token is the token of device
 String fcmToken;
 //success state of responce
 bool success = true;
@@ -70,6 +79,10 @@ int start = 60;
 int current = 60;
 //states of screens for login
 bool changePass = false;
+
+//Setting initial formtype
+FormType formtype = FormType.login;
+//Formtypes that are exists in Login Page
 enum FormType {
   login,
   register,
@@ -77,8 +90,7 @@ enum FormType {
   changePassword,
 }
 
-FormType formtype = FormType.login;
-
+//Editing controllers to listen and fetch data
 TextEditingController emailController = TextEditingController();
 TextEditingController pincodeController = TextEditingController();
 TextEditingController passwordController = TextEditingController();

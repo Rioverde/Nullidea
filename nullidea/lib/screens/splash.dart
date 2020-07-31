@@ -20,13 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 3000), () {
       setState(() {
-        whichScreen();
+        getSession();
       });
     });
-  }
-
-  Future<void> whichScreen() async {
-    await getSession();
   }
 
   Future<void> getSession() async {
