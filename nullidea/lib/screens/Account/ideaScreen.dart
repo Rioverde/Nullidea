@@ -9,7 +9,50 @@ class IdeaScreen extends StatefulWidget {
   _IdeaScreenState createState() => _IdeaScreenState();
 }
 
+double newheight = 250;
+int newFlex = 3;
+
+int lines = 1;
+
 class _IdeaScreenState extends State<IdeaScreen> {
+  void countLines(String text) {
+    int counter = 0;
+    for (var i = 0; i < text.length; i++) {
+      if (text[i] == ' ') {
+        setState(() {
+          lines++;
+        });
+
+        if (lines > 4) {
+          setState(() {
+            newheight += 20;
+            counter += 20;
+          });
+
+          if (counter.remainder(40) == 0) {
+            setState(() {
+              newFlex++;
+            });
+          }
+        }
+      }
+    }
+    print(lines);
+    print(newFlex);
+    print(newheight);
+  }
+
+  @override
+  void initState() {
+    newheight = 250;
+    newFlex = 3;
+
+    lines = 1;
+    countLines(Idea.task);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -54,7 +97,7 @@ class _IdeaScreenState extends State<IdeaScreen> {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: newFlex,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -138,7 +181,7 @@ class _IdeaScreenState extends State<IdeaScreen> {
             )
           ]),
           width: double.infinity,
-          height: 260,
+          height: newheight,
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),

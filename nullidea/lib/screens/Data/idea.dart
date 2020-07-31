@@ -1,6 +1,5 @@
 class Idea {
-  static String task =
-      'Hello khasja jsgfKJ GSKJGASKJFAFk jAKJFAXJCBKJ BKJkjakjVK.J BBDVkKhjzc vjzhjvhzjvhkzhvkjzxkjzhvkjzkjvhkzxvkjzhvkjzh';
+  static String task = 'Hello khasja jsgfKJ jgg';
   static int ratingBoost = 0;
   static String ideaClock = '00:00:00';
   static int ticketPrice = 0;
