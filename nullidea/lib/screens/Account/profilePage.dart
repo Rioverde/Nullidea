@@ -39,8 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     } else {
-      print("Sending request");
-      getPhoto(User.email, User.profilePhoto);
       return ClipRRect(
         borderRadius: new BorderRadius.circular(360),
         child: Image.file(
@@ -179,20 +177,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0),
-                        child: userextradata("234", Colors.white, 16.0),
+                        child: userextradata(
+                            User.entries.toString(), Colors.white, 16.0),
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
                           child: userextradata("Rating", Colors.yellow, 16.0)),
                       Padding(
                           padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
-                          child: userextradata("4553", Colors.white, 20.0)),
+                          child: userextradata(
+                              User.rating.toString(), Colors.white, 20.0)),
                       Padding(
                           padding: EdgeInsets.only(right: 20),
                           child: userextradata("Earned", primaryColor, 14.0)),
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
-                        child: userextradata("543", Colors.white, 16.0),
+                        child: userextradata(
+                            User.earned.toString(), Colors.white, 16.0),
                       ),
                     ],
                   ),

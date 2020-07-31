@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/screens/Custom/myCustomIcons.dart';
 import 'package:nullidea/screens/Initial/theme.dart';
+import '../Data/idea.dart';
 
-class Idea extends StatefulWidget {
+class IdeaScreen extends StatefulWidget {
   @override
-  _IdeaState createState() => _IdeaState();
+  _IdeaScreenState createState() => _IdeaScreenState();
 }
 
-class _IdeaState extends State<Idea> {
+class _IdeaScreenState extends State<IdeaScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -16,32 +17,48 @@ class _IdeaState extends State<Idea> {
         padding: const EdgeInsets.all(24.0),
         child: Container(
           child: Column(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  buildInfo("+100", Colors.black, 16),
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(
-                        Icons.timer,
-                        color: Colors.black,
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(18),
+                      topRight: Radius.circular(18)),
+                  color: Colors.grey.shade900,
+                ),
+                alignment: Alignment.center,
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: buildInfo(
+                          '+' + Idea.ratingBoost.toString(), primaryColor, 16),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            color: primaryColor,
+                          ),
+                          buildInfo(Idea.ideaClock, primaryColor, 16),
+                        ],
                       ),
-                      buildInfo("10:09:21", Colors.black, 16),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Main task to do",
-                  maxLines: 4,
+                  Idea.task,
                   style: GoogleFonts.ubuntu(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
@@ -66,7 +83,10 @@ class _IdeaState extends State<Idea> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("0" + ' \$', primaryColor, 16),
+                              child: buildInfo(
+                                  Idea.ticketPrice.toString() + ' \$',
+                                  primaryColor,
+                                  16),
                             ),
                           ],
                         )),
@@ -82,7 +102,8 @@ class _IdeaState extends State<Idea> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("0" + ' \$', Colors.green, 16),
+                              child: buildInfo(Idea.reward.toString() + ' \$',
+                                  Colors.green, 16),
                             ),
                           ],
                         )),
@@ -98,7 +119,8 @@ class _IdeaState extends State<Idea> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("0", primaryColor, 16),
+                              child: buildInfo(
+                                  Idea.totalEntry.toString(), primaryColor, 16),
                             ),
                           ],
                         )),
@@ -116,7 +138,7 @@ class _IdeaState extends State<Idea> {
             )
           ]),
           width: double.infinity,
-          height: 200,
+          height: 260,
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),

@@ -21,7 +21,7 @@ final Search search = Search();
 final UserNotification userNotification = UserNotification();
 final Allideas allideas = Allideas();
 final ProfilePage profilePage = ProfilePage();
-final Idea idea = Idea();
+final IdeaScreen idea = IdeaScreen();
 
 //ShowPage needed to provide widget or any page
 Widget showPage = new ProfilePage();
