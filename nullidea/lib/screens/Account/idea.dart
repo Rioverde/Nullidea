@@ -52,76 +52,57 @@ class _IdeaState extends State<Idea> {
             Expanded(
               flex: 1,
               child: Container(
-                child: Center(
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 16.0, right: 4),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  MyCustomIcons.ticket,
-                                  size: 32,
-                                  color: primaryColor,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child:
-                                      buildInfo("150" + '\$', primaryColor, 16),
-                                ),
-                              ],
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              MyCustomIcons.ticket,
+                              size: 32,
+                              color: primaryColor,
                             ),
-                          )),
-                      Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 16.0, right: 4),
-                                  child: Icon(
-                                    MyCustomIcons.reward,
-                                    size: 24,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child:
-                                      buildInfo("500" + '\$', Colors.green, 16),
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: buildInfo("150" + '\$', primaryColor, 16),
                             ),
-                          )),
-                      Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 16.0, right: 4),
-                                  child: Icon(
-                                    Icons.group,
-                                    size: 28,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: buildInfo("500", primaryColor, 16),
-                                ),
-                              ],
+                          ],
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              MyCustomIcons.reward,
+                              size: 24,
+                              color: Colors.green,
                             ),
-                          )),
-                    ],
-                  ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: buildInfo("500" + '\$', Colors.green, 16),
+                            ),
+                          ],
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.group,
+                              size: 28,
+                              color: primaryColor,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: buildInfo("500", primaryColor, 16),
+                            ),
+                          ],
+                        )),
+                  ],
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
