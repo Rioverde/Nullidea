@@ -2,15 +2,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nullidea/user.dart';
+import 'package:nullidea/screens/Data/user.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quiver/async.dart';
-import 'package:nullidea/handleRequests.dart';
+import 'package:nullidea/screens/Requests/handleRequests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constants.dart';
-import '../../mechanics.dart';
-import '../../theme.dart';
+import '../Data/constants.dart';
+import '../Initial/mechanics.dart';
+import '../Initial/theme.dart';
 import '../Account/accountRouter.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKeyLogin =
@@ -26,7 +26,7 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
   //==============================================Functions==============
-
+  var sub;
 //Validate the form of data that user write in login and password from Regex
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -55,10 +55,9 @@ class _Login extends State<Login> {
 //Validate User by VAS function and Sign In
   Future<void> validateAndSignIn() async {
     if (validateAndSave()) {
+      await getSignIn(User.email, password, fcmToken);
       checkUsername(User.username);
       await getImageFromAWS(User.email);
-
-      await getSignIn(User.email, password, fcmToken);
       setState(() => scaffoldKeyLogin.currentState.showSnackBar(snackBar(
           responceState ? "Logging In" : 'Incorrect email or password')));
       load(false);
@@ -103,12 +102,13 @@ class _Login extends State<Login> {
 
       if (responceState) {
         setState(() {
-          current = 0;
-          start = 0;
+          returnUsername();
           checkUsername(User.username);
+          sub.cancel();
         });
         await getImageFromAWS(User.email);
         openSession();
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => AccountRouter()),
@@ -124,8 +124,8 @@ class _Login extends State<Login> {
       load(false);
       if (responceState) {
         setState(() {
-          current = 0;
-          start = 0;
+          sub.cancel();
+          returnUsername();
           checkUsername(User.username);
         });
 
@@ -219,13 +219,12 @@ class _Login extends State<Login> {
       new Duration(milliseconds: 300),
     );
 
-    var sub = countDownTimer.listen(null);
+    sub = countDownTimer.listen(null);
     sub.onData((duration) {
       setState(() {
         current = start - duration.elapsed.inSeconds;
       });
     });
-
     sub.onDone(() {
       print("Done");
       sub.cancel();

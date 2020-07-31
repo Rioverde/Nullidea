@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:nullidea/constants.dart';
+import 'package:nullidea/screens/Data/constants.dart';
 
-import 'package:nullidea/user.dart';
+import 'package:nullidea/screens/Data/user.dart';
 import 'package:dio/dio.dart';
 
 var dio = Dio();
 Response response;
 Map data;
+
 String initPhotolink;
 bool registered = false;
 bool sendingPin = false;
@@ -189,6 +190,7 @@ Future<String> getUsername(String email) async {
   final response = await http
       .get('https://nullidea-backend.herokuapp.com/v1/users?email=' + email);
 
+  data = json.decode(response.body);
   if (response.statusCode == 200) {
     return data['data']['username'];
   } else if (response.statusCode == 400) {
@@ -216,7 +218,6 @@ Future<void> getPhoto(String email, File photo) async {
     print("Error 400");
   } else
     print("Error 500");
-  throw Exception("Internal server error");
 }
 
 //Function to  take image from amazon cloud directly by providinglink from Database

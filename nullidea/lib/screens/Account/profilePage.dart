@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/screens/Login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constants.dart';
-import '../../handleRequests.dart';
-import '../../theme.dart';
+import '../Data/constants.dart';
+import '../Requests/handleRequests.dart';
+import '../Initial/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-import '../../user.dart';
+import '../Data/user.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

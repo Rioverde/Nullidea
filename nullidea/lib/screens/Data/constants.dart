@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:nullidea/screens/Account/allIdeas.dart';
-import 'package:nullidea/screens/Account/idea.dart';
+import 'package:nullidea/screens/Account/ideaScreen.dart';
 import 'package:nullidea/screens/Account/profilePage.dart';
 import 'package:nullidea/screens/Account/search.dart';
 import 'package:nullidea/screens/Account/userNotification.dart';

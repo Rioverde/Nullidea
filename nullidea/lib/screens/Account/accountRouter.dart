@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:nullidea/myCustomIcons.dart';
+import 'package:nullidea/screens/Custom/myCustomIcons.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-import '../../constants.dart';
+import '../Data/constants.dart';
 
-import '../../handleRequests.dart';
-import '../../mechanics.dart';
-import '../../theme.dart';
-import '../../user.dart';
+import '../Requests/handleRequests.dart';
+import '../Initial/mechanics.dart';
+import '../Initial/theme.dart';
+import '../Data/user.dart';
 import 'profilePage.dart';
 
 class AccountRouter extends StatefulWidget {
@@ -21,9 +21,13 @@ class AccountRouter extends StatefulWidget {
   _AccountRouterState createState() => _AccountRouterState();
 }
 
-bool sessionEnded = false;
-
 class _AccountRouterState extends State<AccountRouter> {
+  @override
+  void initState() {
+    super.initState();
+    showPage = new ProfilePage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +63,7 @@ class _AccountRouterState extends State<AccountRouter> {
         key: formKeyAccountRouter,
         child: FlatButton(
           onPressed: () => onAlertWithCustomContentPressed(context),
-          child: Text(User.username,
+          child: Text(checkUsername(User.username),
               style: GoogleFonts.pacifico(
                   fontSize: 30.0,
                   fontWeight: FontWeight.normal,

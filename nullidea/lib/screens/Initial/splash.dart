@@ -3,11 +3,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullidea/screens/Account/accountRouter.dart';
 import 'package:nullidea/screens/Login/login.dart';
-import 'package:nullidea/theme.dart';
+import 'package:nullidea/screens/Initial/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../handleRequests.dart';
-import '../user.dart';
+import '../Requests/handleRequests.dart';
+import '../Data/user.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences sessionStatus = await SharedPreferences.getInstance();
     SharedPreferences sessionMail = await SharedPreferences.getInstance();
     if (sessionStatus.getBool('isLogged') == null ||
-        sessionStatus.getBool('isLogged') == false) {
+        !sessionStatus.getBool('isLogged')) {
       sessionStatus.setBool('isLogged', false);
       Navigator.pushReplacement(
         context,

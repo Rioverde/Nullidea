@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nullidea/screens/Account/idea.dart';
+
 import 'package:nullidea/screens/Login/login.dart';
 import 'package:nullidea/screens/Account/accountRouter.dart';
-import 'package:nullidea/screens/splash.dart';
+import 'package:nullidea/screens/Initial/splash.dart';
 
-import 'package:nullidea/theme.dart';
+import 'package:nullidea/screens/Initial/theme.dart';
 
 void main() {
   runApp(Nullidea());
@@ -18,7 +18,7 @@ class Nullidea extends StatelessWidget {
       initialRoute: '/SplashScreen',
       theme: nullideatheme(),
       routes: {
-        '/SplashScreen': (context) => Idea(),
+        '/SplashScreen': (context) => SplashScreen(),
         // When navigating to the "/" route, build the FirstScreen widget.
         '/Login': (context) => Login(),
         // When navigating to the "/second" route, build the SecondScreen widget.

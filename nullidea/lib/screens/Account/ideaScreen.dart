@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nullidea/myCustomIcons.dart';
-import 'package:nullidea/theme.dart';
+import 'package:nullidea/screens/Custom/myCustomIcons.dart';
+import 'package:nullidea/screens/Initial/theme.dart';
 
 class Idea extends StatefulWidget {
   @override
@@ -61,12 +61,12 @@ class _IdeaState extends State<Idea> {
                           children: [
                             Icon(
                               MyCustomIcons.ticket,
-                              size: 32,
+                              size: 28,
                               color: primaryColor,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("150" + '\$', primaryColor, 16),
+                              child: buildInfo("0" + ' \$', primaryColor, 16),
                             ),
                           ],
                         )),
@@ -82,7 +82,7 @@ class _IdeaState extends State<Idea> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("500" + '\$', Colors.green, 16),
+                              child: buildInfo("0" + ' \$', Colors.green, 16),
                             ),
                           ],
                         )),
@@ -98,7 +98,7 @@ class _IdeaState extends State<Idea> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
-                              child: buildInfo("500", primaryColor, 16),
+                              child: buildInfo("0", primaryColor, 16),
                             ),
                           ],
                         )),
