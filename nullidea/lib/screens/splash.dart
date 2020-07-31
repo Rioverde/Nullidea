@@ -28,7 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> getSession() async {
     SharedPreferences sessionStatus = await SharedPreferences.getInstance();
     SharedPreferences sessionMail = await SharedPreferences.getInstance();
-    if (sessionStatus.getBool('isLogged') == null) {
+    if (sessionStatus.getBool('isLogged') == null ||
+        sessionStatus.getBool('isLogged') == false) {
       sessionStatus.setBool('isLogged', false);
       Navigator.pushReplacement(
         context,

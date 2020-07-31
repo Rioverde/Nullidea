@@ -192,6 +192,7 @@ class _Login extends State<Login> {
     }
   }
 
+//Changing states to be easy in use
   void toChangePassword() => setState(() {
         formtype = FormType.changePassword;
       });
@@ -263,7 +264,7 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKeyLogin,
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Form(
           key: formKey,
