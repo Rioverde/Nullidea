@@ -647,36 +647,32 @@ class _Login extends State<Login> {
     );
   }
 
-  dynamic signInButton() {
-    if (formtype == FormType.login) {
-      return ButtonTheme(
-        disabledColor: disabledState,
-        height: 55,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          child: RaisedButton(
-              color: primaryColor,
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(10)),
-              child: Text(
-                "SIGN IN",
-                style: GoogleFonts.ubuntu(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                    color: emailController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty
-                        ? Colors.black
-                        : Colors.black),
-              ),
-              onPressed: emailController.text.isNotEmpty &&
-                      passwordController.text.isNotEmpty
-                  ? validateAndSignIn
-                  : null),
-        ),
-      );
-    } else {
-      return turningSpins();
-    }
+  ButtonTheme signInButton() {
+    return ButtonTheme(
+      disabledColor: disabledState,
+      height: 55,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+        child: RaisedButton(
+            color: primaryColor,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10)),
+            child: Text(
+              "SIGN IN",
+              style: GoogleFonts.ubuntu(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty
+                      ? Colors.black
+                      : Colors.black),
+            ),
+            onPressed: emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty
+                ? validateAndSignIn
+                : null),
+      ),
+    );
   }
 
   Container forgotPassword() {
