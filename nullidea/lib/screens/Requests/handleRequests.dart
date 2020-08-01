@@ -213,7 +213,7 @@ Future<void> getPhoto(String email, File photo) async {
   response = await dio.patch(url, data: formData);
 
   if (response.statusCode == 200) {
-    print("sended, updated");
+    print("Sended, updated");
   } else if (response.statusCode == 400) {
     print("Error 400");
   } else

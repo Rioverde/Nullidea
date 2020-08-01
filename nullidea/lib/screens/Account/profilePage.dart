@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   openGallery(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.gallery);
+
     cropped = await ImageCropper.cropImage(
         sourcePath: picture.path,
         cropStyle: CropStyle.circle,
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     this.setState(() {
       User.profilePhoto = cropped;
-
+      getPhoto(User.email, User.profilePhoto);
       Navigator.of(context).pop();
     });
   }
@@ -79,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     this.setState(() {
       User.profilePhoto = cropped;
+      getPhoto(User.email, User.profilePhoto);
       Navigator.of(context).pop();
     });
   }
