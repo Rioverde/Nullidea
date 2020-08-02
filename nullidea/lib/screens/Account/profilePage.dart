@@ -89,63 +89,67 @@ class _ProfilePageState extends State<ProfilePage> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: primaryColor,
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: Text(
-              "Open with:",
-              style: GoogleFonts.ubuntuMono(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black),
+        return buildCameraChoose(context);
+      },
+    );
+  }
+
+  AlertDialog buildCameraChoose(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: primaryColor,
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Text(
+          "Open with:",
+          style: GoogleFonts.ubuntuMono(
+              fontSize: 22.0,
+              fontWeight: FontWeight.normal,
+              color: Colors.black),
+        ),
+      ),
+      content: SingleChildScrollView(
+          child: ListBody(
+        children: <Widget>[
+          GestureDetector(
+            child: Center(
+              child: Text(
+                "Gallery",
+                style: GoogleFonts.ubuntuMono(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black),
+              ),
+            ),
+            onTap: () {
+              openGallery(context);
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Divider(
+                color: Colors.black,
+                thickness: 1.5,
+                indent: 50,
+                endIndent: 50,
+              ),
             ),
           ),
-          content: SingleChildScrollView(
-              child: ListBody(
-            children: <Widget>[
-              GestureDetector(
-                child: Center(
-                  child: Text(
-                    "Gallery",
-                    style: GoogleFonts.ubuntuMono(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black),
-                  ),
-                ),
-                onTap: () {
-                  openGallery(context);
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Divider(
-                    color: Colors.black,
-                    thickness: 1.5,
-                    indent: 50,
-                    endIndent: 50,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                child: Center(
-                    child: Text(
-                  "Camera",
-                  style: GoogleFonts.ubuntuMono(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-                onTap: () {
-                  openCamera(context);
-                },
-              )
-            ],
-          )),
-        );
-      },
+          GestureDetector(
+            child: Center(
+                child: Text(
+              "Camera",
+              style: GoogleFonts.ubuntuMono(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
+            )),
+            onTap: () {
+              openCamera(context);
+            },
+          )
+        ],
+      )),
     );
   }
 
@@ -159,79 +163,97 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Container(
                 alignment: Alignment.center,
                 child: Row(children: [
-                  Container(
-                    height: 120,
-                    decoration: ShapeDecoration(
-                        shape: CircleBorder(
-                            side: BorderSide(width: 2, color: primaryColor))),
-                    child: FlatButton(
-                      onPressed: () {
-                        showChoiseDialog(context);
-                      },
-                      child: decideImage(),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: userextradata("Entries", primaryColor, 14.0),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: userextradata(
-                            User.entries.toString(), Colors.white, 16.0),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
-                          child: userextradata("Rating", Colors.yellow, 16.0)),
-                      Padding(
-                          padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
-                          child: userextradata(
-                              User.rating.toString(), Colors.white, 20.0)),
-                      Padding(
-                          padding: EdgeInsets.only(right: 20),
-                          child: userextradata("Earned", primaryColor, 14.0)),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: userextradata(
-                            User.earned.toString(), Colors.white, 16.0),
-                      ),
-                    ],
-                  ),
+                  buildProfilePhoto(context),
+                  buildUserData(),
                   Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: Container(
-                      child: Image.asset(
-                        'assets/images/trophy.png',
-                        scale: 2,
-                      ),
-                      alignment: Alignment.topLeft,
-                    ),
-                  ),
+                  //TODO trophy Photo should change depending on score of Rating
+                  buildTrophy(),
                 ]),
               ),
             ),
-            Divider(
-              color: primaryColor,
-              thickness: 1.5,
-              endIndent: 24,
-              indent: 24,
-            ),
+            divider(),
           ],
         ),
+        //TODO History Should be added
+        buildUserHistory()
+      ],
+    );
+  }
+
+  Divider divider() {
+    return Divider(
+      color: primaryColor,
+      thickness: 1.5,
+      endIndent: 24,
+      indent: 24,
+    );
+  }
+
+  Padding buildUserHistory() {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Container(
+        width: double.infinity,
+        height: 110,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade900,
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    );
+  }
+
+  Container buildProfilePhoto(BuildContext context) {
+    return Container(
+      height: 120,
+      decoration: ShapeDecoration(
+          shape: CircleBorder(side: BorderSide(width: 2, color: primaryColor))),
+      child: FlatButton(
+        onPressed: () {
+          showChoiseDialog(context);
+        },
+        child: decideImage(),
+      ),
+    );
+  }
+
+  Padding buildTrophy() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12.0),
+      child: Container(
+        child: Image.asset(
+          'assets/images/trophy.png',
+          scale: 2,
+        ),
+        alignment: Alignment.topLeft,
+      ),
+    );
+  }
+
+  Column buildUserData() {
+    return Column(
+      children: [
         Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Container(
-            width: double.infinity,
-            height: 110,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade900,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        )
+          padding: const EdgeInsets.only(right: 20),
+          child: userextradata("Entries", primaryColor, 14.0),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: userextradata(User.entries.toString(), Colors.white, 16.0),
+        ),
+        Padding(
+            padding: EdgeInsets.fromLTRB(18, 18, 0, 0),
+            child: userextradata("Rating", Colors.yellow, 16.0)),
+        Padding(
+            padding: EdgeInsets.fromLTRB(18, 0, 0, 18),
+            child: userextradata(User.rating.toString(), Colors.white, 20.0)),
+        Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: userextradata("Earned", primaryColor, 14.0)),
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: userextradata(User.earned.toString(), Colors.white, 16.0),
+        ),
       ],
     );
   }
